@@ -138,6 +138,15 @@ export default function TransactionsPage() {
         }
     };
 
+    const clearFilters = () => {
+        setSearchTerm('');
+        setFilterType('All');
+        setFilterCategory('All');
+        setFilterAccountId('All');
+    };
+
+    const hasActiveFilters = searchTerm !== '' || filterType !== 'All' || filterCategory !== 'All' || filterAccountId !== 'All';
+
     const filteredTransactions = transactions.filter(tx => {
         const matchesSearch =
             tx.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -153,7 +162,17 @@ export default function TransactionsPage() {
     return (
         <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h1 className="text-3xl font-bold">Transactions</h1>
+                <div className="flex items-center gap-4">
+                    <h1 className="text-3xl font-bold">Transactions</h1>
+                    {hasActiveFilters && (
+                        <button
+                            onClick={clearFilters}
+                            className="text-xs font-medium text-slate-500 hover:text-primary transition-colors flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md"
+                        >
+                            Clear Filters
+                        </button>
+                    )}
+                </div>
                 <button
                     onClick={() => {
                         resetForm();
