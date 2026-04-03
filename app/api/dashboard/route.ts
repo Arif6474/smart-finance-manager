@@ -41,11 +41,45 @@ export async function GET() {
             .filter(t => t.type === 'Expense')
             .reduce((acc, curr) => acc + curr.amount, 0);
 
+        // Get 7-day daily stats for chart
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(now.getDate() - 6);
+        sevenDaysAgo.setHours(0, 0, 0, 0);
+
+        const lastSevenDaysTransactions = await Transaction.find({
+            userId,
+            date: { $gte: sevenDaysAgo }
+        }).sort({ date: 1 });
+
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const chartData = [];
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(sevenDaysAgo);
+            date.setDate(sevenDaysAgo.getDate() + i);
+            const dayName = days[date.getDay()];
+
+            const dayIncome = lastSevenDaysTransactions
+                .filter(t => new Date(t.date).toDateString() === date.toDateString() && t.type === 'Income')
+                .reduce((acc, curr) => acc + curr.amount, 0);
+
+            const dayExpense = lastSevenDaysTransactions
+                .filter(t => new Date(t.date).toDateString() === date.toDateString() && t.type === 'Expense')
+                .reduce((acc, curr) => acc + curr.amount, 0);
+
+            chartData.push({
+                name: dayName,
+                income: dayIncome,
+                expense: dayExpense
+            });
+        }
+
         return NextResponse.json({
             totalBalance,
             income,
             expense,
             recentTransactions,
+            chartData
         });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
