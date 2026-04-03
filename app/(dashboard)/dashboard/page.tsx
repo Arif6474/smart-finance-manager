@@ -1,7 +1,7 @@
 'use client';
 
 import PageWrapper from '@/components/PageWrapper';
-
+import { motion } from 'framer-motion';
 import {
     TrendingUp,
     TrendingDown,
@@ -18,9 +18,6 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    BarChart,
-    Bar,
-    Cell
 } from 'recharts';
 
 const data = [
@@ -34,78 +31,123 @@ const data = [
 ];
 
 const cards = [
-    { title: 'Total Balance', amount: 125400, icon: DollarSign, color: 'text-blue-500', bg: 'bg-blue-100 dark:bg-blue-900/20' },
-    { title: 'Total Income', amount: 45000, icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-100 dark:bg-green-900/20' },
-    { title: 'Total Expense', amount: 12400, icon: TrendingDown, color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/20' },
+    { title: 'Total Balance', amount: 125400, icon: DollarSign, color: 'text-primary', bg: 'bg-primary/10' },
+    { title: 'Total Income', amount: 45000, icon: TrendingUp, color: 'text-success', bg: 'bg-success/10' },
+    { title: 'Total Expense', amount: 12400, icon: TrendingDown, color: 'text-destructive', bg: 'bg-destructive/10' },
 ];
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } }
+};
 
 export default function DashboardPage() {
     return (
         <PageWrapper>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Cards */}
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 md:grid-cols-3 gap-5"
+            >
                 {cards.map((card) => {
                     const Icon = card.icon;
                     return (
-                        <div key={card.title} className="glass p-6 rounded-2xl flex items-center justify-between">
+                        <motion.div
+                            key={card.title}
+                            variants={itemVariants}
+                            className="bg-card border border-border p-6 rounded-2xl flex items-center justify-between card-hover"
+                        >
                             <div>
-                                <p className="text-slate-500 text-sm font-medium">{card.title}</p>
-                                <h3 className="text-3xl font-bold mt-1">৳{card.amount.toLocaleString()}</h3>
+                                <p className="text-muted-foreground text-sm font-medium">{card.title}</p>
+                                <h3 className="text-3xl font-bold mt-1 tracking-tight">৳{card.amount.toLocaleString()}</h3>
                             </div>
                             <div className={`${card.bg} ${card.color} p-4 rounded-xl`}>
                                 <Icon size={24} />
                             </div>
-                        </div>
+                        </motion.div>
                     );
                 })}
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-                <div className="glass p-6 rounded-2xl h-[400px]">
-                    <h3 className="text-lg font-bold mb-6">Cash Flow Summary</h3>
+            {/* Charts & Transactions */}
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6"
+            >
+                <motion.div variants={itemVariants} className="bg-card border border-border p-6 rounded-2xl h-[400px]">
+                    <h3 className="text-base font-semibold mb-5">Cash Flow Summary</h3>
                     <ResponsiveContainer width="100%" height="85%">
                         <AreaChart data={data}>
                             <defs>
                                 <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8} />
-                                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                                    <stop offset="5%" stopColor="hsl(168 80% 36%)" stopOpacity={0.4} />
+                                    <stop offset="95%" stopColor="hsl(168 80% 36%)" stopOpacity={0} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F033" />
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(214 20% 90%)" strokeOpacity={0.5} />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'hsl(215 14% 50%)', fontSize: 12 }} />
                             <YAxis hide />
                             <Tooltip
-                                contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '12px', color: '#fff' }}
+                                contentStyle={{
+                                    backgroundColor: 'hsl(222 47% 8%)',
+                                    border: '1px solid hsl(220 26% 20%)',
+                                    borderRadius: '12px',
+                                    color: '#fff',
+                                    boxShadow: '0 8px 30px -5px rgb(0 0 0 / 0.3)'
+                                }}
                                 itemStyle={{ color: '#fff' }}
                             />
-                            <Area type="monotone" dataKey="income" stroke="#6366f1" fillOpacity={1} fill="url(#colorIncome)" />
+                            <Area
+                                type="monotone"
+                                dataKey="income"
+                                stroke="hsl(168 80% 36%)"
+                                strokeWidth={2.5}
+                                fillOpacity={1}
+                                fill="url(#colorIncome)"
+                            />
                         </AreaChart>
                     </ResponsiveContainer>
-                </div>
+                </motion.div>
 
-                <div className="glass p-6 rounded-2xl">
-                    <h3 className="text-lg font-bold mb-6">Recent Transactions</h3>
-                    <div className="space-y-4">
+                <motion.div variants={itemVariants} className="bg-card border border-border p-6 rounded-2xl">
+                    <h3 className="text-base font-semibold mb-5">Recent Transactions</h3>
+                    <div className="space-y-2">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <div key={i} className="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors cursor-pointer">
-                                <div className="flex items-center space-x-4">
-                                    <div className={`p-3 rounded-lg ${i % 2 === 0 ? 'bg-green-100 dark:bg-green-900/20 text-green-500' : 'bg-red-100 dark:bg-red-900/20 text-red-500'}`}>
-                                        {i % 2 === 0 ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
+                            <div key={i} className="flex items-center justify-between p-3 hover:bg-muted/50 rounded-xl transition-all duration-300 cursor-pointer group">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2.5 rounded-xl transition-colors duration-300 ${i % 2 === 0
+                                        ? 'bg-success/10 text-success group-hover:bg-success/20'
+                                        : 'bg-destructive/10 text-destructive group-hover:bg-destructive/20'
+                                        }`}>
+                                        {i % 2 === 0 ? <ArrowUpRight size={18} /> : <ArrowDownRight size={18} />}
                                     </div>
                                     <div>
-                                        <p className="font-bold">{i % 2 === 0 ? 'Salary Deposit' : 'Groceries Purchase'}</p>
-                                        <p className="text-xs text-slate-500 flex items-center">
-                                            <Clock size={12} className="mr-1" /> Today, 2:30 PM • Main Bank
+                                        <p className="font-semibold text-sm">{i % 2 === 0 ? 'Salary Deposit' : 'Groceries Purchase'}</p>
+                                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                            <Clock size={11} /> Today, 2:30 PM • Main Bank
                                         </p>
                                     </div>
                                 </div>
-                                <p className={`font-bold ${i % 2 === 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                <p className={`font-bold text-sm ${i % 2 === 0 ? 'text-success' : 'text-destructive'}`}>
                                     {i % 2 === 0 ? '+' : '-'}৳{(500 * (i + 1)).toLocaleString()}
                                 </p>
                             </div>
                         ))}
                     </div>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </PageWrapper>
     );
 }

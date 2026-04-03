@@ -24,30 +24,30 @@ export default function BenefitsSection() {
             title: 'Smarter Decisions',
             desc: 'Data gives you confidence. Make big purchases knowing you can actually afford them.',
             icon: Zap,
-            color: 'bg-indigo-500'
+            color: 'bg-primary'
         }
     ];
 
     return (
-        <section className="py-24 bg-white dark:bg-slate-900 border-t">
+        <section className="py-24 bg-card border-t border-border transition-colors duration-500">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex flex-col lg:flex-row items-center gap-16">
                     <div className="lg:w-1/2 space-y-8">
                         <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-                            Why use <span className="text-primary">Smart Finance?</span>
+                            Why use <span className="bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">Smart Finance?</span>
                         </h2>
-                        <p className="text-lg text-slate-600 dark:text-slate-400">
-                            Stop stressing over spreadsheets and banking apps that do not communicate with each other. We give you a bird's-eye view of your financial health.
+                        <p className="text-lg text-muted-foreground">
+                            Stop stressing over spreadsheets and banking apps that don&apos;t communicate with each other. We give you a bird&apos;s-eye view of your financial health.
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
                             {benefits.map((b, i) => (
-                                <div key={i} className="flex gap-4 items-start">
-                                    <div className={`mt-1 p-2 rounded-lg text-white ${b.color}`}>
-                                        <b.icon size={20} />
+                                <div key={i} className="flex gap-4 items-start group">
+                                    <div className={`mt-0.5 p-2 rounded-xl text-white ${b.color} shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                                        <b.icon size={18} />
                                     </div>
                                     <div>
-                                        <h4 className="font-bold mb-1">{b.title}</h4>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">{b.desc}</p>
+                                        <h4 className="font-semibold mb-1 text-sm">{b.title}</h4>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -55,13 +55,21 @@ export default function BenefitsSection() {
                     </div>
 
                     <div className="lg:w-1/2 w-full relative">
-                        <div className="absolute inset-0 bg-primary/20 dark:bg-primary/10 rounded-3xl rotate-3 scale-105"></div>
-                        <div className="relative glass p-8 md:p-12 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl">
-                            <h3 className="text-2xl font-bold mb-6">Your Net Worth Growth</h3>
-                            <div className="h-64 flex items-end gap-2 md:gap-4 relative">
-                                {/* Fake Growth Chart inside card */}
+                        <div className="absolute inset-0 bg-primary/10 dark:bg-primary/10 rounded-3xl rotate-2 scale-105 blur-sm"></div>
+                        <div className="relative bg-background p-8 md:p-10 rounded-3xl border border-border shadow-lift">
+                            <h3 className="text-xl font-bold mb-6">Your Net Worth Growth</h3>
+                            <div className="h-56 flex items-end gap-2 md:gap-3 relative">
                                 {[20, 35, 50, 45, 60, 80, 100].map((h, i) => (
-                                    <div key={i} className="flex-1 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-md hover:opacity-80 transition-opacity" style={{ height: `${h}%` }}></div>
+                                    <div
+                                        key={i}
+                                        className="flex-1 bg-gradient-to-t from-teal-600 to-emerald-400 rounded-t-lg hover:opacity-90 transition-all duration-300 hover:-translate-y-1"
+                                        style={{ height: `${h}%` }}
+                                    ></div>
+                                ))}
+                            </div>
+                            <div className="flex justify-between mt-3 text-xs text-muted-foreground">
+                                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+                                    <span key={d}>{d}</span>
                                 ))}
                             </div>
                         </div>

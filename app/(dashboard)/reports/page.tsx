@@ -24,7 +24,7 @@ const categoryData = [
     { name: 'Utilities', value: 200 },
 ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0d9488', '#10b981', '#f59e0b', '#ef4444'];
 
 export default function ReportsPage() {
     const [loading, setLoading] = useState(false);
@@ -33,35 +33,39 @@ export default function ReportsPage() {
         <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Analytics & Reports</h1>
-                <button
-                    className="bg-black dark:bg-white text-white dark:text-black hover:opacity-80 px-6 py-2.5 rounded-xl font-bold flex items-center justify-center space-x-2 transition-opacity w-full sm:w-auto"
-                >
-                    <Download size={20} />
+                <button className="btn-primary px-6 py-2.5 flex items-center justify-center gap-2 text-sm w-full sm:w-auto">
+                    <Download size={18} />
                     <span>Export CSV</span>
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="glass p-6 rounded-2xl lg:col-span-2 h-[450px]">
-                    <h3 className="text-lg font-bold mb-6">Income vs Expense (6 Months)</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div className="bg-card border border-border p-6 rounded-2xl lg:col-span-2 h-[450px]">
+                    <h3 className="text-base font-semibold mb-5">Income vs Expense (6 Months)</h3>
                     <ResponsiveContainer width="100%" height="85%">
                         <BarChart data={data}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F033" />
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(214 20% 90%)" strokeOpacity={0.5} />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'hsl(215 14% 50%)', fontSize: 12 }} />
                             <YAxis hide />
                             <Tooltip
-                                contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '12px', color: '#fff' }}
+                                contentStyle={{
+                                    backgroundColor: 'hsl(222 47% 8%)',
+                                    border: '1px solid hsl(220 26% 20%)',
+                                    borderRadius: '12px',
+                                    color: '#fff',
+                                    boxShadow: '0 8px 30px -5px rgb(0 0 0 / 0.3)'
+                                }}
                                 cursor={{ fill: 'rgba(15, 23, 42, 0.05)' }}
                             />
                             <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                            <Bar dataKey="income" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={24} />
-                            <Bar dataKey="expense" fill="#f43f5e" radius={[4, 4, 0, 0]} barSize={24} />
+                            <Bar dataKey="income" fill="#0d9488" radius={[6, 6, 0, 0]} barSize={24} />
+                            <Bar dataKey="expense" fill="#ef4444" radius={[6, 6, 0, 0]} barSize={24} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
 
-                <div className="glass p-6 rounded-2xl h-[450px] flex flex-col items-center">
-                    <h3 className="text-lg font-bold mb-2 self-start">Expenses by Category</h3>
+                <div className="bg-card border border-border p-6 rounded-2xl h-[450px] flex flex-col items-center">
+                    <h3 className="text-base font-semibold mb-2 self-start">Expenses by Category</h3>
                     <div className="flex-1 w-full flex items-center justify-center relative translate-y-[-10px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -81,13 +85,18 @@ export default function ReportsPage() {
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '12px', color: '#fff' }}
+                                    contentStyle={{
+                                        backgroundColor: 'hsl(222 47% 8%)',
+                                        border: '1px solid hsl(220 26% 20%)',
+                                        borderRadius: '12px',
+                                        color: '#fff'
+                                    }}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
 
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <PieChartIcon size={32} className="text-slate-400 mb-1" />
+                            <PieChartIcon size={28} className="text-muted-foreground mb-1" />
                             <span className="text-2xl font-bold">1.2K</span>
                         </div>
                     </div>
@@ -97,7 +106,7 @@ export default function ReportsPage() {
                             <div key={cat.name} className="flex items-center justify-between text-sm">
                                 <div className="flex items-center">
                                     <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[i % COLORS.length] }}></span>
-                                    <span className="text-slate-500 font-medium">{cat.name}</span>
+                                    <span className="text-muted-foreground font-medium">{cat.name}</span>
                                 </div>
                                 <span className="font-bold">৳{cat.value}</span>
                             </div>

@@ -9,6 +9,7 @@ import {
     HandCoins,
     BarChart3
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const menuItems = [
     { name: 'Home', icon: LayoutDashboard, href: '/dashboard' },
@@ -22,8 +23,8 @@ export default function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t md:hidden pb-safe">
-            <div className="flex items-center justify-around p-2">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/90 dark:bg-card/80 backdrop-blur-2xl border-t border-border md:hidden pb-safe transition-colors duration-500">
+            <div className="flex items-center justify-around py-2 px-1">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -31,15 +32,26 @@ export default function BottomNav() {
                         <Link
                             key={item.name}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center w-[72px] h-14 rounded-xl transition-all duration-300 ${isActive
-                                    ? 'text-primary scale-105'
-                                    : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+                            className={`relative flex flex-col items-center justify-center w-16 h-14 rounded-2xl transition-all duration-300 ${isActive
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground'
                                 }`}
                         >
-                            <div className={`p-1.5 rounded-2xl ${isActive ? 'bg-primary/20 shadow-md shadow-primary/20' : ''}`}>
-                                <Icon size={20} className={isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'} />
+                            <div className="relative">
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="bottom-nav-active"
+                                        className="absolute -inset-2 bg-primary/10 rounded-xl"
+                                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                    />
+                                )}
+                                <Icon
+                                    size={20}
+                                    className={`relative z-10 transition-all duration-300 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`}
+                                />
                             </div>
-                            <span className={`text-[10px] sm:text-xs mt-1 transition-all ${isActive ? 'font-extrabold' : 'font-medium'}`}>
+                            <span className={`text-[10px] mt-1 transition-all duration-300 ${isActive ? 'font-bold text-primary' : 'font-medium'
+                                }`}>
                                 {item.name}
                             </span>
                         </Link>

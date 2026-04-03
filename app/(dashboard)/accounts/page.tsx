@@ -71,7 +71,7 @@ export default function AccountsPage() {
                 <h1 className="text-3xl font-bold">Accounts</h1>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-primary/30"
+                    className="btn-primary px-5 py-2.5 flex items-center gap-2 text-sm"
                 >
                     <Plus size={20} />
                     <span>Add Account</span>
@@ -124,7 +124,7 @@ export default function AccountsPage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="e.g. Dutch Bangla Bank"
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
                     <div>
@@ -132,7 +132,7 @@ export default function AccountsPage() {
                         <select
                             value={type}
                             onChange={(e) => setType(e.target.value)}
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         >
                             <option value="Cash">Cash</option>
                             <option value="Bank">Bank</option>
@@ -147,12 +147,12 @@ export default function AccountsPage() {
                             value={balance}
                             onChange={(e) => setBalance(e.target.value)}
                             placeholder="0.00"
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-primary py-3 rounded-xl text-white font-bold mt-4 shadow-lg shadow-primary/30"
+                        className="w-full btn-primary py-3 mt-4 text-sm"
                     >
                         Create Account
                     </button>

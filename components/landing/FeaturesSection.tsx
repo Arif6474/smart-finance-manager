@@ -5,8 +5,8 @@ const features = [
         title: 'Income & Expense',
         description: 'Easily track every penny coming in and out of your accounts with smart categorization.',
         icon: TrendingUp,
-        color: 'text-indigo-500',
-        bg: 'bg-indigo-100 dark:bg-indigo-500/10'
+        color: 'text-teal-600 dark:text-teal-400',
+        bg: 'bg-teal-100 dark:bg-teal-500/10'
     },
     {
         title: 'Smart Reports',
@@ -19,7 +19,7 @@ const features = [
         title: 'Multiple Accounts',
         description: 'Manage Cash, Bank, and Mobile Banking balances all from one unified dashboard.',
         icon: Wallet,
-        color: 'text-emerald-500',
+        color: 'text-emerald-600 dark:text-emerald-400',
         bg: 'bg-emerald-100 dark:bg-emerald-500/10'
     },
     {
@@ -47,25 +47,25 @@ const features = [
 
 export default function FeaturesSection() {
     return (
-        <section className="py-24 bg-white dark:bg-slate-900 border-t border-b">
+        <section className="py-24 bg-card border-t border-b border-border transition-colors duration-500">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Everything you need to succeed</h2>
-                    <p className="text-lg text-slate-600 dark:text-slate-400">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need to succeed</h2>
+                    <p className="text-lg text-muted-foreground">
                         Smart Finance Manager bundles all the tools you need to stop guessing and start predicting your financial future.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {features.map((feature, i) => {
                         const Icon = feature.icon;
                         return (
-                            <div key={i} className="p-8 rounded-2xl glass hover:shadow-xl transition-all duration-300 group border border-slate-100 dark:border-slate-800">
-                                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 ${feature.bg} ${feature.color} group-hover:scale-110 transition-transform`}>
-                                    <Icon size={28} />
+                            <div key={i} className="p-7 rounded-2xl bg-background border border-border hover:shadow-lift hover:-translate-y-1 transition-all duration-500 group">
+                                <div className={`w-13 h-13 w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${feature.bg} ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                                    <Icon size={26} />
                                 </div>
-                                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                                <p className="text-slate-600 dark:text-slate-400">{feature.description}</p>
+                                <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
+                                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                             </div>
                         );
                     })}

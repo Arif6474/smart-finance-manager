@@ -73,7 +73,7 @@ export default function PayablesPage() {
                 <h1 className="text-3xl font-bold">Payables & Receivables</h1>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center space-x-2 transition-all shadow-lg shadow-primary/30 w-full sm:w-auto"
+                    className="btn-primary px-5 py-2.5 flex items-center justify-center gap-2 text-sm w-full sm:w-auto"
                 >
                     <Plus size={20} />
                     <span>Add New</span>
@@ -183,7 +183,7 @@ export default function PayablesPage() {
                             value={person}
                             onChange={(e) => setPerson(e.target.value)}
                             placeholder="Who?"
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
 
@@ -195,7 +195,7 @@ export default function PayablesPage() {
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="0.00"
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
 
@@ -205,7 +205,7 @@ export default function PayablesPage() {
                             type="date"
                             value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
 
@@ -216,13 +216,13 @@ export default function PayablesPage() {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="What was this for?"
-                            className="w-full bg-slate-100 dark:bg-slate-900 border-0 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none"
+                            className="input-field"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-primary py-3 rounded-xl text-white font-bold mt-4 shadow-lg shadow-primary/30"
+                        className="w-full btn-primary py-3 mt-4 text-sm"
                     >
                         Save Entry
                     </button>

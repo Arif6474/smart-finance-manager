@@ -4,77 +4,75 @@
 
 @layer base {
   :root {
-    /* Soft light mode / off-white */
+    /* ─── Soft Teal / Emerald SaaS Palette ─── */
     --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    --foreground: 220 25% 10%;
 
-    /* Clean white cards */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 220 25% 10%;
 
-    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 220 25% 10%;
 
-    /* Soft Indigo Primary */
-    --primary: 235 85% 65%;
-    --primary-foreground: 210 40% 98%;
+    /* Rich Teal Primary */
+    --primary: 168 80% 36%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Accents */
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11.2%;
+    --secondary: 210 25% 95%;
+    --secondary-foreground: 220 25% 10%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 25% 95%;
+    --muted-foreground: 215 14% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222 47% 11.2%;
+    --accent: 168 50% 92%;
+    --accent-foreground: 168 80% 25%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 235 85% 65%;
-    --radius: 1rem;
+    --border: 214 20% 90%;
+    --input: 214 20% 92%;
+    --ring: 168 80% 36%;
+    --radius: 0.875rem;
 
-    /* Semantic Colors */
-    --success: 142 71% 45%;
+    --success: 152 69% 40%;
     --success-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
   }
 
   .dark {
-    /* Deep soft dark (#0f172a / slate-900 style) */
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    /* ─── Deep Navy / Charcoal Dark ─── */
+    --background: 222 47% 8%;
+    --foreground: 210 40% 96%;
 
-    /* Slightly lighter card */
-    --card: 222 47% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 40% 12%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 222 47% 15%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 40% 12%;
+    --popover-foreground: 210 40% 96%;
 
-    /* Soft Indigo Primary */
-    --primary: 235 85% 65%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 168 76% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 32% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 30% 16%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 217 32% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 26% 14%;
+    --muted-foreground: 215 18% 58%;
 
-    --accent: 217 32% 20%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 220 30% 16%;
+    --accent-foreground: 168 76% 50%;
 
-    --border: 217 32% 25%;
-    --input: 217 32% 25%;
-    --ring: 235 85% 65%;
+    --border: 220 26% 20%;
+    --input: 220 26% 18%;
+    --ring: 168 76% 42%;
 
-    --success: 142 71% 45%;
+    --success: 152 69% 40%;
     --success-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
   }
 }
 
@@ -84,18 +82,25 @@
   }
 
   body {
-    @apply bg-background text-foreground tracking-tight transition-colors duration-300;
+    @apply bg-background text-foreground antialiased transition-colors duration-500 ease-in-out;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-foreground;
   }
 }
 
+/* ─── Premium Glassmorphism ─── */
 .glass {
-  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/40 dark:border-slate-800/40 shadow-sm transition-all;
+  @apply bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/50 dark:border-slate-700/40 shadow-sm;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Base custom scrollbar for absolute SaaS feel */
+/* ─── Premium Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -103,9 +108,33 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+  @apply bg-slate-300/60 dark:bg-slate-700/60 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-300 dark:bg-slate-700;
+  @apply bg-slate-400/80 dark:bg-slate-600/80;
+}
+
+/* ─── Button Interactions ─── */
+.btn-primary {
+  @apply bg-primary text-white font-semibold rounded-xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 active:scale-[0.97] transition-all duration-300 ease-out;
+}
+
+.btn-ghost {
+  @apply bg-transparent hover:bg-muted text-muted-foreground hover:text-foreground font-medium rounded-xl active:scale-[0.97] transition-all duration-300 ease-out;
+}
+
+/* ─── Focus Ring ─── */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+/* ─── Card Hover ─── */
+.card-hover {
+  @apply hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 ease-out;
+}
+
+/* ─── Input Fields ─── */
+.input-field {
+  @apply w-full bg-muted/50 border border-border rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/50 focus:border-primary/50 focus:bg-background outline-none transition-all duration-300 placeholder:text-muted-foreground/60;
 }
