@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2 } from 'lucide-react';
+import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
 import PageWrapper from '@/components/PageWrapper';
@@ -93,16 +93,20 @@ export default function AccountsPage() {
                 ) : (
                     accounts.map((acc) => (
                         <div key={acc._id} className="glass p-6 rounded-2xl group hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 border border-slate-200 dark:border-slate-800">
-                            <div className="flex items-start justify-between">
-                                <div className="p-3 bg-primary/10 text-primary rounded-xl">
-                                    {getIcon(acc.type)}
+
+                            <div className="mt-4 flex items-center justify-between ">
+                                <div className="flex  flex-col gap-1 ">
+                                    <div className=" w-12 h-12 flex items-center justify-center bg-primary/10 text-primary rounded-xl">
+                                        {getIcon(acc.type)}
+                                    </div>
+                                    <h3 className="text-lg font-bold truncate">{acc.name}</h3>
+                                    <p className="text-slate-500 text-sm">{acc.type}</p>
                                 </div>
-                            </div>
-                            <div className="mt-4">
-                                <h3 className="text-lg font-bold truncate">{acc.name}</h3>
-                                <p className="text-slate-500 text-sm">{acc.type}</p>
-                                <div className="mt-4 flex items-end justify-between">
+                                <div className="flex items-center gap-2">
                                     <span className="text-3xl font-bold tracking-tight">৳{acc.balance.toLocaleString()}</span>
+                                    {/* <button className="p-2 bg-primary/10 text-primary rounded-xl">
+                                        <Eye size={20} />
+                                    </button> */}
                                 </div>
                             </div>
                         </div>
