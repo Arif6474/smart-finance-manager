@@ -29,10 +29,10 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary rounded-full px-4 py-2 text-sm font-semibold mb-8"
+                    className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary rounded-full px-4 py-2 text-xs font-semibold mb-8"
                 >
                     <Zap size={14} className="fill-current" />
-                    <span>The #1 Personal Finance App of 2025</span>
+                    <span>The #1 Personal Finance App of 2026</span>
                     <span className="bg-primary text-white text-xs px-2 py-0.5 rounded-full ml-1">New</span>
                 </motion.div>
 
@@ -72,7 +72,7 @@ export default function HeroSection() {
                         href="/signup"
                         className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 btn-primary px-8 py-4 text-base font-bold rounded-2xl"
                     >
-                        Start Free — No Card Needed
+                        Start Free
                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
@@ -143,7 +143,7 @@ export default function HeroSection() {
 
 
                     {/* Main Dashboard Mockup */}
-                    <div className="relative rounded-3xl border border-border bg-card shadow-2xl overflow-hidden">
+                    <div className="relative w-full rounded-3xl border border-border bg-card shadow-2xl overflow-hidden">
                         {/* Browser chrome */}
                         <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border bg-muted/30">
                             <div className="flex gap-1.5">
@@ -153,7 +153,7 @@ export default function HeroSection() {
                             </div>
                             <div className="flex-1 flex justify-center">
                                 <div className="bg-background rounded-lg px-16 py-1.5 text-muted-foreground text-xs border border-border">
-                                    smartfinance.app/dashboard
+                                    smartfinance.app
                                 </div>
                             </div>
                         </div>
