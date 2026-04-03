@@ -26,18 +26,56 @@ export async function POST(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const { type, person, amount, description, dueDate } = await req.json();
+        const { type, person, amount, category, description, dueDate } = await req.json();
 
         const entry = await PayableReceivable.create({
             userId: decoded.userId,
             type,
             person,
             amount,
+            category: category || 'Other',
             description,
             dueDate,
+            status: 'Pending'
         });
 
         return NextResponse.json(entry, { status: 201 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function PATCH(req: Request) {
+    try {
+        await dbConnect();
+        const token = cookies().get('token')?.value;
+        if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+
+        const body = await req.json();
+        const updated = await PayableReceivable.findByIdAndUpdate(id, body, { new: true });
+
+        return NextResponse.json(updated);
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: Request) {
+    try {
+        await dbConnect();
+        const token = cookies().get('token')?.value;
+        if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+
+        await PayableReceivable.findByIdAndDelete(id);
+        return NextResponse.json({ message: 'Deleted successfully' });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

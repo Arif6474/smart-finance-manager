@@ -6,6 +6,11 @@ const payableReceivableSchema = new mongoose.Schema(
         type: { type: String, enum: ['Payable', 'Receivable'], required: true },
         person: { type: String, required: true },
         amount: { type: Number, required: true },
+        category: {
+            type: String,
+            enum: ['Bill', 'Loan', 'EMI', 'Subscription', 'Personal', 'Rent', 'Other'],
+            default: 'Other'
+        },
         description: { type: String },
         dueDate: { type: Date },
         status: { type: String, enum: ['Pending', 'Paid', 'Partial'], default: 'Pending' },
