@@ -115,11 +115,11 @@ export default function HeroSection() {
                     transition={{ duration: 0.9, delay: 0.5, ease: 'easeOut' }}
                     className="relative mx-auto max-w-4xl"
                 >
-                    {/* Floating Stat Cards */}
+                    {/* Floating Stat Cards - Desktop Only */}
                     <motion.div
                         variants={floatVariants}
                         animate="animate"
-                        className="absolute -left-4 sm:-left-16 top-8 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-44 sm:w-52"
+                        className="hidden sm:block absolute -left-16 top-8 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-52"
                     >
                         <p className="text-xs text-muted-foreground mb-1">Net Worth</p>
                         <p className="text-2xl font-black text-foreground">৳1.25L</p>
@@ -131,7 +131,7 @@ export default function HeroSection() {
                     <motion.div
                         variants={floatVariants2}
                         animate="animate"
-                        className="absolute -right-4 sm:-right-16 top-16 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-44 sm:w-52"
+                        className="hidden sm:block absolute -right-16 top-16 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-52"
                     >
                         <p className="text-xs text-muted-foreground mb-1">Monthly Savings</p>
                         <p className="text-2xl font-black text-primary">৳32,400</p>
@@ -140,6 +140,7 @@ export default function HeroSection() {
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">74% of goal</p>
                     </motion.div>
+
 
                     {/* Main Dashboard Mockup */}
                     <div className="relative rounded-3xl border border-border bg-card shadow-2xl overflow-hidden">
@@ -158,47 +159,51 @@ export default function HeroSection() {
                         </div>
 
                         {/* Dashboard body */}
-                        <div className="p-5 sm:p-8 grid grid-cols-3 gap-4 sm:gap-6">
-                            {/* Stat cards */}
-                            {[
-                                { label: 'Total Balance', value: '৳1,25,400', color: 'text-foreground', iconBg: 'bg-primary/10 text-primary' },
-                                { label: 'Income', value: '৳45,000', color: 'text-success', iconBg: 'bg-success/10 text-success' },
-                                { label: 'Expense', value: '৳12,400', color: 'text-destructive', iconBg: 'bg-destructive/10 text-destructive' },
-                            ].map((c) => (
-                                <div key={c.label} className="bg-background rounded-2xl p-4 border border-border">
-                                    <p className="text-xs text-muted-foreground mb-1">{c.label}</p>
-                                    <p className={`text-lg sm:text-xl font-bold ${c.color}`}>{c.value}</p>
-                                </div>
-                            ))}
-
-                            {/* Chart area */}
-                            <div className="col-span-2 bg-background rounded-2xl p-4 border border-border h-32 flex flex-col justify-between">
-                                <p className="text-xs font-semibold text-muted-foreground">Cash Flow</p>
-                                <div className="flex items-end gap-1 h-20">
-                                    {[35, 60, 45, 80, 55, 95, 70, 85, 60, 100].map((h, i) => (
-                                        <div
-                                            key={i}
-                                            className="flex-1 rounded-t-md bg-gradient-to-t from-teal-600 to-emerald-400 opacity-90"
-                                            style={{ height: `${h}%` }}
-                                        />
-                                    ))}
-                                </div>
+                        <div className="p-4 sm:p-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mb-6">
+                                {/* Stat cards */}
+                                {[
+                                    { label: 'Total Balance', value: '৳1,25,400', color: 'text-foreground', iconBg: 'bg-primary/10 text-primary' },
+                                    { label: 'Income', value: '৳45,000', color: 'text-success', iconBg: 'bg-success/10 text-success' },
+                                    { label: 'Expense', value: '৳12,400', color: 'text-destructive', iconBg: 'bg-destructive/10 text-destructive' },
+                                ].map((c, i) => (
+                                    <div key={c.label} className={`bg-background rounded-2xl p-4 border border-border ${i > 0 ? 'hidden sm:block' : ''}`}>
+                                        <p className="text-xs text-muted-foreground mb-1">{c.label}</p>
+                                        <p className={`text-lg sm:text-xl font-bold ${c.color}`}>{c.value}</p>
+                                    </div>
+                                ))}
                             </div>
 
-                            {/* Recent tx */}
-                            <div className="bg-background rounded-2xl p-3 border border-border h-32 flex flex-col justify-between">
-                                <p className="text-xs font-semibold text-muted-foreground mb-1">Recent</p>
-                                <div className="space-y-1.5">
-                                    {[
-                                        { name: 'Salary', val: '+৳45K', pos: true },
-                                        { name: 'Grocery', val: '-৳2.4K', pos: false },
-                                        { name: 'Electric', val: '-৳900', pos: false },
-                                    ].map((t) => (
-                                        <div key={t.name} className="flex justify-between items-center">
-                                            <span className="text-[10px] text-foreground/80">{t.name}</span>
-                                            <span className={`text-[10px] font-bold ${t.pos ? 'text-success' : 'text-destructive'}`}>{t.val}</span>
-                                        </div>
-                                    ))}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                {/* Chart area */}
+                                <div className="sm:col-span-2 bg-background rounded-2xl p-4 border border-border h-32 flex flex-col justify-between">
+                                    <p className="text-xs font-semibold text-muted-foreground">Cash Flow</p>
+                                    <div className="flex items-end gap-1 h-20">
+                                        {[35, 60, 45, 80, 55, 95, 70, 85, 60, 100].map((h, i) => (
+                                            <div
+                                                key={i}
+                                                className={`flex-1 rounded-t-md bg-gradient-to-t from-teal-600 to-emerald-400 opacity-90 ${i > 5 ? 'hidden sm:block' : ''}`}
+                                                style={{ height: `${h}%` }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Recent tx */}
+                                <div className="bg-background rounded-2xl p-3 border border-border h-32 flex flex-col justify-between">
+                                    <p className="text-xs font-semibold text-muted-foreground mb-1">Recent</p>
+                                    <div className="space-y-1.5 overflow-hidden">
+                                        {[
+                                            { name: 'Salary', val: '+৳45K', pos: true },
+                                            { name: 'Grocery', val: '-৳2.4K', pos: false },
+                                            { name: 'Electric', val: '-৳900', pos: false },
+                                        ].map((t) => (
+                                            <div key={t.name} className="flex justify-between items-center gap-2">
+                                                <span className="text-[10px] text-foreground/80 truncate">{t.name}</span>
+                                                <span className={`text-[10px] font-bold shrink-0 ${t.pos ? 'text-success' : 'text-destructive'}`}>{t.val}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

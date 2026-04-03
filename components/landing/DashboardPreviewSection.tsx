@@ -71,11 +71,11 @@ export default function DashboardPreviewSection() {
                                     { label: 'Total Income', val: '৳45,000', sub: 'This month', color: 'text-success', icon: '📈' },
                                     { label: 'Total Expense', val: '৳12,400', sub: 'This month', color: 'text-destructive', icon: '📉' },
                                 ].map((c, i) => (
-                                    <div key={c.label} className={`bg-card border border-border rounded-2xl p-4 sm:p-5 ${i > 0 ? 'hidden sm:block' : ''}`}>
-                                        <div className="text-xl mb-2">{c.icon}</div>
-                                        <p className="text-xs text-muted-foreground mb-1">{c.label}</p>
-                                        <p className={`text-lg sm:text-2xl font-black ${c.color}`}>{c.val}</p>
-                                        <p className="text-xs text-muted-foreground mt-1">{c.sub}</p>
+                                    <div key={c.label} className="bg-card border border-border rounded-2xl p-3 sm:p-5">
+                                        <div className="text-lg sm:text-xl mb-1 sm:mb-2">{c.icon}</div>
+                                        <p className="text-[10px] text-muted-foreground mb-0.5 sm:mb-1">{c.label}</p>
+                                        <p className={`text-sm sm:text-2xl font-bold sm:font-black ${c.color}`}>{c.val}</p>
+                                        <p className="hidden sm:block text-xs text-muted-foreground mt-1">{c.sub}</p>
                                     </div>
                                 ))}
                             </div>
