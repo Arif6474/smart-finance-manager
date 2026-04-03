@@ -63,15 +63,15 @@ export default function DashboardPreviewSection() {
                             </div>
                         </div>
 
-                        <div className="p-5 sm:p-8">
+                        <div className="p-4 sm:p-8">
                             {/* Top stat cards */}
-                            <div className="grid grid-cols-3 gap-4 mb-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
                                 {[
                                     { label: 'Total Balance', val: '৳1,25,400', sub: '+৳12,400 this month', color: 'text-foreground', icon: '💰' },
                                     { label: 'Total Income', val: '৳45,000', sub: 'This month', color: 'text-success', icon: '📈' },
                                     { label: 'Total Expense', val: '৳12,400', sub: 'This month', color: 'text-destructive', icon: '📉' },
-                                ].map((c) => (
-                                    <div key={c.label} className="bg-card border border-border rounded-2xl p-4 sm:p-5">
+                                ].map((c, i) => (
+                                    <div key={c.label} className={`bg-card border border-border rounded-2xl p-4 sm:p-5 ${i > 0 ? 'hidden sm:block' : ''}`}>
                                         <div className="text-xl mb-2">{c.icon}</div>
                                         <p className="text-xs text-muted-foreground mb-1">{c.label}</p>
                                         <p className={`text-lg sm:text-2xl font-black ${c.color}`}>{c.val}</p>
@@ -80,21 +80,21 @@ export default function DashboardPreviewSection() {
                                 ))}
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                                 {/* Chart */}
-                                <div className="sm:col-span-3 bg-card border border-border rounded-2xl p-5 h-48 flex flex-col">
+                                <div className="lg:col-span-3 bg-card border border-border rounded-2xl p-5 h-48 flex flex-col">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-2 text-sm font-semibold">
                                             <Activity size={15} className="text-primary" />
                                             Cash Flow
                                         </div>
-                                        <span className="text-xs text-muted-foreground border border-border rounded-full px-3 py-1">Last 7 days</span>
+                                        <span className="text-[10px] sm:text-xs text-muted-foreground border border-border rounded-full px-3 py-1">Last 7 days</span>
                                     </div>
-                                    <div className="flex items-end gap-1.5 flex-1 pb-1">
+                                    <div className="flex items-end gap-1 sm:gap-1.5 flex-1 pb-1">
                                         {[45, 70, 40, 85, 60, 95, 75].map((h, i) => (
                                             <div key={i} className="flex-1 flex flex-col items-center gap-1">
                                                 <div
-                                                    className="w-full rounded-md bg-gradient-to-t from-teal-600 to-emerald-400 opacity-90"
+                                                    className="w-full rounded-sm sm:rounded-md bg-gradient-to-t from-teal-600 to-emerald-400 opacity-90"
                                                     style={{ height: `${h}%` }}
                                                 />
                                                 <span className="text-[8px] text-muted-foreground">{['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}</span>
@@ -104,16 +104,16 @@ export default function DashboardPreviewSection() {
                                 </div>
 
                                 {/* Recent */}
-                                <div className="sm:col-span-2 bg-card border border-border rounded-2xl p-5">
-                                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-4">Recent Transactions</p>
+                                <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-5">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide mb-4">Recent Transactions</p>
                                     <div className="space-y-3">
                                         {[
                                             { name: 'Salary', account: 'Dutch Bangla', val: '+৳45,000', pos: true },
                                             { name: 'Grocery', account: 'Wallet', val: '-৳2,400', pos: false },
                                             { name: 'Electricity', account: 'bKash', val: '-৳900', pos: false },
                                             { name: 'Freelance', account: 'Bank', val: '+৳15,000', pos: true },
-                                        ].map((t) => (
-                                            <div key={t.name} className="flex items-center justify-between">
+                                        ].map((t, i) => (
+                                            <div key={t.name} className={`flex items-center justify-between ${i > 2 ? 'hidden sm:flex' : 'flex'}`}>
                                                 <div className="flex items-center gap-2">
                                                     <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${t.pos ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}`}>
                                                         {t.pos ? <TrendingUp size={12} /> : <ArrowUpRight size={12} className="rotate-180" />}

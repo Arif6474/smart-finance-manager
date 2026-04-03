@@ -20,11 +20,11 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-2 group">
+            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow flex-shrink-0">
               <Sparkles size={15} className="text-white" />
             </div>
-            <span className="text-base font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
+            <span className="text-sm sm:text-base font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent truncate max-w-[100px] sm:max-w-none">
               SmartFinance
             </span>
           </Link>
@@ -37,18 +37,18 @@ export default function Home() {
           </nav>
 
           {/* Auth buttons */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <Link
               href="/login"
-              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Log In
             </Link>
             <Link
               href="/signup"
-              className="btn-primary px-4 py-2 text-sm"
+              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm"
             >
-              Get Started Free
+              Get Started
             </Link>
           </div>
         </div>
@@ -57,16 +57,16 @@ export default function Home() {
       {/* ── Page Sections ── */}
       <main>
         <HeroSection />
-        <div id="features">
+        <div id="features" className="scroll-mt-20 px-6 sm:px-0">
           <FeaturesSection />
         </div>
-        <div id="how-it-works">
+        <div id="how-it-works" className="scroll-mt-20 px-6 sm:px-0">
           <HowItWorksSection />
         </div>
         <DashboardPreviewSection />
         <BenefitsSection />
         <TestimonialsSection />
-        <div id="pricing">
+        <div id="pricing" className="scroll-mt-20 px-6 sm:px-0">
           <PricingSection />
         </div>
         <FinalCTASection />

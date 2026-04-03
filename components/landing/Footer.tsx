@@ -4,15 +4,15 @@ export default function Footer() {
     return (
         <footer className="bg-card pt-20 pb-10 border-t border-border transition-colors duration-500">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                    <div className="md:col-span-1">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 mb-16">
+                    <div className="col-span-2 md:col-span-1">
                         <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent inline-block">
                             SmartFinance
                         </h2>
                         <p className="text-muted-foreground text-sm mb-6 max-w-xs">
                             The smartest way to track your income, expenses, and overall financial health all in one place.
                         </p>
-                        <div className="flex gap-4 text-muted-foreground text-sm font-medium">
+                        <div className="flex gap-4 text-muted-foreground text-sm font-medium flex-wrap">
                             <a href="#" className="hover:text-primary transition-colors duration-300">Twitter</a>
                             <a href="#" className="hover:text-primary transition-colors duration-300">Facebook</a>
                             <a href="#" className="hover:text-primary transition-colors duration-300">Instagram</a>

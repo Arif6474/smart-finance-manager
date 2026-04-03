@@ -30,10 +30,10 @@ const benefits = [
 
 export default function BenefitsSection() {
     return (
-        <section className="py-28 bg-background relative overflow-hidden">
+        <section className="py-20 sm:py-28 bg-background relative overflow-hidden scroll-mt-20">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,hsl(168,80%,36%,0.05),transparent_60%)] pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-6 sm:px-6 relative z-10">
                 {/* Stats banner */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

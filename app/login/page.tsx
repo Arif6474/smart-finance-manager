@@ -73,26 +73,26 @@ export default function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="relative">
-                        <Mail className="absolute left-3.5 top-3.5 text-muted-foreground" size={17} />
+                        <Mail className="absolute left-4 top-3.5 text-muted-foreground/70" size={18} />
                         <input
                             type="email"
                             placeholder="Email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="input-field pl-11 focus-ring"
+                            className="input-field pl-12 focus-ring"
                         />
                     </div>
 
                     <div className="relative">
-                        <Lock className="absolute left-3.5 top-3.5 text-muted-foreground" size={17} />
+                        <Lock className="absolute left-4 top-3.5 text-muted-foreground/70" size={18} />
                         <input
                             type="password"
                             placeholder="Password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="input-field pl-11 focus-ring"
+                            className="input-field pl-12 focus-ring"
                         />
                     </div>
 
