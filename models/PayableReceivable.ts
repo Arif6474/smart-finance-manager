@@ -17,5 +17,9 @@ const payableReceivableSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+// Delete existing model in development to ensure schema changes are applied instantly on hot reload
+if (process.env.NODE_ENV === 'development') {
+    delete mongoose.models.PayableReceivable;
+}
 
 export default mongoose.models.PayableReceivable || mongoose.model('PayableReceivable', payableReceivableSchema);
