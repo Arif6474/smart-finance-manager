@@ -76,3 +76,91 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
+export async function PATCH(req: Request) {
+    try {
+        await dbConnect();
+        const token = cookies().get('token')?.value;
+        if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const decoded: any = verifyToken(token);
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+
+        const body = await req.json();
+        const oldTx = await Transaction.findById(id);
+        if (!oldTx) return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
+
+        // 1. Revert old balance changes
+        const oldAcc = await Account.findById(oldTx.accountId);
+        if (oldAcc) {
+            if (oldTx.type === 'Income') oldAcc.balance -= oldTx.amount;
+            else if (oldTx.type === 'Expense' || oldTx.type === 'Transfer') oldAcc.balance += oldTx.amount;
+            await oldAcc.save();
+        }
+        if (oldTx.type === 'Transfer' && oldTx.toAccountId) {
+            const oldTargetAcc = await Account.findById(oldTx.toAccountId);
+            if (oldTargetAcc) {
+                oldTargetAcc.balance -= oldTx.amount;
+                await oldTargetAcc.save();
+            }
+        }
+
+        // 2. Apply new changes
+        const updatedTx = await Transaction.findByIdAndUpdate(id, body, { new: true });
+
+        // 3. Apply new balance changes
+        const newAcc = await Account.findById(updatedTx.accountId);
+        if (newAcc) {
+            if (updatedTx.type === 'Income') newAcc.balance += updatedTx.amount;
+            else if (updatedTx.type === 'Expense' || updatedTx.type === 'Transfer') newAcc.balance -= updatedTx.amount;
+            await newAcc.save();
+        }
+        if (updatedTx.type === 'Transfer' && updatedTx.toAccountId) {
+            const newTargetAcc = await Account.findById(updatedTx.toAccountId);
+            if (newTargetAcc) {
+                newTargetAcc.balance += updatedTx.amount;
+                await newTargetAcc.save();
+            }
+        }
+
+        return NextResponse.json(updatedTx);
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: Request) {
+    try {
+        await dbConnect();
+        const token = cookies().get('token')?.value;
+        if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+        if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+
+        const tx = await Transaction.findById(id);
+        if (!tx) return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
+
+        // Revert balance changes before deleting
+        const acc = await Account.findById(tx.accountId);
+        if (acc) {
+            if (tx.type === 'Income') acc.balance -= tx.amount;
+            else if (tx.type === 'Expense' || tx.type === 'Transfer') acc.balance += tx.amount;
+            await acc.save();
+        }
+        if (tx.type === 'Transfer' && tx.toAccountId) {
+            const targetAcc = await Account.findById(tx.toAccountId);
+            if (targetAcc) {
+                targetAcc.balance -= tx.amount;
+                await targetAcc.save();
+            }
+        }
+
+        await Transaction.findByIdAndDelete(id);
+        return NextResponse.json({ message: 'Deleted successfully' });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}

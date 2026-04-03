@@ -1,26 +1,44 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, ArrowUpRight, ArrowDownRight, Search, Filter } from 'lucide-react';
+import { Plus, ArrowUpRight, ArrowDownRight, Search, Filter, Edit2, Trash2, Calendar } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
+import ConfirmModal from '@/components/ConfirmModal';
+import DatePicker from '@/components/DatePicker';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
+
+const CATEGORIES = {
+    Income: ['Salary', 'Business', 'Investment', 'Freelance', 'Gift', 'Other'],
+    Expense: ['Food & Dining', 'Shopping', 'Transport', 'Rent', 'Bills & Utilities', 'Entertainment', 'Health', 'Education', 'Other']
+};
+
+const ALL_CATEGORIES = Array.from(new Set([...CATEGORIES.Income, ...CATEGORIES.Expense])).sort();
 
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<any[]>([]);
     const [accounts, setAccounts] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
     // Form state
+    const [editId, setEditId] = useState<string | null>(null);
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
     const [type, setType] = useState('Expense');
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
     const [accountId, setAccountId] = useState('');
     const [description, setDescription] = useState('');
+    const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterType, setFilterType] = useState('All');
+    const [filterCategory, setFilterCategory] = useState('All');
+    const [filterAccountId, setFilterAccountId] = useState('All');
 
     useEffect(() => {
         fetchData();
@@ -44,42 +62,103 @@ export default function TransactionsPage() {
         }
     };
 
-    const handleAddTransaction = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const url = editId ? `/api/transactions?id=${editId}` : '/api/transactions';
+        const method = editId ? 'PATCH' : 'POST';
+
         try {
-            const res = await fetch('/api/transactions', {
-                method: 'POST',
+            const res = await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     type,
                     amount: parseFloat(amount),
                     category,
                     accountId,
-                    description
+                    description,
+                    date: new Date(date)
                 }),
             });
             if (res.ok) {
                 setIsModalOpen(false);
-                setAmount('');
-                setCategory('');
-                setDescription('');
-                toast.success('Transaction saved');
+                resetForm();
+                toast.success(editId ? 'Transaction updated' : 'Transaction saved');
                 fetchData();
             } else {
                 toast.error('Failed to save transaction');
             }
         } catch (err) {
-            console.error('Failed to add transaction', err);
+            console.error('Failed to save transaction', err);
             toast.error('An error occurred');
         }
     };
+
+    const resetForm = () => {
+        setEditId(null);
+        setAmount('');
+        setCategory('');
+        setDescription('');
+        setDate(format(new Date(), 'yyyy-MM-dd'));
+        if (accounts.length > 0) setAccountId(accounts[0]._id);
+    };
+
+    const handleEdit = (tx: any) => {
+        setEditId(tx._id);
+        setType(tx.type);
+        setAmount(tx.amount.toString());
+        setCategory(tx.category);
+        setAccountId(tx.accountId._id);
+        setDescription(tx.description || '');
+        setDate(format(new Date(tx.date), 'yyyy-MM-dd'));
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = (id: string) => {
+        setItemToDelete(id);
+        setIsConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!itemToDelete) return;
+        try {
+            const res = await fetch(`/api/transactions?id=${itemToDelete}`, {
+                method: 'DELETE',
+            });
+            if (res.ok) {
+                toast.success('Transaction deleted');
+                fetchData();
+            } else {
+                toast.error('Failed to delete');
+            }
+        } catch (err) {
+            toast.error('An error occurred');
+        } finally {
+            setItemToDelete(null);
+        }
+    };
+
+    const filteredTransactions = transactions.filter(tx => {
+        const matchesSearch =
+            tx.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            tx.category?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesType = filterType === 'All' || tx.type === filterType;
+        const matchesCategory = filterCategory === 'All' || tx.category === filterCategory;
+        const matchesAccount = filterAccountId === 'All' || tx.accountId?._id === filterAccountId;
+
+        return matchesSearch && matchesType && matchesCategory && matchesAccount;
+    });
 
     return (
         <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Transactions</h1>
                 <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                        resetForm();
+                        setIsModalOpen(true);
+                    }}
                     className="btn-primary px-5 py-2.5 flex items-center justify-center gap-2 text-sm w-full sm:w-auto"
                 >
                     <Plus size={20} />
@@ -89,18 +168,50 @@ export default function TransactionsPage() {
 
             <div className="glass rounded-2xl overflow-hidden">
                 <div className="p-4 border-b flex flex-col sm:flex-row gap-4 justify-between items-center bg-white/50 dark:bg-slate-900/50">
-                    <div className="relative w-full sm:w-96">
+                    <div className="relative w-full sm:w-80">
                         <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
                         <input
                             type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Search transactions..."
                             className="w-full bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none"
                         />
                     </div>
-                    <button className="flex items-center space-x-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl transition-colors w-full sm:w-auto justify-center border border-slate-200 dark:border-slate-700">
-                        <Filter size={18} />
-                        <span>Filter</span>
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        <select
+                            value={filterType}
+                            onChange={(e) => {
+                                setFilterType(e.target.value);
+                                setFilterCategory('All');
+                            }}
+                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
+                        >
+                            <option value="All">Type: All</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                        <select
+                            value={filterCategory}
+                            onChange={(e) => setFilterCategory(e.target.value)}
+                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
+                        >
+                            <option value="All">Category: All</option>
+                            {(filterType === 'All' ? ALL_CATEGORIES : (filterType === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense)).map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={filterAccountId}
+                            onChange={(e) => setFilterAccountId(e.target.value)}
+                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
+                        >
+                            <option value="All">Account: All</option>
+                            {accounts.map(acc => (
+                                <option key={acc._id} value={acc._id}>{acc.name}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -112,6 +223,7 @@ export default function TransactionsPage() {
                                 <th className="px-6 py-4 hidden md:table-cell">Category</th>
                                 <th className="px-6 py-4 hidden lg:table-cell">Date</th>
                                 <th className="px-6 py-4 text-right">Amount</th>
+                                <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -125,17 +237,17 @@ export default function TransactionsPage() {
                                         <td className="px-6 py-4"><Skeleton className="h-6 w-16 ml-auto" /></td>
                                     </tr>
                                 ))
-                            ) : transactions.length === 0 ? (
+                            ) : filteredTransactions.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12">
+                                    <td colSpan={6} className="px-6 py-12 text-center">
                                         <EmptyState
-                                            title="No transactions yet"
-                                            description="Record your first income or expense to see it here."
+                                            title="No results found"
+                                            description="Try adjusting your search or filters to find what you're looking for."
                                         />
                                     </td>
                                 </tr>
                             ) : (
-                                transactions.map((tx) => (
+                                filteredTransactions.map((tx) => (
                                     <tr key={tx._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-3">
@@ -162,6 +274,24 @@ export default function TransactionsPage() {
                                         <td className={`px-6 py-4 text-right font-bold ${tx.type === 'Income' ? 'text-green-500' : 'text-red-500'}`}>
                                             {tx.type === 'Income' ? '+' : '-'}৳{tx.amount.toLocaleString()}
                                         </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => handleEdit(tx)}
+                                                    className="p-2 hover:bg-primary/10 text-slate-400 hover:text-primary transition-colors rounded-lg"
+                                                    title="Edit"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(tx._id)}
+                                                    className="p-2 hover:bg-destructive/10 text-slate-400 hover:text-destructive transition-colors rounded-lg"
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -172,10 +302,13 @@ export default function TransactionsPage() {
 
             <Modal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title="Add Transaction"
+                onClose={() => {
+                    setIsModalOpen(false);
+                    resetForm();
+                }}
+                title={editId ? "Edit Transaction" : "Add Transaction"}
             >
-                <form onSubmit={handleAddTransaction} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl">
                         <button
                             type="button"
@@ -221,14 +354,22 @@ export default function TransactionsPage() {
 
                     <div>
                         <label className="text-sm font-medium block mb-2">Category</label>
-                        <input
-                            type="text"
+                        <select
                             required
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
-                            placeholder="e.g. Food, Salary, Rent"
                             className="input-field"
-                        />
+                        >
+                            <option value="">Select Category</option>
+                            {(type === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense).map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="text-sm font-medium block mb-2">Date</label>
+                        <DatePicker value={date} onChange={setDate} />
                     </div>
 
                     <div>
@@ -246,10 +387,19 @@ export default function TransactionsPage() {
                         type="submit"
                         className="w-full btn-primary py-3 mt-4 text-sm"
                     >
-                        Save Transaction
+                        {editId ? 'Update Transaction' : 'Save Transaction'}
                     </button>
                 </form>
             </Modal>
+
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Transaction?"
+                description="This will permanently delete this transaction and revert its impact on your account balance. This action cannot be undone."
+                confirmText="Delete Transaction"
+            />
         </PageWrapper>
     );
 }
