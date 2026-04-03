@@ -1,43 +1,89 @@
-export default function HowItWorksSection() {
-    const steps = [
-        {
-            num: '01',
-            title: 'Create an Account',
-            desc: 'Sign up securely in 30 seconds. No credit card required to start tracking.',
-        },
-        {
-            num: '02',
-            title: 'Add Your Transactions',
-            desc: 'Log your income, expenses, and debts quickly using our clean, simple interface.',
-        },
-        {
-            num: '03',
-            title: 'Analyze Your Money',
-            desc: 'Watch the beautiful charts aggregate your spending habits and net worth automatically.',
-        }
-    ];
+'use client';
 
+import { motion } from 'framer-motion';
+import { UserPlus, LayoutDashboard, TrendingUp } from 'lucide-react';
+
+const steps = [
+    {
+        num: '01',
+        icon: UserPlus,
+        title: 'Create your account',
+        desc: 'Sign up in 30 seconds. No credit card, no setup headache. Just your name and email.',
+        color: 'from-teal-500 to-emerald-500',
+    },
+    {
+        num: '02',
+        icon: LayoutDashboard,
+        title: 'Log your money',
+        desc: 'Add your accounts, income, and expenses. It takes 2 minutes to set up and looks stunning.',
+        color: 'from-blue-500 to-cyan-500',
+    },
+    {
+        num: '03',
+        icon: TrendingUp,
+        title: 'Watch your wealth grow',
+        desc: 'Get powerful insights and charts. Cut bad habits. Save more. Build real financial freedom.',
+        color: 'from-purple-500 to-pink-500',
+    },
+];
+
+export default function HowItWorksSection() {
     return (
-        <section className="py-24 bg-background transition-colors duration-500">
-            <div className="max-w-7xl mx-auto px-6">
+        <section className="py-28 bg-card border-t border-border relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,hsl(168,80%,36%,0.04),transparent_60%)] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold">How It Works</h2>
-                    <p className="text-lg text-muted-foreground mt-4">Simple as 1-2-3.</p>
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-block bg-primary/10 border border-primary/20 text-primary text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest"
+                    >
+                        How It Works
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight"
+                    >
+                        Up and running in{' '}
+                        <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
+                            3 minutes flat
+                        </span>
+                    </motion.h2>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-start justify-center gap-12 relative">
-                    {/* Connecting Line */}
-                    <div className="hidden lg:block absolute top-[40px] left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 relative">
+                    {/* Connector line */}
+                    <div className="hidden md:block absolute top-16 left-[18%] right-[18%] h-px bg-gradient-to-r from-border via-primary/30 to-border z-0" />
 
-                    {steps.map((step, i) => (
-                        <div key={i} className="flex-1 text-center relative z-10 w-full group">
-                            <div className="w-20 h-20 mx-auto bg-card border-4 border-background rounded-full flex items-center justify-center shadow-lift mb-6 group-hover:scale-110 transition-all duration-300">
-                                <span className="text-2xl font-black bg-gradient-to-br from-teal-500 to-emerald-600 bg-clip-text text-transparent">{step.num}</span>
-                            </div>
-                            <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                            <p className="text-muted-foreground mx-auto max-w-sm text-sm leading-relaxed">{step.desc}</p>
-                        </div>
-                    ))}
+                    {steps.map((step, i) => {
+                        const Icon = step.icon;
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.15, duration: 0.5, ease: 'easeOut' }}
+                                className="relative z-10 text-center group"
+                            >
+                                <div className="relative inline-flex mb-7">
+                                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300`}>
+                                        <Icon size={26} className="text-white" />
+                                    </div>
+                                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-background border-2 border-border rounded-full flex items-center justify-center text-[10px] font-black text-primary">
+                                        {i + 1}
+                                    </span>
+                                </div>
+                                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">{step.desc}</p>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

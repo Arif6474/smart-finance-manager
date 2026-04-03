@@ -1,55 +1,142 @@
+'use client';
+
 import Link from 'next/link';
-import { Check } from 'lucide-react';
+import { Check, Zap, PackageCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const plans = [
+    {
+        name: 'Basic',
+        price: '৳0',
+        period: 'forever',
+        desc: 'Everything you need to start taking control of your money.',
+        icon: PackageCheck,
+        gradient: 'from-slate-500 to-slate-600',
+        features: [
+            'Up to 3 accounts',
+            '500 transactions/month',
+            'Basic cash flow charts',
+            'Payable & receivable tracking',
+            'PWA mobile app install',
+            'Dark mode',
+        ],
+        cta: 'Get Started Free',
+        ctaHref: '/signup',
+        highlighted: false,
+    },
+    {
+        name: 'Pro',
+        price: '৳499',
+        period: 'per month',
+        desc: 'For power users and small businesses who need unlimited everything.',
+        icon: Zap,
+        gradient: 'from-teal-500 to-emerald-500',
+        features: [
+            'Unlimited accounts',
+            'Unlimited transactions',
+            'Advanced AI analytics',
+            'CSV data export',
+            'Priority support',
+            'Multi-user access (coming soon)',
+        ],
+        cta: 'Start Pro Trial',
+        ctaHref: '/signup',
+        highlighted: true,
+    },
+];
 
 export default function PricingSection() {
     return (
-        <section className="py-24 bg-card border-t border-border transition-colors duration-500">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-16 max-w-2xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, transparent pricing</h2>
-                    <p className="text-lg text-muted-foreground">Start for free, upgrade when you need superpowers.</p>
+        <section className="py-28 bg-card border-t border-border relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,hsl(168,80%,36%,0.07),transparent_60%)] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                <div className="text-center mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-block bg-primary/10 border border-primary/20 text-primary text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest"
+                    >
+                        Pricing
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4"
+                    >
+                        Honest pricing.{' '}
+                        <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
+                            No surprises.
+                        </span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-lg text-muted-foreground"
+                    >
+                        Start free. Upgrade only when you&apos;re ready.
+                    </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    {plans.map((plan, i) => {
+                        const Icon = plan.icon;
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.15, duration: 0.5, ease: 'easeOut' }}
+                                className={`relative rounded-3xl p-8 flex flex-col hover:-translate-y-2 transition-all duration-500 ${plan.highlighted
+                                        ? 'bg-gradient-to-br from-teal-600 to-emerald-700 text-white shadow-2xl shadow-teal-500/30 border-2 border-teal-500/50'
+                                        : 'bg-background border border-border hover:shadow-lift'
+                                    }`}
+                            >
+                                {plan.highlighted && (
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-900 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wide shadow-lg">
+                                        ⚡ Most Popular
+                                    </div>
+                                )}
 
-                    {/* Free Plan */}
-                    <div className="bg-background p-10 rounded-3xl border border-border hover:-translate-y-2 transition-all duration-500 flex flex-col text-center md:text-left">
-                        <div>
-                            <h3 className="text-2xl font-bold mb-2">Basic</h3>
-                            <p className="text-muted-foreground mb-6">Perfect for personal use</p>
-                            <div className="text-5xl font-black mb-6">৳0 <span className="text-lg text-muted-foreground font-medium tracking-normal">/forever</span></div>
-                            <ul className="space-y-4 mb-8 text-left max-w-xs mx-auto md:mx-0 text-sm">
-                                <li className="flex items-center gap-3"><Check className="text-success flex-shrink-0" size={18} /> Unlimited Accounts</li>
-                                <li className="flex items-center gap-3"><Check className="text-success flex-shrink-0" size={18} /> Up to 500 transactions/mo</li>
-                                <li className="flex items-center gap-3"><Check className="text-success flex-shrink-0" size={18} /> Basic Reports</li>
-                                <li className="flex items-center gap-3"><Check className="text-success flex-shrink-0" size={18} /> Installable Mobile App (PWA)</li>
-                            </ul>
-                        </div>
-                        <Link href="/signup" className="mt-auto w-full py-3.5 text-center rounded-xl bg-muted hover:bg-muted/80 font-semibold transition-colors text-sm">
-                            Get Started Free
-                        </Link>
-                    </div>
+                                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${plan.gradient} ${plan.highlighted ? 'bg-white/20' : ''} flex items-center justify-center mb-5 shadow-lg`}>
+                                    <Icon size={22} className="text-white" />
+                                </div>
 
-                    {/* Pro Plan */}
-                    <div className="bg-background p-10 rounded-3xl border-2 border-primary relative hover:-translate-y-2 transition-all duration-500 flex flex-col text-center md:text-left shadow-glow">
-                        <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-4 py-2 rounded-bl-xl rounded-tr-3xl">POPULAR</div>
-                        <div>
-                            <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                            <p className="text-muted-foreground mb-6">For small businesses & power users</p>
-                            <div className="text-5xl font-black mb-6">৳499 <span className="text-lg text-muted-foreground font-medium tracking-normal">/mo</span></div>
-                            <ul className="space-y-4 mb-8 text-left max-w-xs mx-auto md:mx-0 text-sm">
-                                <li className="flex items-center gap-3"><Check className="text-primary flex-shrink-0" size={18} /> Everything in Basic</li>
-                                <li className="flex items-center gap-3"><Check className="text-primary flex-shrink-0" size={18} /> Priority support</li>
-                                <li className="flex items-center gap-3"><Check className="text-primary flex-shrink-0" size={18} /> Advanced AI Analytics</li>
-                                <li className="flex items-center gap-3"><Check className="text-primary flex-shrink-0" size={18} /> CSV Data Export</li>
-                                <li className="flex items-center gap-3"><Check className="text-primary flex-shrink-0" size={18} /> Payable & Receivable Tracking</li>
-                            </ul>
-                        </div>
-                        <button className="mt-auto w-full btn-primary py-3.5 text-sm">
-                            Upgrade to Pro
-                        </button>
-                    </div>
+                                <h3 className={`text-2xl font-bold mb-1 ${plan.highlighted ? 'text-white' : ''}`}>{plan.name}</h3>
+                                <p className={`text-sm mb-5 ${plan.highlighted ? 'text-white/70' : 'text-muted-foreground'}`}>{plan.desc}</p>
 
+                                <div className="mb-6">
+                                    <span className={`text-5xl font-black ${plan.highlighted ? 'text-white' : ''}`}>{plan.price}</span>
+                                    <span className={`text-sm ml-2 ${plan.highlighted ? 'text-white/70' : 'text-muted-foreground'}`}>/{plan.period}</span>
+                                </div>
+
+                                <ul className={`space-y-3 mb-8 flex-1 text-sm ${plan.highlighted ? 'text-white/90' : 'text-muted-foreground'}`}>
+                                    {plan.features.map((f) => (
+                                        <li key={f} className="flex items-center gap-3">
+                                            <Check size={16} className={plan.highlighted ? 'text-white' : 'text-success'} />
+                                            {f}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <Link
+                                    href={plan.ctaHref}
+                                    className={`w-full py-3.5 rounded-2xl font-bold text-sm text-center transition-all duration-300 ${plan.highlighted
+                                            ? 'bg-white text-teal-700 hover:bg-white/90 shadow-lg hover:shadow-xl'
+                                            : 'btn-primary'
+                                        }`}
+                                >
+                                    {plan.cta}
+                                </Link>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

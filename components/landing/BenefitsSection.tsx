@@ -1,79 +1,113 @@
-import { PiggyBank, Target, ShieldCheck, Zap } from 'lucide-react';
+'use client';
+
+import { motion } from 'framer-motion';
+import { TrendingUp, PiggyBank, ShieldCheck, Clock } from 'lucide-react';
+
+const stats = [
+    { value: '৳500Cr+', label: 'Transactions tracked monthly', icon: TrendingUp },
+    { value: '2,000+', label: 'Active users across Bangladesh', icon: PiggyBank },
+    { value: '99.9%', label: 'Uptime reliability', icon: ShieldCheck },
+    { value: '< 2min', label: 'Average setup time', icon: Clock },
+];
+
+const benefits = [
+    {
+        title: "See where every taka goes",
+        desc: "Most people have no idea where their money disappears each month. Our auto-categorization and charts make it crystal clear — instantly.",
+        color: "from-teal-500 to-emerald-500",
+    },
+    {
+        title: "Never miss a payment again",
+        desc: "Outstanding loans, due bills, supplier payments — we track everything so nothing falls through the cracks. Your reputation stays intact.",
+        color: "from-amber-500 to-orange-500",
+    },
+    {
+        title: "Build wealth, not just track it",
+        desc: "Month-over-month net worth tracking shows your progress. Seeing the number go up every month is addicting in the best way possible.",
+        color: "from-purple-500 to-pink-500",
+    },
+];
 
 export default function BenefitsSection() {
-    const benefits = [
-        {
-            title: 'Save More Money',
-            desc: 'Identify useless subscriptions and cut down on impulse spending easily.',
-            icon: PiggyBank,
-            color: 'bg-emerald-500'
-        },
-        {
-            title: 'Understand Habits',
-            desc: 'See exactly where your money goes. Month-over-month graphs reveal your real habits.',
-            icon: Target,
-            color: 'bg-blue-500'
-        },
-        {
-            title: 'Track Debts Easily',
-            desc: 'Never forget a loaned out amount again. Accurate payable and receivable lists keep you safe.',
-            icon: ShieldCheck,
-            color: 'bg-amber-500'
-        },
-        {
-            title: 'Smarter Decisions',
-            desc: 'Data gives you confidence. Make big purchases knowing you can actually afford them.',
-            icon: Zap,
-            color: 'bg-primary'
-        }
-    ];
-
     return (
-        <section className="py-24 bg-card border-t border-border transition-colors duration-500">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="flex flex-col lg:flex-row items-center gap-16">
-                    <div className="lg:w-1/2 space-y-8">
-                        <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-                            Why use <span className="bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">Smart Finance?</span>
-                        </h2>
-                        <p className="text-lg text-muted-foreground">
-                            Stop stressing over spreadsheets and banking apps that don&apos;t communicate with each other. We give you a bird&apos;s-eye view of your financial health.
-                        </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
-                            {benefits.map((b, i) => (
-                                <div key={i} className="flex gap-4 items-start group">
-                                    <div className={`mt-0.5 p-2 rounded-xl text-white ${b.color} shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                                        <b.icon size={18} />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold mb-1 text-sm">{b.title}</h4>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+        <section className="py-28 bg-background relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_50%,hsl(168,80%,36%,0.05),transparent_60%)] pointer-events-none" />
 
-                    <div className="lg:w-1/2 w-full relative">
-                        <div className="absolute inset-0 bg-primary/10 dark:bg-primary/10 rounded-3xl rotate-2 scale-105 blur-sm"></div>
-                        <div className="relative bg-background p-8 md:p-10 rounded-3xl border border-border shadow-lift">
-                            <h3 className="text-xl font-bold mb-6">Your Net Worth Growth</h3>
-                            <div className="h-56 flex items-end gap-2 md:gap-3 relative">
-                                {[20, 35, 50, 45, 60, 80, 100].map((h, i) => (
-                                    <div
-                                        key={i}
-                                        className="flex-1 bg-gradient-to-t from-teal-600 to-emerald-400 rounded-t-lg hover:opacity-90 transition-all duration-300 hover:-translate-y-1"
-                                        style={{ height: `${h}%` }}
-                                    ></div>
-                                ))}
-                            </div>
-                            <div className="flex justify-between mt-3 text-xs text-muted-foreground">
-                                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                                    <span key={d}>{d}</span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                {/* Stats banner */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24"
+                >
+                    {stats.map((s, i) => {
+                        const Icon = s.icon;
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.08 }}
+                                className="bg-card border border-border rounded-2xl p-6 text-center hover:border-primary/30 hover:shadow-soft transition-all duration-300"
+                            >
+                                <Icon size={20} className="text-primary mx-auto mb-2" />
+                                <p className="text-2xl sm:text-3xl font-black text-foreground">{s.value}</p>
+                                <p className="text-xs text-muted-foreground mt-1 leading-snug">{s.label}</p>
+                            </motion.div>
+                        );
+                    })}
+                </motion.div>
+
+                {/* Why SmartFinance */}
+                <div className="text-center mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-block bg-primary/10 border border-primary/20 text-primary text-xs font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest"
+                    >
+                        Why SmartFinance
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4"
+                    >
+                        More than just tracking.{' '}
+                        <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
+                            It&apos;s a mindset shift.
+                        </span>
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-lg text-muted-foreground max-w-xl mx-auto"
+                    >
+                        SmartFinance doesn&apos;t just show you numbers. It changes how you think about money.
+                    </motion.p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {benefits.map((b, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.12, duration: 0.5, ease: 'easeOut' }}
+                            className="bg-card border border-border rounded-3xl p-8 hover:shadow-lift hover:-translate-y-1 transition-all duration-500"
+                        >
+                            <div className={`h-1.5 w-12 rounded-full bg-gradient-to-r ${b.color} mb-6`} />
+                            <h3 className="text-lg font-bold mb-3">{b.title}</h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed">{b.desc}</p>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>

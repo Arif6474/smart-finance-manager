@@ -13,36 +13,62 @@ import { Sparkles } from 'lucide-react';
 export default function Home() {
   return (
     <div className="min-h-screen bg-background font-sans transition-colors duration-500">
-      {/* Sticky Landing Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 dark:bg-card/60 backdrop-blur-2xl border-b border-border h-16 flex items-center px-4 sm:px-6 transition-colors duration-500">
+
+      {/* ── Sticky Navigation ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-4 sm:px-6 transition-colors duration-500"
+        style={{ background: 'hsl(var(--card) / 0.85)', backdropFilter: 'blur(20px)', borderBottom: '1px solid hsl(var(--border) / 0.6)' }}
+      >
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-md shadow-teal-500/20">
-              <Sparkles size={16} className="text-white" />
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow">
+              <Sparkles size={15} className="text-white" />
             </div>
-            <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
+            <span className="text-base font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
               SmartFinance
             </span>
           </Link>
-          <div className="flex gap-2 sm:gap-3 items-center">
-            <Link href="/login" className="px-4 py-2 font-medium text-muted-foreground hover:text-foreground transition-colors text-sm">
+
+          {/* Nav links (desktop) */}
+          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground font-medium">
+            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
+          </nav>
+
+          {/* Auth buttons */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Log In
             </Link>
-            <Link href="/signup" className="btn-primary px-4 py-2 text-sm">
-              Sign Up
+            <Link
+              href="/signup"
+              className="btn-primary px-4 py-2 text-sm"
+            >
+              Get Started Free
             </Link>
           </div>
         </div>
       </header>
 
+      {/* ── Page Sections ── */}
       <main>
         <HeroSection />
+        <div id="features">
+          <FeaturesSection />
+        </div>
+        <div id="how-it-works">
+          <HowItWorksSection />
+        </div>
         <DashboardPreviewSection />
-        <FeaturesSection />
-        <HowItWorksSection />
         <BenefitsSection />
         <TestimonialsSection />
-        <PricingSection />
+        <div id="pricing">
+          <PricingSection />
+        </div>
         <FinalCTASection />
       </main>
 

@@ -1,28 +1,60 @@
+'use client';
+
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function FinalCTASection() {
     return (
-        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-teal-600 to-emerald-700 text-white">
-            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-teal-900 opacity-20 rounded-full blur-3xl"></div>
+        <section className="py-28 relative overflow-hidden">
+            {/* Full-bleed gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-600 via-emerald-600 to-teal-700" />
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,hsl(0,0%,100%,0.05)_25%,transparent_25%),linear-gradient(225deg,hsl(0,0%,100%,0.05)_25%,transparent_25%),linear-gradient(315deg,hsl(0,0%,100%,0.05)_25%,transparent_25%)] bg-[size:60px_60px]" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-900/30 rounded-full blur-3xl" />
 
-            <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                    Start Managing Your Money Today
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+                className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center"
+            >
+                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white rounded-full px-4 py-2 text-sm font-semibold mb-8">
+                    <Sparkles size={14} className="fill-current" />
+                    <span>Join 2,000+ smart savers today</span>
+                </div>
+
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                    Your financial future <br className="hidden sm:block" />
+                    starts{' '}
+                    <span className="text-amber-300">right now.</span>
                 </h2>
-                <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto text-white/80">
-                    Join thousands of smart individuals and business owners who have taken control of their financial future.
+
+                <p className="text-xl text-white/80 mb-12 max-w-xl mx-auto leading-relaxed">
+                    Stop waiting. Stop guessing. Take 30 seconds to sign up and see your complete financial picture for the first time.
                 </p>
-                <Link
-                    href="/signup"
-                    className="inline-block px-10 py-5 bg-white text-teal-700 rounded-xl font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300 hover:shadow-white/20"
-                >
-                    Get Started Free
-                </Link>
-                <p className="mt-6 text-sm opacity-60">
-                    Takes only 30 seconds. No credit card required.
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                        href="/signup"
+                        className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-amber-50 font-extrabold px-10 py-5 rounded-2xl text-lg shadow-2xl hover:shadow-white/25 hover:scale-105 transition-all duration-300"
+                    >
+                        Start for Free
+                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                    <Link
+                        href="/login"
+                        className="w-full sm:w-auto inline-flex items-center justify-center text-white/80 hover:text-white font-semibold px-8 py-5 rounded-2xl border border-white/20 hover:bg-white/10 transition-all duration-300 text-lg"
+                    >
+                        Already have an account?
+                    </Link>
+                </div>
+
+                <p className="mt-8 text-white/50 text-sm">
+                    Free forever plan available · No credit card required · Cancel anytime
                 </p>
-            </div>
+            </motion.div>
         </section>
     );
 }
