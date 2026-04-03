@@ -28,7 +28,7 @@ export async function POST(req: Request) {
 
         const decoded: any = verifyToken(token);
         const { type, person, amount, category, description, dueDate } = await req.json();
-        console.log({type, person, amount, category, description, dueDate})
+        console.log({ type, person, amount, category, description, dueDate })
         const entry = await PayableReceivable.create({
             userId: decoded.userId,
             type,

@@ -8,6 +8,7 @@ import {
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
 import ConfirmModal from '@/components/ConfirmModal';
+import DatePicker from '@/components/DatePicker';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
@@ -366,11 +367,9 @@ export default function PayablesPage() {
 
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Due Date</label>
-                            <input
-                                type="date"
+                            <DatePicker
                                 value={dueDate}
-                                onChange={(e) => setDueDate(e.target.value)}
-                                className="input-field"
+                                onChange={setDueDate}
                             />
                         </div>
 
