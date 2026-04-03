@@ -4,6 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 
+import { Toaster } from 'react-hot-toast';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -33,6 +35,12 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen antialiased`}>
         <ThemeProvider>
           <AuthProvider>
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: { background: '#1e293b', color: '#fff', borderRadius: '12px' }
+              }}
+            />
             {children}
           </AuthProvider>
         </ThemeProvider>

@@ -1,5 +1,7 @@
 'use client';
 
+import PageWrapper from '@/components/PageWrapper';
+
 import {
     TrendingUp,
     TrendingDown,
@@ -39,7 +41,7 @@ const cards = [
 
 export default function DashboardPage() {
     return (
-        <>
+        <PageWrapper>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {cards.map((card) => {
                     const Icon = card.icon;
@@ -104,6 +106,6 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-        </>
+        </PageWrapper>
     );
 }

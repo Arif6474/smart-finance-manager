@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Download, PieChart as PieChartIcon } from 'lucide-react';
+import PageWrapper from '@/components/PageWrapper';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     PieChart, Pie, Cell
@@ -29,7 +30,7 @@ export default function ReportsPage() {
     const [loading, setLoading] = useState(false);
 
     return (
-        <div className="space-y-6">
+        <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Analytics & Reports</h1>
                 <button
@@ -104,6 +105,6 @@ export default function ReportsPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </PageWrapper>
     );
 }

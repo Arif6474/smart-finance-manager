@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, ArrowUpRight, ArrowDownRight, Search, Filter } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
+import PageWrapper from '@/components/PageWrapper';
+import Skeleton from '@/components/Skeleton';
+import EmptyState from '@/components/EmptyState';
 import { format } from 'date-fns';
 
 export default function TransactionsPage() {
@@ -59,15 +63,19 @@ export default function TransactionsPage() {
                 setAmount('');
                 setCategory('');
                 setDescription('');
+                toast.success('Transaction saved');
                 fetchData();
+            } else {
+                toast.error('Failed to save transaction');
             }
         } catch (err) {
             console.error('Failed to add transaction', err);
+            toast.error('An error occurred');
         }
     };
 
     return (
-        <div className="space-y-6">
+        <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Transactions</h1>
                 <button
@@ -108,9 +116,24 @@ export default function TransactionsPage() {
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
-                                <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">Loading...</td></tr>
+                                [1, 2, 3, 4, 5].map((i) => (
+                                    <tr key={i}>
+                                        <td className="px-6 py-4"><Skeleton className="h-10 w-full" /></td>
+                                        <td className="px-6 py-4 hidden sm:table-cell"><Skeleton className="h-6 w-24" /></td>
+                                        <td className="px-6 py-4 hidden md:table-cell"><Skeleton className="h-6 w-16" /></td>
+                                        <td className="px-6 py-4 hidden lg:table-cell"><Skeleton className="h-6 w-32" /></td>
+                                        <td className="px-6 py-4"><Skeleton className="h-6 w-16 ml-auto" /></td>
+                                    </tr>
+                                ))
                             ) : transactions.length === 0 ? (
-                                <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">No transactions found</td></tr>
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-12">
+                                        <EmptyState
+                                            title="No transactions yet"
+                                            description="Record your first income or expense to see it here."
+                                        />
+                                    </td>
+                                </tr>
                             ) : (
                                 transactions.map((tx) => (
                                     <tr key={tx._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
@@ -227,6 +250,6 @@ export default function TransactionsPage() {
                     </button>
                 </form>
             </Modal>
-        </div>
+        </PageWrapper>
     );
 }

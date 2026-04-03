@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
+import PageWrapper from '@/components/PageWrapper';
+import Skeleton from '@/components/Skeleton';
+import EmptyState from '@/components/EmptyState';
 
 export default function AccountsPage() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -42,10 +46,14 @@ export default function AccountsPage() {
                 setIsModalOpen(false);
                 setName('');
                 setBalance('');
+                toast.success('Account created successfully');
                 fetchAccounts();
+            } else {
+                toast.error('Failed to create account');
             }
         } catch (err) {
             console.error('Failed to add account', err);
+            toast.error('An error occurred');
         }
     };
 
@@ -58,7 +66,7 @@ export default function AccountsPage() {
     };
 
     return (
-        <div className="space-y-6">
+        <PageWrapper className="space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">Accounts</h1>
                 <button
@@ -73,25 +81,28 @@ export default function AccountsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
                     [1, 2, 3].map((i) => (
-                        <div key={i} className="glass p-6 rounded-2xl animate-pulse h-32 bg-slate-200 dark:bg-slate-800"></div>
+                        <Skeleton key={i} className="h-32" />
                     ))
+                ) : accounts.length === 0 ? (
+                    <div className="col-span-full">
+                        <EmptyState
+                            title="No accounts found"
+                            description="Create your first account to start tracking your balance."
+                        />
+                    </div>
                 ) : (
                     accounts.map((acc) => (
-                        <div key={acc._id} className="glass p-6 rounded-2xl group hover:border-primary/50 transition-all">
+                        <div key={acc._id} className="glass p-6 rounded-2xl group hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 border border-slate-200 dark:border-slate-800">
                             <div className="flex items-start justify-between">
                                 <div className="p-3 bg-primary/10 text-primary rounded-xl">
                                     {getIcon(acc.type)}
                                 </div>
-                                <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <MoreVertical size={20} />
-                                </button>
                             </div>
                             <div className="mt-4">
                                 <h3 className="text-lg font-bold truncate">{acc.name}</h3>
                                 <p className="text-slate-500 text-sm">{acc.type}</p>
                                 <div className="mt-4 flex items-end justify-between">
-                                    <span className="text-2xl font-bold">৳{acc.balance.toLocaleString()}</span>
-                                    <span className="text-xs font-medium px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg">Default</span>
+                                    <span className="text-3xl font-bold tracking-tight">৳{acc.balance.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -147,6 +158,6 @@ export default function AccountsPage() {
                     </button>
                 </form>
             </Modal>
-        </div>
+        </PageWrapper>
     );
 }

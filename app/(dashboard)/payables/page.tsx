@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, HandCoins, Calendar, CheckCircle2, Circle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
+import PageWrapper from '@/components/PageWrapper';
+import Skeleton from '@/components/Skeleton';
+import EmptyState from '@/components/EmptyState';
 import { format } from 'date-fns';
 
 export default function PayablesPage() {
@@ -52,15 +56,19 @@ export default function PayablesPage() {
                 setAmount('');
                 setDescription('');
                 setDueDate('');
+                toast.success('Entry added successfully');
                 fetchItems();
+            } else {
+                toast.error('Failed to add entry');
             }
         } catch (err) {
             console.error('Failed to add entry', err);
+            toast.error('An error occurred');
         }
     };
 
     return (
-        <div className="space-y-6">
+        <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Payables & Receivables</h1>
                 <button
@@ -79,28 +87,31 @@ export default function PayablesPage() {
                         <HandCoins className="mr-2" /> I Owe (Payables)
                     </h2>
                     <div className="space-y-4">
-                        {items.filter(i => i.type === 'Payable').map(item => (
-                            <div key={item._id} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border hover:border-red-500/50 transition-colors flex justify-between items-center group">
-                                <div>
-                                    <h3 className="font-bold text-lg">{item.person}</h3>
-                                    <p className="text-sm text-slate-500">{item.description}</p>
-                                    {item.dueDate && (
-                                        <div className="flex items-center text-xs text-orange-500 mt-2 font-medium">
-                                            <Calendar size={12} className="mr-1" />
-                                            Due: {format(new Date(item.dueDate), 'MMM d, yyyy')}
-                                        </div>
-                                    )}
+                        {loading ? (
+                            [1, 2].map((i) => <Skeleton key={i} className="h-24 w-full" />)
+                        ) : items.filter(i => i.type === 'Payable').length === 0 ? (
+                            <EmptyState title="All Caught Up" description="You don't owe money to anyone right now." />
+                        ) : (
+                            items.filter(i => i.type === 'Payable').map(item => (
+                                <div key={item._id} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border hover:-translate-y-1 hover:shadow-md hover:border-red-500/50 transition-all duration-300 flex justify-between items-center group">
+                                    <div>
+                                        <h3 className="font-bold text-lg">{item.person}</h3>
+                                        <p className="text-sm text-slate-500">{item.description}</p>
+                                        {item.dueDate && (
+                                            <div className="flex items-center text-xs text-orange-500 mt-2 font-medium">
+                                                <Calendar size={12} className="mr-1" />
+                                                Due: {format(new Date(item.dueDate), 'MMM d, yyyy')}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-xl font-bold text-red-500">৳{item.amount.toLocaleString()}</p>
+                                        <button className="text-xs text-slate-500 flex items-center justify-end mt-2 hover:text-green-500 transition-colors">
+                                            <Circle size={14} className="mr-1 mt-0.5" /> Mark Paid
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-xl font-bold text-red-500">৳{item.amount.toLocaleString()}</p>
-                                    <button className="text-xs text-slate-500 flex items-center justify-end mt-2 hover:text-green-500 transition-colors">
-                                        <Circle size={14} className="mr-1 mt-0.5" /> Mark Paid
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                        {items.filter(i => i.type === 'Payable').length === 0 && !loading && (
-                            <p className="text-center text-slate-500 italic py-4">No pending payables</p>
+                            ))
                         )}
                     </div>
                 </div>
@@ -111,28 +122,31 @@ export default function PayablesPage() {
                         <HandCoins className="mr-2" /> Owes Me (Receivables)
                     </h2>
                     <div className="space-y-4">
-                        {items.filter(i => i.type === 'Receivable').map(item => (
-                            <div key={item._id} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border hover:border-green-500/50 transition-colors flex justify-between items-center group">
-                                <div>
-                                    <h3 className="font-bold text-lg">{item.person}</h3>
-                                    <p className="text-sm text-slate-500">{item.description}</p>
-                                    {item.dueDate && (
-                                        <div className="flex items-center text-xs text-orange-500 mt-2 font-medium">
-                                            <Calendar size={12} className="mr-1" />
-                                            Due: {format(new Date(item.dueDate), 'MMM d, yyyy')}
-                                        </div>
-                                    )}
+                        {loading ? (
+                            [1, 2].map((i) => <Skeleton key={i} className="h-24 w-full" />)
+                        ) : items.filter(i => i.type === 'Receivable').length === 0 ? (
+                            <EmptyState title="No Receivables" description="Nobody owes you money at the moment." />
+                        ) : (
+                            items.filter(i => i.type === 'Receivable').map(item => (
+                                <div key={item._id} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/50 border hover:-translate-y-1 hover:shadow-md hover:border-green-500/50 transition-all duration-300 flex justify-between items-center group">
+                                    <div>
+                                        <h3 className="font-bold text-lg">{item.person}</h3>
+                                        <p className="text-sm text-slate-500">{item.description}</p>
+                                        {item.dueDate && (
+                                            <div className="flex items-center text-xs text-orange-500 mt-2 font-medium">
+                                                <Calendar size={12} className="mr-1" />
+                                                Due: {format(new Date(item.dueDate), 'MMM d, yyyy')}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-xl font-bold text-green-500">৳{item.amount.toLocaleString()}</p>
+                                        <button className="text-xs text-slate-500 flex items-center justify-end mt-2 hover:text-green-500 transition-colors">
+                                            <Circle size={14} className="mr-1 mt-0.5" /> Mark Received
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-xl font-bold text-green-500">৳{item.amount.toLocaleString()}</p>
-                                    <button className="text-xs text-slate-500 flex items-center justify-end mt-2 hover:text-green-500 transition-colors">
-                                        <Circle size={14} className="mr-1 mt-0.5" /> Mark Received
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                        {items.filter(i => i.type === 'Receivable').length === 0 && !loading && (
-                            <p className="text-center text-slate-500 italic py-4">No pending receivables</p>
+                            ))
                         )}
                     </div>
                 </div>
@@ -214,6 +228,6 @@ export default function PayablesPage() {
                     </button>
                 </form>
             </Modal>
-        </div>
+        </PageWrapper>
     );
 }
