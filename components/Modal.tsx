@@ -20,13 +20,13 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
+                        className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm"
                         onClick={onClose}
                     />
                     <motion.div
@@ -34,9 +34,9 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ type: "spring", duration: 0.4, bounce: 0.15 }}
-                        className="glass w-full max-w-md rounded-3xl shadow-2xl relative z-10 overflow-hidden"
+                        className="glass w-full max-w-md rounded-3xl shadow-2xl relative z-10 flex flex-col my-auto max-h-[90vh]"
                     >
-                        <div className="px-6 py-4 border-b flex items-center justify-between">
+                        <div className="px-6 py-4 border-b flex items-center justify-between flex-shrink-0">
                             <h3 className="text-xl font-bold">{title}</h3>
                             <button
                                 onClick={onClose}
@@ -45,7 +45,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
                                 <X size={20} />
                             </button>
                         </div>
-                        <div className="p-6">
+                        <div className="p-6 overflow-y-auto modal-scrollable-content">
                             {children}
                         </div>
                     </motion.div>

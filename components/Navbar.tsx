@@ -37,10 +37,10 @@ export default function Navbar() {
                     {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-500" />}
                 </motion.button>
 
-                <button className="p-2.5 hover:bg-muted rounded-xl transition-colors duration-300 relative">
+                {/* <button className="p-2.5 hover:bg-muted rounded-xl transition-colors duration-300 relative">
                     <Bell size={18} className="text-muted-foreground" />
                     <span className="absolute top-2 right-2 w-2 h-2 bg-destructive rounded-full ring-2 ring-card"></span>
-                </button>
+                </button> */}
 
                 <div className="flex items-center gap-2 pl-2 sm:pl-3 ml-1 sm:ml-2 border-l border-border">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-teal-500/20">
