@@ -12,7 +12,8 @@ import {
     Target,
     Goal,
     MoreHorizontal,
-    RotateCw
+    RotateCw,
+    HeartPulse
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -28,6 +29,7 @@ const moreItems = [
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
+    { name: 'Health', icon: HeartPulse, href: '/health' },
 ];
 
 export default function BottomNav() {

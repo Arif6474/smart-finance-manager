@@ -14,6 +14,17 @@ const payableReceivableSchema = new mongoose.Schema(
         description: { type: String },
         dueDate: { type: Date },
         status: { type: String, enum: ['Pending', 'Paid', 'Partial'], default: 'Pending' },
+        accountId: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' },
+
+        // Loan-specific fields
+        isLoan: { type: Boolean, default: false },
+        totalPrincipal: { type: Number },
+        interestRate: { type: Number }, // Annual %
+        termMonths: { type: Number },
+        emiAmount: { type: Number },
+        startDate: { type: Date },
+        remainingPrincipal: { type: Number },
+        paidMonths: { type: Number, default: 0 },
     },
     { timestamps: true }
 );

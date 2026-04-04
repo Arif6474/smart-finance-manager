@@ -20,8 +20,9 @@ export default function DashboardLayout({
         if (!loading && !user) {
             router.push('/login');
         } else if (user) {
-            // Trigger auto-payment processing on app load
+            // Trigger auto-payment & EMI processing on app load
             fetch('/api/subscriptions/process', { method: 'POST' }).catch(console.error);
+            fetch('/api/payables/emi/process', { method: 'POST' }).catch(console.error);
         }
     }, [user, loading, router]);
 

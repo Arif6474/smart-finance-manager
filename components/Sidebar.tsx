@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
+import { HeartPulse } from 'lucide-react';
 
 const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
@@ -27,6 +28,7 @@ const menuItems = [
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
+    { name: 'Health', icon: HeartPulse, href: '/health' },
 ];
 
 export default function Sidebar() {

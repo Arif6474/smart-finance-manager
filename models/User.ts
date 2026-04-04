@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         image: { type: String, default: '' },
+
+        // Gamification & Habit Building fields
+        streakCount: { type: Number, default: 0 },
+        lastActiveDate: { type: Date },
+        healthScore: { type: Number, default: 0 },
+        badges: { type: [String], default: [] },
     },
     { timestamps: true }
 );

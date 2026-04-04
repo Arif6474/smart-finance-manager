@@ -27,19 +27,46 @@ export async function POST(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const { type, person, amount, category, description, dueDate } = await req.json();
-        console.log({ type, person, amount, category, description, dueDate })
+        const body = await req.json();
+        const {
+            type, person, amount, category, description, dueDate,
+            isLoan, totalPrincipal, interestRate, termMonths, startDate, accountId
+        } = body;
+
+        let loanData = {};
+        if (isLoan) {
+            let emi = body.emiAmount;
+            if (!emi && totalPrincipal && interestRate && termMonths) {
+                const r = interestRate / 12 / 100;
+                const n = termMonths;
+                emi = Math.round((totalPrincipal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+            }
+
+            loanData = {
+                isLoan: true,
+                totalPrincipal,
+                interestRate,
+                termMonths,
+                emiAmount: emi,
+                startDate: startDate || dueDate || new Date(),
+                remainingPrincipal: totalPrincipal,
+                paidMonths: 0
+            };
+        }
+
         const entry = await PayableReceivable.create({
             userId: decoded.userId,
             type,
             person,
-            amount,
+            amount: isLoan ? (loanData as any).emiAmount : amount, // If loan, amount is the EMI
             category: category || 'Other',
             description,
-            dueDate,
-            status: 'Pending'
+            dueDate: isLoan ? (startDate || dueDate || new Date()) : dueDate,
+            status: 'Pending',
+            accountId: accountId || undefined,
+            ...loanData
         });
-        console.log(entry, 'entry')
+
         return NextResponse.json(entry, { status: 201 });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });

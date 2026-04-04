@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import AiInsightsWidget from '@/components/dashboard/AiInsightsWidget';
+import GamificationWidget from '@/components/dashboard/GamificationWidget';
 import { motion } from 'framer-motion';
 import {
     TrendingUp,
@@ -205,6 +206,9 @@ export default function DashboardPage() {
 
             {/* AI Insights Widget */}
             <AiInsightsWidget />
+
+            {/* Gamification Widget */}
+            <GamificationWidget />
         </PageWrapper>
     );
 }
