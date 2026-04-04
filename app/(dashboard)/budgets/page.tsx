@@ -8,6 +8,7 @@ import Modal from '@/components/Modal';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import Select from '@/components/Select';
+import MonthPicker from '@/components/MonthPicker';
 
 const CATEGORIES = [
     'Food & Dining', 'Shopping', 'Transport', 'Rent', 'Bills & Utilities',
@@ -105,23 +106,15 @@ export default function BudgetsPage() {
         return `৳${Math.abs(remaining).toLocaleString()} over budget`;
     };
 
-    const displayedDate = new Date();
-    displayedDate.setMonth(displayedDate.getMonth() + monthOffset);
-    const monthDisplay = displayedDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
     return (
         <PageWrapper>
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-start md:items-center gap-3 flex-col md:flex-row mb-8">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight">Monthly Budgets</h2>
 
                 </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                        <button onClick={() => setMonthOffset(p => p - 1)} className="p-1 hover:bg-muted rounded-md text-muted-foreground transition-colors"><ChevronLeft size={24} /></button>
-                        <p className="text-muted-foreground font-medium w-32 text-center">{monthDisplay}</p>
-                        <button onClick={() => setMonthOffset(p => p + 1)} className="p-1 hover:bg-muted rounded-md text-muted-foreground transition-colors"><ChevronRight size={24} /></button>
-                    </div>
+                <div className="flex items-center justify-between gap-3">
+                    <MonthPicker monthOffset={monthOffset} onChange={setMonthOffset} />
                     <button
                         onClick={() => {
                             setIsEditing(false);
@@ -133,7 +126,7 @@ export default function BudgetsPage() {
                         className="btn-primary flex items-center gap-2 px-5 py-2.5"
                     >
                         <Plus size={18} />
-                        <span>Set Budget</span>
+                        <span className='hidden md:block'>Set Budget</span>
                     </button>
                 </div>
             </div>
