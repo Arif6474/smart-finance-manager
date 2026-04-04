@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
+import Select from '@/components/Select';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
@@ -133,16 +134,16 @@ export default function AccountsPage() {
                     </div>
                     <div>
                         <label className="text-sm font-medium block mb-2">Account Type</label>
-                        <select
+                        <Select
                             value={type}
-                            onChange={(e) => setType(e.target.value)}
-                            className="input-field"
-                        >
-                            <option value="Cash">Cash</option>
-                            <option value="Bank">Bank</option>
-                            <option value="Mobile Banking">Mobile Banking</option>
-                            <option value="Other">Other</option>
-                        </select>
+                            onChange={(val) => setType(val)}
+                            options={[
+                                { value: 'Cash', label: 'Cash' },
+                                { value: 'Bank', label: 'Bank' },
+                                { value: 'Mobile Banking', label: 'Mobile Banking' },
+                                { value: 'Other', label: 'Other' }
+                            ]}
+                        />
                     </div>
                     <div>
                         <label className="text-sm font-medium block mb-2">Initial Balance</label>

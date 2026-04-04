@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
 import ConfirmModal from '@/components/ConfirmModal';
 import DatePicker from '@/components/DatePicker';
+import Select from '@/components/Select';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
@@ -197,39 +198,44 @@ export default function TransactionsPage() {
                             className="w-full bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none"
                         />
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                        <select
+                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto min-w-[200px]">
+                        <Select
                             value={filterType}
-                            onChange={(e) => {
-                                setFilterType(e.target.value);
+                            onChange={(val) => {
+                                setFilterType(val);
                                 setFilterCategory('All');
                             }}
-                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
-                        >
-                            <option value="All">Type: All</option>
-                            <option value="Income">Income</option>
-                            <option value="Expense">Expense</option>
-                        </select>
-                        <select
+                            options={[
+                                { value: 'All', label: 'Type: All' },
+                                { value: 'Income', label: 'Income' },
+                                { value: 'Expense', label: 'Expense' }
+                            ]}
+                            className="w-full sm:w-40"
+                        />
+                        <Select
                             value={filterCategory}
-                            onChange={(e) => setFilterCategory(e.target.value)}
-                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
-                        >
-                            <option value="All">Category: All</option>
-                            {(filterType === 'All' ? ALL_CATEGORIES : (filterType === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense)).map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
-                        <select
+                            onChange={(val) => setFilterCategory(val)}
+                            options={[
+                                { value: 'All', label: 'Category: All' },
+                                ...(filterType === 'All' ? ALL_CATEGORIES : (filterType === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense)).map(cat => ({
+                                    value: cat,
+                                    label: cat
+                                }))
+                            ]}
+                            className="w-full sm:w-48"
+                        />
+                        <Select
                             value={filterAccountId}
-                            onChange={(e) => setFilterAccountId(e.target.value)}
-                            className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 px-4 focus:ring-2 focus:ring-primary outline-none text-sm font-medium"
-                        >
-                            <option value="All">Account: All</option>
-                            {accounts.map(acc => (
-                                <option key={acc._id} value={acc._id}>{acc.name}</option>
-                            ))}
-                        </select>
+                            onChange={(val) => setFilterAccountId(val)}
+                            options={[
+                                { value: 'All', label: 'Account: All' },
+                                ...accounts.map(acc => ({
+                                    value: acc._id,
+                                    label: acc.name
+                                }))
+                            ]}
+                            className="w-full sm:w-48"
+                        />
                     </div>
                 </div>
 
@@ -359,31 +365,28 @@ export default function TransactionsPage() {
 
                     <div>
                         <label className="text-sm font-medium block mb-2">Account</label>
-                        <select
+                        <Select
                             value={accountId}
-                            onChange={(e) => setAccountId(e.target.value)}
-                            required
-                            className="input-field"
-                        >
-                            {accounts.map(acc => (
-                                <option key={acc._id} value={acc._id}>{acc.name} (৳{acc.balance})</option>
-                            ))}
-                        </select>
+                            onChange={(val) => setAccountId(val)}
+                            options={accounts.map(acc => ({
+                                value: acc._id,
+                                label: `${acc.name} (৳${acc.balance})`
+                            }))}
+                            placeholder="Select Account"
+                        />
                     </div>
 
                     <div>
                         <label className="text-sm font-medium block mb-2">Category</label>
-                        <select
-                            required
+                        <Select
                             value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="input-field"
-                        >
-                            <option value="">Select Category</option>
-                            {(type === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense).map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
+                            onChange={(val) => setCategory(val)}
+                            options={(type === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense).map(cat => ({
+                                value: cat,
+                                label: cat
+                            }))}
+                            placeholder="Select Category"
+                        />
                     </div>
 
                     <div>
