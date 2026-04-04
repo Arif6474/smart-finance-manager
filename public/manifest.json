@@ -1,6 +1,6 @@
 {
   "name": "Smart Finance Manager",
-  "short_name": "FinanceApp",
+  "short_name": "Finance",
   "description": "Manage your finances, accounts, and transactions with ease.",
   "start_url": "/",
   "display": "standalone",
