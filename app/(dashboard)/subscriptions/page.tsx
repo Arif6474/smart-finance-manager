@@ -248,7 +248,7 @@ export default function SubscriptionsPage() {
 
                                         <button
                                             onClick={(e) => handleDeleteClick(sub._id, e)}
-                                            className="opacity-0 group-hover:opacity-100 p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-all"
+                                            className="opacity-70 group-hover:opacity-100 p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-all"
                                         >
                                             <Trash2 size={18} />
                                         </button>
@@ -337,7 +337,6 @@ export default function SubscriptionsPage() {
                                 </div>
 
                                 <div className="pt-4 flex gap-3">
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary flex-1 py-3 bg-muted hover:bg-muted/80">Cancel</button>
                                     <button type="submit" className="btn-primary flex-1 py-3">Save Subscription</button>
                                 </div>
                             </form>
