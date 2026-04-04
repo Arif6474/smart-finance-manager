@@ -10,7 +10,8 @@ import {
     BarChart3,
     Target,
     LogOut,
-    Sparkles
+    Sparkles,
+    Goal    
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -21,6 +22,7 @@ const menuItems = [
     { name: 'Transactions', icon: Receipt, href: '/transactions' },
     { name: 'Payables', icon: HandCoins, href: '/payables' },
     { name: 'Budgets', icon: Target, href: '/budgets' },
+    { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
 ];
 
