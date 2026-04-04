@@ -198,7 +198,7 @@ export default function TransactionsPage() {
                             className="w-full bg-slate-100 dark:bg-slate-800 border-0 rounded-xl py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none"
                         />
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto min-w-[200px]">
+                    <div className="flex flex-row gap-2 w-full sm:w-auto min-w-[200px]">
                         <Select
                             value={filterType}
                             onChange={(val) => {
@@ -206,7 +206,7 @@ export default function TransactionsPage() {
                                 setFilterCategory('All');
                             }}
                             options={[
-                                { value: 'All', label: 'Type: All' },
+                                { value: 'All', label: 'Type' },
                                 { value: 'Income', label: 'Income' },
                                 { value: 'Expense', label: 'Expense' }
                             ]}
@@ -216,7 +216,7 @@ export default function TransactionsPage() {
                             value={filterCategory}
                             onChange={(val) => setFilterCategory(val)}
                             options={[
-                                { value: 'All', label: 'Category: All' },
+                                { value: 'All', label: 'Category' },
                                 ...(filterType === 'All' ? ALL_CATEGORIES : (filterType === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense)).map(cat => ({
                                     value: cat,
                                     label: cat
@@ -228,7 +228,7 @@ export default function TransactionsPage() {
                             value={filterAccountId}
                             onChange={(val) => setFilterAccountId(val)}
                             options={[
-                                { value: 'All', label: 'Account: All' },
+                                { value: 'All', label: 'Account' },
                                 ...accounts.map(acc => ({
                                     value: acc._id,
                                     label: acc.name

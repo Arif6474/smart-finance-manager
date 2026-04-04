@@ -20,7 +20,7 @@ export async function GET() {
 
         // Get recent transactions
         const recentTransactions = await Transaction.find({ userId })
-            .sort({ date: -1 })
+            .sort({ date: -1, createdAt: -1 })
             .limit(5)
             .populate('accountId', 'name');
 

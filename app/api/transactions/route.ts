@@ -23,7 +23,7 @@ export async function GET(req: Request) {
         if (accountId) query.accountId = accountId;
 
         const transactions = await Transaction.find(query)
-            .sort({ date: -1 })
+            .sort({ date: -1, createdAt: -1 })
             .populate('accountId', 'name')
             .populate('toAccountId', 'name');
 
