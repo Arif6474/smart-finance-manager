@@ -21,8 +21,8 @@ const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
     { name: 'Accounts', icon: Wallet, href: '/accounts' },
     { name: 'Transactions', icon: Receipt, href: '/transactions' },
-    { name: 'Payables', icon: HandCoins, href: '/payables' },
     { name: 'Budgets', icon: Target, href: '/budgets' },
+    { name: 'Payables', icon: HandCoins, href: '/payables' },
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
 ];
