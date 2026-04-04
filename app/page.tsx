@@ -1,3 +1,5 @@
+'use client';
+
 import HeroSection from '@/components/landing/HeroSection';
 import FeaturesSection from '@/components/landing/FeaturesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
@@ -8,9 +10,12 @@ import PricingSection from '@/components/landing/PricingSection';
 import FinalCTASection from '@/components/landing/FinalCTASection';
 import Footer from '@/components/landing/Footer';
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-background font-sans transition-colors duration-500">
 
@@ -38,18 +43,30 @@ export default function Home() {
 
           {/* Auth buttons */}
           <div className="flex items-center gap-1 sm:gap-3">
-            <Link
-              href="/login"
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Log In
-            </Link>
-            <Link
-              href="/signup"
-              className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm"
-            >
-              Get Started
-            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="btn-primary px-3 sm:px-5 py-2 text-xs sm:text-sm flex items-center gap-2"
+              >
+                <LayoutDashboard size={16} />
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight, TrendingUp, ShieldCheck, Zap, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
 
 const floatVariants = {
     animate: { y: [-8, 8, -8], transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' as const } }
@@ -12,6 +13,7 @@ const floatVariants2 = {
 };
 
 export default function HeroSection() {
+    const { user } = useAuth();
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background pt-16">
             {/* ── Gradient Mesh Background ── */}
@@ -68,19 +70,31 @@ export default function HeroSection() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
                 >
-                    <Link
-                        href="/signup"
-                        className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 btn-primary px-8 py-4 text-base font-bold rounded-2xl"
-                    >
-                        Start Free
-                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                    <Link
-                        href="/login"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card border border-border hover:bg-muted text-foreground font-semibold px-8 py-4 rounded-2xl transition-all duration-300 text-base"
-                    >
-                        Sign In
-                    </Link>
+                    {user ? (
+                        <Link
+                            href="/dashboard"
+                            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 btn-primary px-10 py-4 text-lg font-bold rounded-2xl shadow-xl shadow-teal-500/20"
+                        >
+                            Go to Dashboard
+                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    ) : (
+                        <>
+                            <Link
+                                href="/signup"
+                                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 btn-primary px-8 py-4 text-base font-bold rounded-2xl"
+                            >
+                                Start Free
+                                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            <Link
+                                href="/login"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card border border-border hover:bg-muted text-foreground font-semibold px-8 py-4 rounded-2xl transition-all duration-300 text-base"
+                            >
+                                Sign In
+                            </Link>
+                        </>
+                    )}
                 </motion.div>
 
                 {/* ── Social Proof ── */}

@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function FinalCTASection() {
+    const { user } = useAuth();
     return (
         <section className="py-28 relative overflow-hidden">
             {/* Full-bleed gradient background */}
@@ -36,19 +38,31 @@ export default function FinalCTASection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Link
-                        href="/signup"
-                        className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-amber-50 font-extrabold px-10 py-5 rounded-2xl text-lg shadow-2xl hover:shadow-white/25 hover:scale-105 transition-all duration-300"
-                    >
-                        Start for Free
-                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                    <Link
-                        href="/login"
-                        className="w-full sm:w-auto inline-flex items-center justify-center text-white/80 hover:text-white font-semibold px-8 py-5 rounded-2xl border border-white/20 hover:bg-white/10 transition-all duration-300 text-lg"
-                    >
-                        Already have an account?
-                    </Link>
+                    {user ? (
+                        <Link
+                            href="/dashboard"
+                            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-amber-50 font-extrabold px-12 py-5 rounded-2xl text-xl shadow-2xl hover:shadow-white/25 hover:scale-105 transition-all duration-300"
+                        >
+                            Go to Dashboard
+                            <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    ) : (
+                        <>
+                            <Link
+                                href="/signup"
+                                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-amber-50 font-extrabold px-10 py-5 rounded-2xl text-lg shadow-2xl hover:shadow-white/25 hover:scale-105 transition-all duration-300"
+                            >
+                                Start for Free
+                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            <Link
+                                href="/login"
+                                className="w-full sm:w-auto inline-flex items-center justify-center text-white/80 hover:text-white font-semibold px-8 py-5 rounded-2xl border border-white/20 hover:bg-white/10 transition-all duration-300 text-lg"
+                            >
+                                Already have an account?
+                            </Link>
+                        </>
+                    )}
                 </div>
 
                 <p className="mt-8 text-white/50 text-sm">
