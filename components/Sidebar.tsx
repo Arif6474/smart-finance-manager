@@ -8,6 +8,7 @@ import {
     Receipt,
     HandCoins,
     BarChart3,
+    Target,
     LogOut,
     Sparkles
 } from 'lucide-react';
@@ -19,6 +20,7 @@ const menuItems = [
     { name: 'Accounts', icon: Wallet, href: '/accounts' },
     { name: 'Transactions', icon: Receipt, href: '/transactions' },
     { name: 'Payables', icon: HandCoins, href: '/payables' },
+    { name: 'Budgets', icon: Target, href: '/budgets' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
 ];
 
@@ -54,8 +56,8 @@ export default function Sidebar() {
                             key={item.name}
                             href={item.href}
                             className={`relative flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 group ${isActive
-                                    ? 'bg-primary/10 text-primary font-semibold'
-                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                ? 'bg-primary/10 text-primary font-semibold'
+                                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                 }`}
                         >
                             {isActive && (

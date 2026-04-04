@@ -15,9 +15,10 @@ interface SelectProps {
     options: Option[];
     placeholder?: string;
     className?: string;
+    disabled?: boolean;
 }
 
-const Select = ({ value, onChange, options, placeholder = 'Select...', className = '' }: SelectProps) => {
+const Select = ({ value, onChange, options, placeholder = 'Select...', className = '', disabled = false }: SelectProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -37,8 +38,9 @@ const Select = ({ value, onChange, options, placeholder = 'Select...', className
         <div className={`relative ${className}`} ref={containerRef}>
             <button
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between w-full px-4 py-2 text-sm transition-all border rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                onClick={() => !disabled && setIsOpen(!isOpen)}
+                disabled={disabled}
+                className={`flex items-center justify-between w-full px-4 py-2 text-sm transition-all border rounded-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 ${disabled ? 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-950' : 'hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20'}`}
             >
                 <span className={selectedOption ? 'text-slate-900 dark:text-slate-100' : 'text-slate-400'}>
                     {selectedOption ? selectedOption.label : placeholder}
