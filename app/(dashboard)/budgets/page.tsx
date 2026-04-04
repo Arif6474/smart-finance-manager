@@ -113,7 +113,7 @@ export default function BudgetsPage() {
                     <h2 className="text-2xl font-bold tracking-tight">Monthly Budgets</h2>
 
                 </div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 w-full md:w-auto">
                     <MonthPicker monthOffset={monthOffset} onChange={setMonthOffset} />
                     <button
                         onClick={() => {
