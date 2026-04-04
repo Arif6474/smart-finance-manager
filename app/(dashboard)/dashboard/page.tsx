@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
+import AiInsightsWidget from '@/components/dashboard/AiInsightsWidget';
 import { motion } from 'framer-motion';
 import {
     TrendingUp,
@@ -201,6 +202,9 @@ export default function DashboardPage() {
                     </div>
                 </motion.div>
             </motion.div>
+
+            {/* AI Insights Widget */}
+            <AiInsightsWidget />
         </PageWrapper>
     );
 }
