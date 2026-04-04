@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Advanced full-stack financial management PWA",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icons/icon-192x192.png",
+    icon: "/favicon.png",
     apple: "/icons/icon-192x192.png",
   },
   appleWebApp: {
