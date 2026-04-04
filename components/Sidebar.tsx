@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -11,7 +12,7 @@ import {
     Target,
     LogOut,
     Sparkles,
-    Goal    
+    Goal
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -35,9 +36,13 @@ export default function Sidebar() {
             {/* Logo */}
             <div className="p-6 pb-2">
                 <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                    <div className="w-9 h-9 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow duration-300">
-                        <Sparkles size={18} className="text-white" />
-                    </div>
+                    <Image
+                        src="/icons/icon-192x192.png"
+                        alt="SmartFinance Logo"
+                        width={32}
+                        height={32}
+                        className="w-9 h-9 rounded-xl object-contain shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow duration-300"
+                    />
                     <span className="text-lg font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
                         SmartFinance
                     </span>

@@ -10,6 +10,7 @@ import PricingSection from '@/components/landing/PricingSection';
 import FinalCTASection from '@/components/landing/FinalCTASection';
 import Footer from '@/components/landing/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sparkles, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -26,9 +27,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow flex-shrink-0">
-              <Sparkles size={15} className="text-white" />
-            </div>
+            <Image
+              src="/icons/icon-192x192.png"
+              alt="SmartFinance Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-xl object-contain shadow-md shadow-primary/20 group-hover:shadow-primary/40 transition-shadow flex-shrink-0"
+            />
             <span className="text-sm sm:text-base font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent truncate max-w-[100px] sm:max-w-none">
               SmartFinance
             </span>

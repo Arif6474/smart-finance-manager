@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { LogIn, Mail, Lock, Loader2, Sparkles } from 'lucide-react';
+import { LogIn, Mail, Lock, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {
@@ -50,14 +52,20 @@ export default function LoginPage() {
                 transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
                 className="max-w-md w-full bg-card border border-border p-8 rounded-3xl shadow-lift space-y-7 relative"
             >
-                {/* Logo */}
-                <div className="text-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-teal-500/25">
-                        <Sparkles size={22} className="text-white" />
-                    </div>
-                    <h1 className="text-2xl font-bold text-foreground">
-                        Welcome Back
-                    </h1>
+                {/* Logo Section */}
+                <div className="text-center mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 mb-2 group">
+                        <Image
+                            src="/icons/icon-192x192.png"
+                            alt="SmartFinance Logo"
+                            width={48}
+                            height={48}
+                            className="w-12 h-12 rounded-2xl object-contain shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow"
+                        />
+                        <span className="text-2xl font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                            SmartFinance
+                        </span>
+                    </Link>
                     <p className="text-muted-foreground text-sm mt-1">Log in to manage your finances</p>
                 </div>
 

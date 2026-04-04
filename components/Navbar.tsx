@@ -5,6 +5,7 @@ import { Sun, Moon, Bell, LogOut, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
@@ -17,11 +18,15 @@ export default function Navbar() {
                 <h2 className="text-base font-medium hidden md:block text-muted-foreground">
                     Welcome back, <span className="text-foreground font-semibold">{user?.name || 'User'}</span>
                 </h2>
-                <Link href="/dashboard" className="flex items-center gap-2 md:hidden">
-                    <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-md shadow-teal-500/20">
-                        <Sparkles size={16} className="text-white" />
-                    </div>
-                    <span className="text-base font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                <Link href="/dashboard" className="flex items-center gap-2 group md:hidden">
+                    <Image
+                        src="/icons/icon-192x192.png"
+                        alt="SmartFinance Logo"
+                        width={28}
+                        height={28}
+                        className="w-7 h-7 rounded-lg object-contain shadow-sm shadow-primary/20"
+                    />
+                    <span className="text-sm font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
                         SmartFinance
                     </span>
                 </Link>
