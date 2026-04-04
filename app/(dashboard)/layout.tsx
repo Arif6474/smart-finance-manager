@@ -19,6 +19,9 @@ export default function DashboardLayout({
     useEffect(() => {
         if (!loading && !user) {
             router.push('/login');
+        } else if (user) {
+            // Trigger auto-payment processing on app load
+            fetch('/api/subscriptions/process', { method: 'POST' }).catch(console.error);
         }
     }, [user, loading, router]);
 

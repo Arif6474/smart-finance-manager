@@ -11,7 +11,8 @@ import {
     BarChart3,
     Target,
     Goal,
-    MoreHorizontal
+    MoreHorizontal,
+    RotateCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,6 +26,7 @@ const mainItems = [
 const moreItems = [
     { name: 'Payables', icon: HandCoins, href: '/payables' },
     { name: 'Goals', icon: Goal, href: '/goals' },
+    { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
 ];
 
