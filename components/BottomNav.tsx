@@ -7,7 +7,9 @@ import {
     Wallet,
     Receipt,
     HandCoins,
-    BarChart3
+    BarChart3,
+    Target,
+    Goal
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -15,7 +17,9 @@ const menuItems = [
     { name: 'Home', icon: LayoutDashboard, href: '/dashboard' },
     { name: 'Accounts', icon: Wallet, href: '/accounts' },
     { name: 'Trans', icon: Receipt, href: '/transactions' },
+    { name: 'Budgets', icon: Target, href: '/budgets' },
     { name: 'Payables', icon: HandCoins, href: '/payables' },
+    { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
 ];
 
@@ -33,8 +37,8 @@ export default function BottomNav() {
                             key={item.name}
                             href={item.href}
                             className={`relative flex flex-col items-center justify-center w-16 h-14 rounded-2xl transition-all duration-300 ${isActive
-                                    ? 'text-primary'
-                                    : 'text-muted-foreground'
+                                ? 'text-primary'
+                                : 'text-muted-foreground'
                                 }`}
                         >
                             <div className="relative">
