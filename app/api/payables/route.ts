@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import PayableReceivable from '@/models/PayableReceivable';
+import Transaction from '@/models/Transaction';
+import Account from '@/models/Account';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import console from 'console';
@@ -66,6 +68,31 @@ export async function POST(req: Request) {
             accountId: accountId || undefined,
             ...loanData
         });
+
+        if (accountId) {
+            const txAmount = Number(isLoan ? totalPrincipal : amount);
+            const txType = type === 'Payable' ? 'Income' : 'Expense';
+            
+            await Transaction.create({
+                userId: decoded.userId,
+                accountId,
+                type: txType,
+                amount: txAmount,
+                category: category || 'Other',
+                description: `Initial ${type.toLowerCase()} entry for ${person}${description ? ` - ${description}` : ''}`,
+                date: new Date(),
+            });
+
+            const account = await Account.findById(accountId);
+            if (account) {
+                if (txType === 'Income') {
+                    account.balance += txAmount;
+                } else {
+                    account.balance -= txAmount;
+                }
+                await account.save();
+            }
+        }
 
         return NextResponse.json(entry, { status: 201 });
     } catch (error: any) {
