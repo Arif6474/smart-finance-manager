@@ -308,9 +308,14 @@ export default function PayablesPage() {
         return (
             <div className="space-y-6">
                 <div className="space-y-4">
-                    {pending.map(item => (
+                    {pending.map(item => {
+                        const computedDueDate = item.isLoan && item.startDate
+                            ? addMonths(new Date(item.startDate), item.paidMonths || 0)
+                            : item.dueDate;
+
+                        return (
                         <div key={item._id} className="p-4 rounded-xl bg-card border border-border hover:shadow-md transition-all duration-300 flex flex-col gap-4 group relative overflow-hidden">
-                            {isOverdue(item.dueDate) && (
+                            {isOverdue(computedDueDate) && (
                                 <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
                             )}
                             <div className="flex justify-between items-start">
@@ -321,7 +326,7 @@ export default function PayablesPage() {
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <h3 className="font-bold text-lg leading-tight">{item.person}</h3>
-                                            {isOverdue(item.dueDate) && (
+                                            {isOverdue(computedDueDate) && (
                                                 <span className="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Overdue</span>
                                             )}
                                             {item.isLoan && (
@@ -345,9 +350,9 @@ export default function PayablesPage() {
                                             ৳{item.amount.toLocaleString()}
                                         </p>
                                     )}
-                                    <div className={`flex items-center text-xs mt-1 font-medium justify-end ${isOverdue(item.dueDate) ? 'text-red-500' : 'text-muted-foreground'}`}>
+                                    <div className={`flex items-center text-xs mt-1 font-medium justify-end ${isOverdue(computedDueDate) ? 'text-red-500' : 'text-muted-foreground'}`}>
                                         <Calendar size={12} className="mr-1" />
-                                        {item.dueDate ? format(new Date(item.dueDate), 'MMM d, yyyy') : 'No Date'}
+                                        {computedDueDate ? format(new Date(computedDueDate), 'MMM d, yyyy') : 'No Date'}
                                     </div>
                                 </div>
                             </div>
@@ -360,8 +365,8 @@ export default function PayablesPage() {
                                             <span>Started: {item.startDate ? format(new Date(item.startDate), 'MMM d, yyyy') : 'N/A'}</span>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <AlertCircle size={12} className={isOverdue(item.dueDate) ? "text-red-500" : "text-emerald-500"} />
-                                            <span>Next: {item.dueDate ? format(new Date(item.dueDate), 'MMM d, yyyy') : 'N/A'}</span>
+                                            <AlertCircle size={12} className={isOverdue(computedDueDate) ? "text-red-500" : "text-emerald-500"} />
+                                            <span>Next: {computedDueDate ? format(new Date(computedDueDate), 'MMM d, yyyy') : 'N/A'}</span>
                                         </div>
                                     </div>
 
@@ -399,7 +404,8 @@ export default function PayablesPage() {
                                 </button>
                             </div>
                         </div>
-                    ))}
+                    );
+                })}
                 </div>
 
                 {paid.length > 0 && (
