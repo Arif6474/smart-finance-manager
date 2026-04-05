@@ -455,9 +455,9 @@ export default function PayablesPage() {
                                     {!item.isLoan && (
                                         <span className="text-sm font-bold line-through">৳{item.amount.toLocaleString()}</span>
                                     )}
-                                    <button onClick={() => handleDelete(item._id)} className="p-1 hover:text-red-500">
+                                    {/* <button onClick={() => handleDelete(item._id)} className="p-1 hover:text-red-500">
                                         <Trash2 size={12} />
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         ))}
