@@ -135,13 +135,13 @@ export default function PayablesPage() {
     };
 
     const handleToggleStatus = async (item: any) => {
-        if (item.status === 'Pending') {
+        if (item.status === 'Pending' || item.status === 'Partial') {
             setSelectedItemToPay(item);
             setPaymentAccountId(item.accountId || '');
             setIsPaymentModalOpen(true);
             setPaymentMode('single');
             setEmiCount(1);
-            setCustomSettlementAmount(item.remainingPrincipal?.toString() || '');
+            setCustomSettlementAmount(item.isLoan ? (item.remainingPrincipal?.toString() || '') : (item.amount - (item.paidAmount || 0)).toString());
             return;
         }
 
@@ -202,6 +202,19 @@ export default function PayablesPage() {
                         paidMonths: newPaidMonths,
                         ...(newDueDate && { dueDate: newDueDate })
                     };
+                }
+            } else {
+                const amountPaying = customSettlementAmount ? parseFloat(customSettlementAmount) : (item.amount - (item.paidAmount || 0));
+                txAmount = amountPaying;
+                
+                const newPaidAmount = (item.paidAmount || 0) + amountPaying;
+                const newRemaining = item.amount - newPaidAmount;
+
+                if (newRemaining <= 0) {
+                    updatePayload = { status: 'Paid', paidAmount: item.amount };
+                } else {
+                    updatePayload = { status: 'Partial', paidAmount: newPaidAmount };
+                    desc = `Partial Payment for ${item.person}${item.description ? ` - ${item.description}` : ''}`;
                 }
             }
             
@@ -272,7 +285,7 @@ export default function PayablesPage() {
         return items
             .filter(i => i.type === t && i.status !== 'Paid')
             .reduce((acc, curr) => {
-                const itemAmount = curr.isLoan ? (curr.emiAmount || 0) : (curr.amount || 0);
+                const itemAmount = curr.isLoan ? (curr.emiAmount || 0) : Math.max(0, curr.amount - (curr.paidAmount || 0));
                 return acc + itemAmount;
             }, 0);
     };
@@ -281,7 +294,7 @@ export default function PayablesPage() {
         return items
             .filter(i => i.type === t && i.status !== 'Paid')
             .reduce((acc, curr) => {
-                const itemAmount = curr.isLoan ? (curr.remainingPrincipal || 0) : (curr.amount || 0);
+                const itemAmount = curr.isLoan ? (curr.remainingPrincipal || 0) : Math.max(0, curr.amount - (curr.paidAmount || 0));
                 return acc + itemAmount;
             }, 0);
     };
@@ -355,9 +368,16 @@ export default function PayablesPage() {
                                         </p>
                                     )}
                                     {!item.isLoan && (
-                                        <p className={`text-xl font-bold ${itemType === 'Payable' ? 'text-red-500' : 'text-emerald-500'}`}>
-                                            ৳{item.amount.toLocaleString()}
-                                        </p>
+                                        <div className="text-right">
+                                            <p className={`text-xl font-bold ${itemType === 'Payable' ? 'text-red-500' : 'text-emerald-500'}`}>
+                                                ৳{Math.max(0, item.amount - (item.paidAmount || 0)).toLocaleString()}
+                                            </p>
+                                            {item.paidAmount > 0 && (
+                                                <p className="text-[10px] text-muted-foreground uppercase mt-0.5 tracking-widest font-bold">
+                                                    Paid: ৳{item.paidAmount.toLocaleString()}
+                                                </p>
+                                            )}
+                                        </div>
                                     )}
                                     <div className={`flex items-center text-xs mt-1 font-medium justify-end ${isOverdue(computedDueDate) ? 'text-red-500' : 'text-muted-foreground'}`}>
                                         <Calendar size={12} className="mr-1" />
@@ -706,7 +726,7 @@ export default function PayablesPage() {
                                             ? (parseFloat(customSettlementAmount) || selectedItemToPay?.remainingPrincipal)?.toLocaleString()
                                             : ((selectedItemToPay?.emiAmount || 0) * (paymentMode === 'multiple' ? emiCount : 1)).toLocaleString()
                                           )
-                                        : (selectedItemToPay?.amount)?.toLocaleString()
+                                        : (parseFloat(customSettlementAmount) || Math.max(0, selectedItemToPay?.amount - (selectedItemToPay?.paidAmount || 0)))?.toLocaleString()
                                 }
                             </h3>
                             <p className="text-xs uppercase tracking-widest font-bold mt-2 text-primary">{selectedItemToPay?.person}</p>
@@ -738,6 +758,19 @@ export default function PayablesPage() {
                                         <p className="text-[10px] text-muted-foreground mt-1">Remaining Principal: ৳{selectedItemToPay?.remainingPrincipal?.toLocaleString()}</p>
                                     </div>
                                 )}
+                            </div>
+                        )}
+
+                        {!selectedItemToPay?.isLoan && (
+                            <div className="space-y-4">
+                                <div className="space-y-2 mt-3">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Amount to Pay</label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">৳</span>
+                                        <input type="number" max={selectedItemToPay?.amount - (selectedItemToPay?.paidAmount || 0)} className="input-field pl-8 font-bold" value={customSettlementAmount} onChange={(e) => setCustomSettlementAmount(e.target.value)} />
+                                    </div>
+                                    <p className="text-[10px] text-muted-foreground mt-1">Remaining: ৳{Math.max(0, selectedItemToPay?.amount - (selectedItemToPay?.paidAmount || 0))?.toLocaleString()}</p>
+                                </div>
                             </div>
                         )}
 
