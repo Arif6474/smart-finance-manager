@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import {
     Plus, HandCoins, Calendar, CheckCircle2, Circle, AlertCircle,
-    Trash2, Clock, Zap, Home, Tv, User, CreditCard, MoreHorizontal
+    Trash2, Clock, Zap, Home, Tv, User, CreditCard, MoreHorizontal,
+    Edit2
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
@@ -423,7 +424,9 @@ export default function PayablesPage() {
                                     onClick={() => handleToggleStatus(item)}
                                     className="text-[10px] font-bold text-muted-foreground hover:text-emerald-500 flex items-center gap-1 transition-colors uppercase tracking-tight"
                                 >
-                                    <CheckCircle2 size={12} /> Mark {item.status === 'Paid' ? 'Pending' : 'Paid'}
+                                    {/* edit icon */}
+                                    <Edit2 size={14} />
+                                    {/* <CheckCircle2 size={12} /> Mark {item.status === 'Paid' ? 'Pending' : 'Paid'} */}
                                 </button>
                                 <button
                                     onClick={() => handleDelete(item._id)}

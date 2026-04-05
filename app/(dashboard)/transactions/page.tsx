@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, ArrowUpRight, ArrowDownRight, Search, Filter, Edit2, Trash2, Calendar } from 'lucide-react';
+import { Plus, ArrowUpRight, ArrowDownRight, Search, Filter, Edit2, Trash2, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -40,6 +40,9 @@ export default function TransactionsPage() {
     const [filterType, setFilterType] = useState('All');
     const [filterCategory, setFilterCategory] = useState('All');
     const [filterAccountId, setFilterAccountId] = useState('All');
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const PAGE_SIZE = 15;
 
     useEffect(() => {
         fetchData();
@@ -160,6 +163,34 @@ export default function TransactionsPage() {
         return matchesSearch && matchesType && matchesCategory && matchesAccount;
     });
 
+    const totalPages = Math.max(1, Math.ceil(filteredTransactions.length / PAGE_SIZE));
+    const safePage = Math.min(currentPage, totalPages);
+    const paginatedTransactions = filteredTransactions.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+    };
+
+    // Reset to page 1 when filters change
+    const handleFilterChange = (setter: (v: string) => void) => (val: string) => {
+        setter(val);
+        setCurrentPage(1);
+    };
+
+    const getPageNumbers = () => {
+        const pages: (number | '...')[] = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (safePage > 3) pages.push('...');
+            for (let i = Math.max(2, safePage - 1); i <= Math.min(totalPages - 1, safePage + 1); i++) pages.push(i);
+            if (safePage < totalPages - 2) pages.push('...');
+            pages.push(totalPages);
+        }
+        return pages;
+    };
+
     return (
         <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -202,7 +233,7 @@ export default function TransactionsPage() {
                         <Select
                             value={filterType}
                             onChange={(val) => {
-                                setFilterType(val);
+                                handleFilterChange(setFilterType)(val);
                                 setFilterCategory('All');
                             }}
                             options={[
@@ -214,7 +245,7 @@ export default function TransactionsPage() {
                         />
                         <Select
                             value={filterCategory}
-                            onChange={(val) => setFilterCategory(val)}
+                            onChange={handleFilterChange(setFilterCategory)}
                             options={[
                                 { value: 'All', label: 'Category' },
                                 ...(filterType === 'All' ? ALL_CATEGORIES : (filterType === 'Income' ? CATEGORIES.Income : CATEGORIES.Expense)).map(cat => ({
@@ -226,7 +257,7 @@ export default function TransactionsPage() {
                         />
                         <Select
                             value={filterAccountId}
-                            onChange={(val) => setFilterAccountId(val)}
+                            onChange={handleFilterChange(setFilterAccountId)}
                             options={[
                                 { value: 'All', label: 'Account' },
                                 ...accounts.map(acc => ({
@@ -272,7 +303,7 @@ export default function TransactionsPage() {
                                     </td>
                                 </tr>
                             ) : (
-                                filteredTransactions.map((tx) => (
+                                paginatedTransactions.map((tx) => (
                                     <tr key={tx._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-3">
@@ -323,6 +354,54 @@ export default function TransactionsPage() {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Footer */}
+                {!loading && filteredTransactions.length > 0 && (
+                    <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50">
+                        <p className="text-xs text-slate-500 font-medium">
+                            Showing{' '}
+                            <span className="font-bold text-foreground">{(safePage - 1) * PAGE_SIZE + 1}</span>
+                            {' '}–{' '}
+                            <span className="font-bold text-foreground">{Math.min(safePage * PAGE_SIZE, filteredTransactions.length)}</span>
+                            {' '}of{' '}
+                            <span className="font-bold text-foreground">{filteredTransactions.length}</span>
+                            {' '}transactions
+                        </p>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => handlePageChange(safePage - 1)}
+                                disabled={safePage === 1}
+                                className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            {getPageNumbers().map((page, idx) =>
+                                page === '...' ? (
+                                    <span key={`ellipsis-${idx}`} className="px-2 text-slate-400 text-sm">…</span>
+                                ) : (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageChange(page as number)}
+                                        className={`min-w-[34px] h-[34px] rounded-lg text-sm font-bold transition-all ${
+                                            safePage === page
+                                                ? 'bg-primary text-white shadow-md shadow-primary/30'
+                                                : 'text-slate-500 hover:bg-primary/10 hover:text-primary'
+                                        }`}
+                                    >
+                                        {page}
+                                    </button>
+                                )
+                            )}
+                            <button
+                                onClick={() => handlePageChange(safePage + 1)}
+                                disabled={safePage === totalPages}
+                                className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <Modal
