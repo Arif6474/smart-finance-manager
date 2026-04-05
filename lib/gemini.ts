@@ -30,7 +30,7 @@ export async function generateFinancialInsights(data: FinancialDataSummary): Pro
     }
 
     // Determine the model to use
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt = `
 You are an expert, empathetic personal financial advisor. Analyze the following financial data summary for a user for the month of ${data.month}. 

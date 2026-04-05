@@ -33,6 +33,10 @@ export default function PayablesPage() {
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [selectedItemToPay, setSelectedItemToPay] = useState<any>(null);
+    const [paymentAccountId, setPaymentAccountId] = useState('');
+
     const [type, setType] = useState<'Payable' | 'Receivable'>('Payable');
     const [person, setPerson] = useState('');
     const [amount, setAmount] = useState('');
@@ -72,7 +76,7 @@ export default function PayablesPage() {
             const res = await fetch('/api/accounts');
             const data = await res.json();
             setAccounts(data);
-            if (data.length > 0) setAccountId(data[0]._id);
+            // if (data.length > 0) setAccountId(data[0]._id);
         } catch (err) {
             console.error('Failed to fetch accounts', err);
         }
@@ -127,7 +131,15 @@ export default function PayablesPage() {
     };
 
     const handleToggleStatus = async (item: any) => {
-        const newStatus = item.status === 'Paid' ? 'Pending' : 'Paid';
+        if (item.status === 'Pending') {
+            setSelectedItemToPay(item);
+            setPaymentAccountId(item.accountId || '');
+            setIsPaymentModalOpen(true);
+            return;
+        }
+
+        // Handling 'Paid' -> 'Pending' toggle
+        const newStatus = 'Pending';
         try {
             const res = await fetch(`/api/payables?id=${item._id}`, {
                 method: 'PATCH',
@@ -140,6 +152,58 @@ export default function PayablesPage() {
             }
         } catch (err) {
             toast.error('Failed to update status');
+        }
+    };
+
+    const handleMarkPaid = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedItemToPay || !paymentAccountId) {
+            toast.error('Please select an account');
+            return;
+        }
+
+        try {
+            const item = selectedItemToPay;
+            const amount = item.isLoan ? item.emiAmount : item.amount;
+            
+            // 1. Create Transaction
+            const txRes = await fetch('/api/transactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    accountId: paymentAccountId,
+                    type: item.type === 'Payable' ? 'Expense' : 'Income',
+                    amount: amount,
+                    category: item.category,
+                    description: `Payment for ${item.person}${item.description ? ` - ${item.description}` : ''}`,
+                    date: new Date()
+                })
+            });
+
+            if (!txRes.ok) {
+                toast.error('Failed to create transaction');
+                return;
+            }
+
+            // 2. Mark Payable as Paid
+            const res = await fetch(`/api/payables?id=${item._id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'Paid' }),
+            });
+
+            if (res.ok) {
+                toast.success('Marked as Paid and transaction created');
+                setIsPaymentModalOpen(false);
+                setSelectedItemToPay(null);
+                setPaymentAccountId('');
+                fetchItems();
+                fetchAccounts(); // refresh accounts balance
+            } else {
+                toast.error('Failed to update status');
+            }
+        } catch (err) {
+            toast.error('An error occurred');
         }
     };
 
@@ -484,10 +548,13 @@ export default function PayablesPage() {
                             <Select
                                 value={accountId}
                                 onChange={(val) => setAccountId(val)}
-                                options={accounts.map(acc => ({
-                                    value: acc._id,
-                                    label: `${acc.name} (৳${acc.balance})`
-                                }))}
+                                options={[
+                                    { value: '', label: 'Select Account' },
+                                    ...accounts.map(acc => ({
+                                        value: acc._id,
+                                        label: `${acc.name} (৳${acc.balance})`
+                                    }))
+                                ]}
                                 placeholder="Select Account for Auto-Payment"
                             />
                         </div>
@@ -533,6 +600,43 @@ export default function PayablesPage() {
                         className="w-full btn-primary py-4 mt-2 text-sm shadow-lg shadow-primary/20"
                     >
                         Save Entry
+                    </button>
+                </form>
+            </Modal>
+
+            <Modal
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                title={selectedItemToPay?.type === 'Payable' ? "Process Payment" : "Process Collection"}
+            >
+                <form onSubmit={handleMarkPaid} className="space-y-5">
+                    <div className="space-y-4">
+                        <div className="p-4 bg-muted/30 rounded-2xl border border-border/50 text-center">
+                            <p className="text-sm text-muted-foreground">{selectedItemToPay?.type === 'Payable' ? 'Paying off' : 'Collecting'}</p>
+                            <h3 className="text-2xl font-bold mt-1">৳{(selectedItemToPay?.isLoan ? selectedItemToPay?.emiAmount : selectedItemToPay?.amount)?.toLocaleString()}</h3>
+                            <p className="text-xs uppercase tracking-widest font-bold mt-2 text-primary">{selectedItemToPay?.person}</p>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Select Account</label>
+                            <Select
+                                value={paymentAccountId}
+                                onChange={(val) => setPaymentAccountId(val)}
+                                options={[
+                                    { value: '', label: 'Select Account' },
+                                    ...accounts.map(acc => ({
+                                        value: acc._id,
+                                        label: `${acc.name} (৳${acc.balance})`
+                                    }))
+                                ]}
+                                placeholder="Choose account to use"
+                            />
+                        </div>
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full btn-primary py-4 mt-2 text-sm shadow-lg shadow-primary/20"
+                    >
+                        Confirm Transaction
                     </button>
                 </form>
             </Modal>
