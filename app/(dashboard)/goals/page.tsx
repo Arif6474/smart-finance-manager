@@ -193,7 +193,7 @@ export default function GoalsPage() {
                             resetForm();
                             setIsGoalModalOpen(true);
                         }}
-                        className="btn-primary"
+                        className="btn-primary p-2"
                     >
                         Create Your First Goal
                     </button>

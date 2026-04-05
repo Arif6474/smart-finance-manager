@@ -73,7 +73,7 @@ export default function HealthDashboard() {
             >
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
 
-                <div className="flex items-center gap-8 relative z-10 w-full md:w-auto">
+                <div className="flex items-center flex-col md:flex-row gap-8 relative z-10 w-full md:w-auto">
                     <div className="relative flex items-center justify-center">
                         <svg className="w-32 h-32 md:w-40 md:h-40 transform -rotate-90">
                             <circle cx="50%" cy="50%" r="45%" stroke="var(--border)" strokeWidth="8" fill="none" />
