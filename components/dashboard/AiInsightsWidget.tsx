@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, TrendingUp, AlertTriangle, Lightbulb } from 'lucide-react';
-import { Insight } from '@/lib/gemini';
+import { Insight } from '@/lib/ai';
 
 export default function AiInsightsWidget() {
     const [insights, setInsights] = useState<Insight[]>([]);

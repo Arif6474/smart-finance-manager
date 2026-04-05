@@ -1,13 +1,15 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { OpenAI } from 'openai';
 
-// Initialize the Gemini API client
-const apiKey = process.env.GEMINI_API_KEY;
+// Initialize the OpenAI API client
+const apiKey = process.env.OPENAI_API_KEY;
 
 if (!apiKey) {
-    console.warn("GEMINI_API_KEY is not defined in the environment variables.");
+    console.warn("OPENAI_API_KEY is not defined in the environment variables.");
 }
 
-const genAI = new GoogleGenerativeAI(apiKey || 'unconfigured');
+const openai = new OpenAI({
+    apiKey: apiKey || 'unconfigured',
+});
 
 export interface FinancialDataSummary {
     totalBalance: number;
@@ -26,11 +28,8 @@ export interface Insight {
 
 export async function generateFinancialInsights(data: FinancialDataSummary): Promise<Insight[]> {
     if (!apiKey) {
-        throw new Error("Cannot generate insights: GEMINI_API_KEY is missing.");
+        throw new Error("Cannot generate insights: OPENAI_API_KEY is missing.");
     }
-
-    // Determine the model to use
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt = `
 You are an expert, empathetic personal financial advisor. Analyze the following financial data summary for a user for the month of ${data.month}. 
@@ -48,41 +47,50 @@ Your task is to provide exactly 3 to 4 actionable insights based on this data. E
 3. "tip": For actionable future advice (e.g., suggesting a budget limit for an unbudgeted high-spend category, or general savings tips based on their data).
 
 CRITICAL INSTRUCTIONS:
-- Do NOT output any markdown blocks (like \`\`\`json). 
 - Output ONLY a raw, valid JSON array of objects. 
 - Ensure the JSON is parseable by JSON.parse().
 - Limit descriptions to 1-2 concise, engaging sentences.
 - Use the currency symbol ৳ where appropriate.
 
-Provide the raw JSON array in this exact schema:
-[
-  {
-    "type": "warning" | "success" | "tip",
-    "title": "Short Catchy Title",
-    "description": "The concise actionable insight or praise."
-  }
-]
+Provide the response as a raw JSON object with an "insights" key containing the array:
+{
+  "insights": [
+    {
+      "type": "warning" | "success" | "tip",
+      "title": "Short Catchy Title",
+      "description": "The concise actionable insight or praise."
+    }
+  ]
+}
 `;
 
     try {
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            messages: [
+                { role: 'system', content: 'You are a financial advisor that only responds in JSON.' },
+                { role: 'user', content: prompt }
+            ],
+            response_format: { type: 'json_object' }
+        });
 
-        // Clean the text in case the model ignored instructions and wrapped in markdown
-        const cleanedText = responseText.replace(/```json\n?|\n?```/gi, '').trim();
-
+        const responseText = response.choices[0].message.content || '[]';
+        
         try {
-            const parsedInsights = JSON.parse(cleanedText) as Insight[];
-            if (!Array.isArray(parsedInsights)) {
-                throw new Error("Response is not an array");
+            const parsedResponse = JSON.parse(responseText);
+            // Some models might wrap the array in an object like { "insights": [...] }
+            const insights = Array.isArray(parsedResponse) ? parsedResponse : (parsedResponse.insights || []);
+            
+            if (!Array.isArray(insights)) {
+                return [];
             }
-            return parsedInsights.slice(0, 4); // ensure max 4 insights
+            return insights.slice(0, 4); // ensure max 4 insights
         } catch (parseError) {
-            console.error("Failed to parse Gemini JSON output:", responseText);
+            console.error("Failed to parse OpenAI JSON output:", responseText);
             throw new Error("The AI returned a malformed response.");
         }
     } catch (error: any) {
-        console.error("Gemini AI API Error:", error);
+        console.error("OpenAI AI API Error:", error);
         throw new Error(`AI generation failed: ${error.message}`);
     }
 }

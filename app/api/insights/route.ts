@@ -6,7 +6,7 @@ import Transaction from '@/models/Transaction';
 import Budget from '@/models/Budget';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
-import { generateFinancialInsights, FinancialDataSummary } from '@/lib/gemini';
+import { generateFinancialInsights, FinancialDataSummary } from '@/lib/ai';
 
 export async function GET(req: Request) {
     try {
