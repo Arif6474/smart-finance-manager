@@ -277,6 +277,15 @@ export default function PayablesPage() {
             }, 0);
     };
 
+    const getGrandTotal = (t: 'Payable' | 'Receivable') => {
+        return items
+            .filter(i => i.type === t && i.status !== 'Paid')
+            .reduce((acc, curr) => {
+                const itemAmount = curr.isLoan ? (curr.remainingPrincipal || 0) : (curr.amount || 0);
+                return acc + itemAmount;
+            }, 0);
+    };
+
     const getIcon = (catName: string) => {
         const cat = categories.find(c => c.name === catName) || categories[categories.length - 1];
         return <cat.icon size={18} />;
@@ -455,22 +464,41 @@ export default function PayablesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 rounded-2xl bg-red-500/5 border border-red-500/10 flex items-center justify-between">
-                    <div>
-                        <p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-1">Upcoming Payables</p>
-                        <h2 className="text-3xl font-bold tracking-tight">৳{getTotal('Payable').toLocaleString()}</h2>
+                <div className="p-6 rounded-2xl bg-red-500/5 border border-red-500/10 flex flex-col justify-between">
+                    <div className="flex justify-between items-start w-full mb-4">
+                        <div>
+                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest mb-1">Upcoming Payables</p>
+                            <h2 className="text-3xl font-bold tracking-tight text-red-500 flex items-end gap-2">
+                                ৳{getTotal('Payable').toLocaleString()} 
+                                <span className="text-xs font-medium text-muted-foreground pb-1.5 uppercase tracking-wider hidden sm:inline-block">Due Shortly</span>
+                            </h2>
+                        </div>
+                        <div className="w-12 h-12 bg-red-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20 shrink-0">
+                            <HandCoins size={24} />
+                        </div>
                     </div>
-                    <div className="w-12 h-12 bg-red-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20">
-                        <HandCoins size={24} />
+                    <div className="pt-4 border-t border-red-500/10 flex justify-between items-center w-full mt-auto">
+                        <span className="text-sm font-medium text-muted-foreground mr-2">Total Outstanding Debt</span>
+                        <span className="text-lg font-bold text-red-500">৳{getGrandTotal('Payable').toLocaleString()}</span>
                     </div>
                 </div>
-                <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-between">
-                    <div>
-                        <p className="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-1">Expected Receivables</p>
-                        <h2 className="text-3xl font-bold tracking-tight">৳{getTotal('Receivable').toLocaleString()}</h2>
+                
+                <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex flex-col justify-between">
+                    <div className="flex justify-between items-start w-full mb-4">
+                        <div>
+                            <p className="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-1">Expected Receivables</p>
+                            <h2 className="text-3xl font-bold tracking-tight text-emerald-500 flex items-end gap-2">
+                                ৳{getTotal('Receivable').toLocaleString()} 
+                                <span className="text-xs font-medium text-muted-foreground pb-1.5 uppercase tracking-wider hidden sm:inline-block">Due Shortly</span>
+                            </h2>
+                        </div>
+                        <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
+                            <HandCoins size={24} />
+                        </div>
                     </div>
-                    <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                        <HandCoins size={24} />
+                    <div className="pt-4 border-t border-emerald-500/10 flex justify-between items-center w-full mt-auto">
+                        <span className="text-sm font-medium text-muted-foreground mr-2">Total Outstanding Collections</span>
+                        <span className="text-lg font-bold text-emerald-500">৳{getGrandTotal('Receivable').toLocaleString()}</span>
                     </div>
                 </div>
             </div>
