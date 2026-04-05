@@ -12,7 +12,7 @@ import DatePicker from '@/components/DatePicker';
 import PageWrapper from '@/components/PageWrapper';
 import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
-import { format, isAfter, isBefore, addDays } from 'date-fns';
+import { format, isAfter, isBefore, addDays, addMonths } from 'date-fns';
 import Select from '@/components/Select';
 import EmiCalculator from '@/components/EmiCalculator';
 
@@ -36,6 +36,10 @@ export default function PayablesPage() {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedItemToPay, setSelectedItemToPay] = useState<any>(null);
     const [paymentAccountId, setPaymentAccountId] = useState('');
+
+    const [paymentMode, setPaymentMode] = useState<'single' | 'multiple' | 'full'>('single');
+    const [emiCount, setEmiCount] = useState<number>(1);
+    const [customSettlementAmount, setCustomSettlementAmount] = useState<string>('');
 
     const [type, setType] = useState<'Payable' | 'Receivable'>('Payable');
     const [person, setPerson] = useState('');
@@ -135,6 +139,9 @@ export default function PayablesPage() {
             setSelectedItemToPay(item);
             setPaymentAccountId(item.accountId || '');
             setIsPaymentModalOpen(true);
+            setPaymentMode('single');
+            setEmiCount(1);
+            setCustomSettlementAmount(item.remainingPrincipal?.toString() || '');
             return;
         }
 
@@ -164,7 +171,39 @@ export default function PayablesPage() {
 
         try {
             const item = selectedItemToPay;
-            const amount = item.isLoan ? item.emiAmount : item.amount;
+            let txAmount = item.amount;
+            let desc = `Payment for ${item.person}${item.description ? ` - ${item.description}` : ''}`;
+            let updatePayload: any = { status: 'Paid' };
+
+            if (item.isLoan) {
+                if (paymentMode === 'full') {
+                    txAmount = parseFloat(customSettlementAmount) || item.remainingPrincipal;
+                    desc = `Full Settlement for ${item.person}${item.description ? ` - ${item.description}` : ''}`;
+                    updatePayload = {
+                        status: 'Paid',
+                        remainingPrincipal: 0,
+                        paidMonths: item.termMonths
+                    };
+                } else {
+                    const count = paymentMode === 'multiple' ? emiCount : 1;
+                    txAmount = item.emiAmount * count;
+                    desc = `${count}x EMI Payment for ${item.person}${item.description ? ` - ${item.description}` : ''}`;
+                    
+                    const principalReductionPerEmi = item.totalPrincipal / item.termMonths;
+                    const totalReduction = principalReductionPerEmi * count;
+                    const newRemaining = Math.max(0, item.remainingPrincipal - totalReduction);
+                    const newPaidMonths = Math.min(item.termMonths, (item.paidMonths || 0) + count);
+                    
+                    const newStatus = (newRemaining <= 0 || newPaidMonths >= item.termMonths) ? 'Paid' : 'Pending';
+                    const newDueDate = item.dueDate ? addMonths(new Date(item.dueDate), count) : undefined;
+                    updatePayload = {
+                        status: newStatus,
+                        remainingPrincipal: newRemaining,
+                        paidMonths: newPaidMonths,
+                        ...(newDueDate && { dueDate: newDueDate })
+                    };
+                }
+            }
             
             // 1. Create Transaction
             const txRes = await fetch('/api/transactions', {
@@ -173,9 +212,9 @@ export default function PayablesPage() {
                 body: JSON.stringify({
                     accountId: paymentAccountId,
                     type: item.type === 'Payable' ? 'Expense' : 'Income',
-                    amount: amount,
+                    amount: txAmount,
                     category: item.category,
-                    description: `Payment for ${item.person}${item.description ? ` - ${item.description}` : ''}`,
+                    description: desc,
                     date: new Date()
                 })
             });
@@ -189,11 +228,11 @@ export default function PayablesPage() {
             const res = await fetch(`/api/payables?id=${item._id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: 'Paid' }),
+                body: JSON.stringify(updatePayload),
             });
 
             if (res.ok) {
-                toast.success('Marked as Paid and transaction created');
+                toast.success('Processed successfully');
                 setIsPaymentModalOpen(false);
                 setSelectedItemToPay(null);
                 setPaymentAccountId('');
@@ -314,20 +353,33 @@ export default function PayablesPage() {
                             </div>
 
                             {item.isLoan && (
-                                <div className="pt-2">
-                                    <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-muted-foreground mb-1.5">
-                                        <span>Repayment Progress</span>
-                                        <span>{Math.round(((item.totalPrincipal - item.remainingPrincipal) / item.totalPrincipal) * 100)}%</span>
+                                <div className="pt-3 mt-1 border-t border-border/30 space-y-3">
+                                    <div className="flex justify-between items-center text-[10px] text-muted-foreground font-medium">
+                                        <div className="flex items-center gap-1">
+                                            <Calendar size={12} className="text-primary/70" />
+                                            <span>Started: {item.startDate ? format(new Date(item.startDate), 'MMM d, yyyy') : 'N/A'}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <AlertCircle size={12} className={isOverdue(item.dueDate) ? "text-red-500" : "text-emerald-500"} />
+                                            <span>Next: {item.dueDate ? format(new Date(item.dueDate), 'MMM d, yyyy') : 'N/A'}</span>
+                                        </div>
                                     </div>
-                                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-primary transition-all duration-1000"
-                                            style={{ width: `${((item.totalPrincipal - item.remainingPrincipal) / item.totalPrincipal) * 100}%` }}
-                                        />
-                                    </div>
-                                    <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
-                                        <span>Paid: ৳{(item.totalPrincipal - item.remainingPrincipal).toLocaleString()}</span>
-                                        <span>Remaining: ৳{item.remainingPrincipal.toLocaleString()}</span>
+
+                                    <div>
+                                        <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-muted-foreground mb-1.5">
+                                            <span>{item.paidMonths || 0} / {item.termMonths} EMIs Paid</span>
+                                            <span>{Math.round(((item.totalPrincipal - item.remainingPrincipal) / item.totalPrincipal) * 100)}%</span>
+                                        </div>
+                                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-primary transition-all duration-1000"
+                                                style={{ width: `${((item.totalPrincipal - item.remainingPrincipal) / item.totalPrincipal) * 100}%` }}
+                                            />
+                                        </div>
+                                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
+                                            <span>Paid: ৳{(item.totalPrincipal - item.remainingPrincipal).toLocaleString()}</span>
+                                            <span>Remaining: ৳{item.remainingPrincipal.toLocaleString()}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -613,9 +665,48 @@ export default function PayablesPage() {
                     <div className="space-y-4">
                         <div className="p-4 bg-muted/30 rounded-2xl border border-border/50 text-center">
                             <p className="text-sm text-muted-foreground">{selectedItemToPay?.type === 'Payable' ? 'Paying off' : 'Collecting'}</p>
-                            <h3 className="text-2xl font-bold mt-1">৳{(selectedItemToPay?.isLoan ? selectedItemToPay?.emiAmount : selectedItemToPay?.amount)?.toLocaleString()}</h3>
+                            <h3 className="text-2xl font-bold mt-1">
+                                ৳{
+                                    selectedItemToPay?.isLoan 
+                                        ? (paymentMode === 'full' 
+                                            ? (parseFloat(customSettlementAmount) || selectedItemToPay?.remainingPrincipal)?.toLocaleString()
+                                            : ((selectedItemToPay?.emiAmount || 0) * (paymentMode === 'multiple' ? emiCount : 1)).toLocaleString()
+                                          )
+                                        : (selectedItemToPay?.amount)?.toLocaleString()
+                                }
+                            </h3>
                             <p className="text-xs uppercase tracking-widest font-bold mt-2 text-primary">{selectedItemToPay?.person}</p>
                         </div>
+                        
+                        {selectedItemToPay?.isLoan && (
+                            <div className="space-y-4">
+                                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2">Repayment Mode</label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <button type="button" onClick={() => setPaymentMode('single')} className={`py-2 text-[10px] font-bold uppercase rounded-lg border ${paymentMode === 'single' ? 'bg-primary/10 border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'}`}>1 EMI</button>
+                                    <button type="button" onClick={() => setPaymentMode('multiple')} className={`py-2 text-[10px] font-bold uppercase rounded-lg border ${paymentMode === 'multiple' ? 'bg-primary/10 border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'}`}>Multi EMI</button>
+                                    <button type="button" onClick={() => setPaymentMode('full')} className={`py-2 text-[10px] font-bold uppercase rounded-lg border ${paymentMode === 'full' ? 'bg-primary/10 border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'}`}>Close Loan</button>
+                                </div>
+                                
+                                {paymentMode === 'multiple' && (
+                                    <div className="space-y-2 mt-3">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Number of EMIs</label>
+                                        <input type="number" min="2" max={(selectedItemToPay.termMonths || 1) - (selectedItemToPay.paidMonths || 0)} className="input-field" value={emiCount} onChange={(e) => setEmiCount(parseInt(e.target.value) || 1)} />
+                                    </div>
+                                )}
+                                
+                                {paymentMode === 'full' && (
+                                    <div className="space-y-2 mt-3">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Final Settlement Amount (Inc. Interest)</label>
+                                        <div className="relative">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">৳</span>
+                                            <input type="number" className="input-field pl-8 font-bold" value={customSettlementAmount} onChange={(e) => setCustomSettlementAmount(e.target.value)} />
+                                        </div>
+                                        <p className="text-[10px] text-muted-foreground mt-1">Remaining Principal: ৳{selectedItemToPay?.remainingPrincipal?.toLocaleString()}</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Select Account</label>
                             <Select
