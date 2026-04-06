@@ -79,6 +79,13 @@ export async function POST(req: Request) {
             date: { $gte: startOfMonth, $lte: endOfMonth }
         });
 
+        // Get Significant Transactions (Top 5 by amount)
+        const significantTransactions = await Transaction.find({
+            userId: decoded.userId,
+            date: { $gte: startOfMonth, $lte: endOfMonth },
+            type: 'Expense'
+        }).sort({ amount: -1 }).limit(5);
+
         let totalIncomeThisMonth = 0;
         let totalExpenseThisMonth = 0;
         const spendingByCategory: Record<string, number> = {};
@@ -113,16 +120,23 @@ export async function POST(req: Request) {
             totalIncomeThisMonth,
             totalExpenseThisMonth,
             spendingByCategory,
-            budgets: formattedBudgets
+            budgets: formattedBudgets,
+            significantTransactions: significantTransactions.map(t => ({
+                description: t.description,
+                amount: t.amount,
+                date: t.date.toISOString().split('T')[0],
+                category: t.category
+            }))
         };
 
         // Call OpenAI
-        const insights = await generateFinancialInsights(dataSummary);
+        const { insights, summary } = await generateFinancialInsights(dataSummary);
 
         // 3. Save as today's report
         const newReport = await AiInsight.create({
             userId: decoded.userId,
             insights,
+            summary,
             createdAt: new Date()
         });
 

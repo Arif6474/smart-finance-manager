@@ -10,6 +10,7 @@ const aiInsightSchema = new mongoose.Schema(
                 description: { type: String, required: true }
             }
         ],
+        summary: { type: String, default: '' },
         createdAt: { type: Date, default: Date.now }
     },
     { timestamps: true }

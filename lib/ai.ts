@@ -18,6 +18,7 @@ export interface FinancialDataSummary {
     totalExpenseThisMonth: number;
     spendingByCategory: Record<string, number>;
     budgets: Array<{ category: string; limit: number; spent: number }>;
+    significantTransactions?: Array<{ description: string, amount: number, date: string, category: string }>;
 }
 
 export interface Insight {
@@ -26,7 +27,12 @@ export interface Insight {
     description: string;
 }
 
-export async function generateFinancialInsights(data: FinancialDataSummary): Promise<Insight[]> {
+export interface AiResponse {
+    insights: Insight[];
+    summary: string;
+}
+
+export async function generateFinancialInsights(data: FinancialDataSummary): Promise<AiResponse> {
     if (!apiKey) {
         throw new Error("Cannot generate insights: OPENAI_API_KEY is missing.");
     }
@@ -40,20 +46,26 @@ Data:
 - Expense This Month: ৳${data.totalExpenseThisMonth}
 - Spending By Category: ${JSON.stringify(data.spendingByCategory)}
 - Active Budgets & Usage: ${JSON.stringify(data.budgets)}
+${data.significantTransactions && data.significantTransactions.length > 0 
+    ? `- Top/Significant Transactions: ${JSON.stringify(data.significantTransactions)}` 
+    : ''}
 
-Your task is to provide exactly 3 to 4 actionable insights based on this data. Each insight must fall into one of three categories:
+Your task is to provide exactly 3 to 4 actionable insights and a high-level monthly summary.
+Each insight must fall into one of three categories:
 1. "success": For positive behavior (e.g., staying well under budget, high savings rate).
 2. "warning": For negative behavior or risks (e.g., overspending in a category, spending exceeding income).
 3. "tip": For actionable future advice (e.g., suggesting a budget limit for an unbudgeted high-spend category, or general savings tips based on their data).
 
-CRITICAL INSTRUCTIONS:
-- Output ONLY a raw, valid JSON array of objects. 
-- Ensure the JSON is parseable by JSON.parse().
-- Limit descriptions to 1-2 concise, engaging sentences.
-- Use the currency symbol ৳ where appropriate.
+The "summary" should be a 3-4 sentence, engaging, and professional at-a-glance overview of their financial health for the month, specifically mentioning any large transactions if relevant.
 
-Provide the response as a raw JSON object with an "insights" key containing the array:
+CRITICAL INSTRUCTIONS:
+- Use the currency symbol ৳ where appropriate.
+- Limit insight descriptions to 1-2 concise, engaging sentences.
+- Ensure the JSON is parseable by JSON.parse().
+
+Provide the response as a raw JSON object with an "insights" key and a "summary" key:
 {
+  "summary": "Enter the 3-4 sentence monthly overview here...",
   "insights": [
     {
       "type": "warning" | "success" | "tip",
@@ -74,17 +86,17 @@ Provide the response as a raw JSON object with an "insights" key containing the 
             response_format: { type: 'json_object' }
         });
 
-        const responseText = response.choices[0].message.content || '[]';
+        const responseText = response.choices[0].message.content || '{}';
         
         try {
             const parsedResponse = JSON.parse(responseText);
-            // Some models might wrap the array in an object like { "insights": [...] }
-            const insights = Array.isArray(parsedResponse) ? parsedResponse : (parsedResponse.insights || []);
+            const insights = Array.isArray(parsedResponse.insights) ? parsedResponse.insights : [];
+            const summary = parsedResponse.summary || "Your monthly financial overview is ready.";
             
-            if (!Array.isArray(insights)) {
-                return [];
-            }
-            return insights.slice(0, 4); // ensure max 4 insights
+            return {
+                insights: insights.slice(0, 4),
+                summary: summary
+            };
         } catch (parseError) {
             console.error("Failed to parse OpenAI JSON output:", responseText);
             throw new Error("The AI returned a malformed response.");
