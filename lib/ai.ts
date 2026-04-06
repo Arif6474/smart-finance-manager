@@ -19,6 +19,9 @@ export interface FinancialDataSummary {
     spendingByCategory: Record<string, number>;
     budgets: Array<{ category: string; limit: number; spent: number }>;
     significantTransactions?: Array<{ description: string, amount: number, date: string, category: string }>;
+    subscriptions?: Array<{ name: string, amount: number, frequency: string }>;
+    upcomingPayables?: Array<{ person: string, amount: number, dueDate: string, status: string }>;
+    upcomingReceivables?: Array<{ person: string, amount: number, dueDate: string, status: string }>;
 }
 
 export interface Insight {
@@ -40,23 +43,37 @@ export async function generateFinancialInsights(data: FinancialDataSummary): Pro
     const prompt = `
 You are an expert, empathetic personal financial advisor. Analyze the following financial data summary for a user for the month of ${data.month}. 
 
-Data:
+Data Context:
 - Total Current Balance Across All Accounts: ৳${data.totalBalance}
-- Income This Month: ৳${data.totalIncomeThisMonth}
-- Expense This Month: ৳${data.totalExpenseThisMonth}
+- Income Recorded This Month: ৳${data.totalIncomeThisMonth}
+- Expenses Recorded This Month: ৳${data.totalExpenseThisMonth}
 - Spending By Category: ${JSON.stringify(data.spendingByCategory)}
 - Active Budgets & Usage: ${JSON.stringify(data.budgets)}
 ${data.significantTransactions && data.significantTransactions.length > 0 
     ? `- Top/Significant Transactions: ${JSON.stringify(data.significantTransactions)}` 
     : ''}
+${data.subscriptions && data.subscriptions.length > 0 
+    ? `- Active Subscriptions: ${JSON.stringify(data.subscriptions)}` 
+    : ''}
+${data.upcomingPayables && data.upcomingPayables.length > 0 
+    ? `- Upcoming Payables (Bills/Debts Due): ${JSON.stringify(data.upcomingPayables)}` 
+    : ''}
+${data.upcomingReceivables && data.upcomingReceivables.length > 0 
+    ? `- Upcoming Receivables (Income/Owed to You): ${JSON.stringify(data.upcomingReceivables)}` 
+    : ''}
 
 Your task is to provide exactly 3 to 4 actionable insights and a high-level monthly summary.
-Each insight must fall into one of three categories:
-1. "success": For positive behavior (e.g., staying well under budget, high savings rate).
-2. "warning": For negative behavior or risks (e.g., overspending in a category, spending exceeding income).
-3. "tip": For actionable future advice (e.g., suggesting a budget limit for an unbudgeted high-spend category, or general savings tips based on their data).
+Factor in:
+1. Current actuals vs. budgets.
+2. Upcoming obligations (Payables/Subscriptions) vs. Current Balance and Receivables.
+3. Trends or unusual spikes based on "Significant Transactions".
 
-The "summary" should be a 3-4 sentence, engaging, and professional at-a-glance overview of their financial health for the month, specifically mentioning any large transactions if relevant.
+Insights categories:
+1. "success": Positive behavior (e.g., staying under budget, significant savings).
+2. "warning": Negative behavior or risks (e.g., overspending, payables exceeding current balance, heavy subscription load).
+3. "tip": Future advice (e.g., cancelling idle subscriptions, setting a budget for a rogue category).
+
+The "summary" should be a 3-4 sentence, engaging, and professional at-a-glance overview of their financial health for the month, specifically mentioning any high-impact upcoming payables or subscriptions if they seem risky.
 
 CRITICAL INSTRUCTIONS:
 - Use the currency symbol ৳ where appropriate.

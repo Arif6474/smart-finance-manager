@@ -5,6 +5,8 @@ import Account from '@/models/Account';
 import Transaction from '@/models/Transaction';
 import Budget from '@/models/Budget';
 import AiInsight from '@/models/AiInsight';
+import Subscription from '@/models/Subscription';
+import PayableReceivable from '@/models/PayableReceivable';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { generateFinancialInsights, FinancialDataSummary } from '@/lib/ai';
@@ -79,12 +81,46 @@ export async function POST(req: Request) {
             date: { $gte: startOfMonth, $lte: endOfMonth }
         });
 
-        // Get Significant Transactions (Top 5 by amount)
+        // Get Significant Transactions (Expense only, Top 5)
         const significantTransactions = await Transaction.find({
             userId: decoded.userId,
             date: { $gte: startOfMonth, $lte: endOfMonth },
             type: 'Expense'
         }).sort({ amount: -1 }).limit(5);
+
+        // Fetch Subscriptions
+        const subscriptions = await Subscription.find({
+            userId: decoded.userId,
+            isActive: true
+        });
+
+        // Fetch Payables & Receivables due this month or pending
+        const upcomingItems = await PayableReceivable.find({
+            userId: decoded.userId,
+            $or: [
+                { status: 'Pending' },
+                { status: 'Partial' }
+            ],
+            dueDate: { $gte: startOfMonth, $lte: endOfMonth }
+        });
+
+        const upcomingPayables = upcomingItems
+            .filter(item => item.type === 'Payable')
+            .map(item => ({
+                person: item.person,
+                amount: item.amount - (item.paidAmount || 0),
+                dueDate: item.dueDate.toISOString().split('T')[0],
+                status: item.status
+            }));
+
+        const upcomingReceivables = upcomingItems
+            .filter(item => item.type === 'Receivable')
+            .map(item => ({
+                person: item.person,
+                amount: item.amount - (item.paidAmount || 0),
+                dueDate: item.dueDate.toISOString().split('T')[0],
+                status: item.status
+            }));
 
         let totalIncomeThisMonth = 0;
         let totalExpenseThisMonth = 0;
@@ -113,7 +149,7 @@ export async function POST(req: Request) {
             spent: spendingByCategory[b.category] || 0
         }));
 
-        // Provide context to AI
+        // Context summary for AI
         const dataSummary: FinancialDataSummary = {
             totalBalance,
             month: now.toLocaleString('default', { month: 'long', year: 'numeric' }),
@@ -126,7 +162,14 @@ export async function POST(req: Request) {
                 amount: t.amount,
                 date: t.date.toISOString().split('T')[0],
                 category: t.category
-            }))
+            })),
+            subscriptions: subscriptions.map(s => ({
+                name: s.name,
+                amount: s.amount,
+                frequency: s.frequency
+            })),
+            upcomingPayables,
+            upcomingReceivables
         };
 
         // Call OpenAI
