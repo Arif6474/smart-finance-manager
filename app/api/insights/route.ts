@@ -4,9 +4,18 @@ import dbConnect from '@/lib/db';
 import Account from '@/models/Account';
 import Transaction from '@/models/Transaction';
 import Budget from '@/models/Budget';
+import AiInsight from '@/models/AiInsight';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { generateFinancialInsights, FinancialDataSummary } from '@/lib/ai';
+
+const getTodayRange = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return { today, tomorrow };
+};
 
 export async function GET(req: Request) {
     try {
@@ -15,8 +24,44 @@ export async function GET(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const userIdObj = new mongoose.Types.ObjectId(decoded.userId);
+        const { today, tomorrow } = getTodayRange();
 
+        // Check if an insight already exists for today
+        const existingInsight = await AiInsight.findOne({
+            userId: decoded.userId,
+            createdAt: { $gte: today, $lt: tomorrow }
+        }).sort({ createdAt: -1 });
+
+        return NextResponse.json({ insight: existingInsight || null });
+    } catch (error: any) {
+        console.error("Error in GET insights route:", error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function POST(req: Request) {
+    try {
+        await dbConnect();
+        const token = cookies().get('token')?.value;
+        if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+        const decoded: any = verifyToken(token);
+        const { today, tomorrow } = getTodayRange();
+
+        // 1. Check if already generated today
+        const existingInsight = await AiInsight.findOne({
+            userId: decoded.userId,
+            createdAt: { $gte: today, $lt: tomorrow }
+        });
+
+        if (existingInsight) {
+            return NextResponse.json({ 
+                error: 'Daily limit reached. You can only generate one report per day.',
+                insight: existingInsight 
+            }, { status: 429 });
+        }
+
+        // 2. Prepare Financial Summary
         const now = new Date();
         const currentMonth = now.getMonth() + 1;
         const currentYear = now.getFullYear();
@@ -24,11 +69,11 @@ export async function GET(req: Request) {
         const startOfMonth = new Date(currentYear, currentMonth - 1, 1);
         const endOfMonth = new Date(currentYear, currentMonth, 0, 23, 59, 59);
 
-        // 1. Get Total Balance
+        // Get Total Balance
         const accounts = await Account.find({ userId: decoded.userId });
         const totalBalance = accounts.reduce((acc, curr) => acc + curr.balance, 0);
 
-        // 2. Get Monthly Transactions
+        // Get Monthly Transactions
         const monthlyTransactions = await Transaction.find({
             userId: decoded.userId,
             date: { $gte: startOfMonth, $lte: endOfMonth }
@@ -47,7 +92,7 @@ export async function GET(req: Request) {
             }
         });
 
-        // 3. Get Active Budgets & Usage
+        // Get Active Budgets & Usage
         const budgets = await Budget.find({
             userId: decoded.userId,
             month: currentMonth,
@@ -71,12 +116,19 @@ export async function GET(req: Request) {
             budgets: formattedBudgets
         };
 
-        // Call Gemini
+        // Call OpenAI
         const insights = await generateFinancialInsights(dataSummary);
 
-        return NextResponse.json(insights);
+        // 3. Save as today's report
+        const newReport = await AiInsight.create({
+            userId: decoded.userId,
+            insights,
+            createdAt: new Date()
+        });
+
+        return NextResponse.json({ insight: newReport });
     } catch (error: any) {
-        console.error("Error in insights route:", error);
+        console.error("Error in POST insights route:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
