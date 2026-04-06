@@ -149,7 +149,7 @@ export default function AiAssistantPage() {
                         </div>
                     </div>
                 ) : error ? (
-                    <div className="p-10 bg-destructive/5 border border-destructive/20 rounded-[40px] text-center space-y-6 backdrop-blur-sm">
+                    <div className="p-8 bg-destructive/5 border border-destructive/20 rounded-[40px] text-center space-y-6 backdrop-blur-sm">
                         <div className="w-20 h-20 bg-destructive/10 rounded-full flex items-center justify-center mx-auto shadow-inner">
                             <AlertTriangle size={40} className="text-destructive" />
                         </div>
@@ -200,7 +200,7 @@ export default function AiAssistantPage() {
                             className="relative"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-indigo-500/10 blur-3xl opacity-60" />
-                            <div className="relative bg-card/60 backdrop-blur-2xl border border-white/10 p-10 md:p-14 rounded-[50px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)]">
+                            <div className="relative bg-card/60 backdrop-blur-2xl border border-white/10 p-8 lg:p-10 xl:p-14 rounded-[50px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)]">
                                 <div className="flex flex-col md:flex-row items-start gap-10">
                                     <div className="p-5 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-[32px] shadow-xl shadow-teal-500/20">
                                         <History size={40} className="text-white" />
@@ -236,7 +236,7 @@ export default function AiAssistantPage() {
                                         initial={{ opacity: 0, y: 40, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         transition={{ delay: idx * 0.1, duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-                                        className={`p-10 rounded-[48px] border-2 ${getColors(insight.type)} shadow-[0_16px_32px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] hover:-translate-y-3 transition-all duration-700 group relative overflow-hidden`}
+                                        className={`p-8 rounded-[48px] border-2 ${getColors(insight.type)} shadow-[0_16px_32px_-8px_rgba(0,0,0,0.05)] hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] hover:-translate-y-3 transition-all duration-700 group relative overflow-hidden`}
                                     >
                                         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-150 transition-transform duration-1000 group-hover:rotate-12 translate-x-4 -translate-y-4">
                                             {getIcon(insight.type)}
