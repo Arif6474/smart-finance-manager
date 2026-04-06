@@ -213,7 +213,7 @@ export default function AiAssistantPage() {
                                             <div className="h-px flex-1 max-w-[100px] bg-border/50" />
                                         </div>
                                         <h2 className="text-3xl font-black tracking-tight text-foreground">Monthly Financial Status</h2>
-                                        <p className="text-2xl md:text-3xl font-bold text-slate-700 dark:text-slate-200 leading-[1.4] italic pr-6 tracking-tight">
+                                        <p className="text-lg md:text-xl font-bold text-slate-700 dark:text-slate-200 leading-[1.4] italic pr-6 tracking-tight">
                                             {report.summary}
                                         </p>
                                     </div>
