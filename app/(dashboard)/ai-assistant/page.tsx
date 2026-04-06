@@ -253,9 +253,9 @@ export default function AiAssistantPage() {
                                             {insight.description}
                                         </p>
 
-                                        <div className="mt-10 flex items-center gap-3 text-xs font-black uppercase tracking-widest text-primary/0 group-hover:text-primary/100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
+                                        {/* <div className="mt-10 flex items-center gap-3 text-xs font-black uppercase tracking-widest text-primary/0 group-hover:text-primary/100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
                                             View Details <ChevronRight size={14} className="stroke-[3]" />
-                                        </div>
+                                        </div> */}
                                     </motion.div>
                                 ))}
                             </AnimatePresence>

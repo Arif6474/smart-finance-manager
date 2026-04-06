@@ -30,7 +30,6 @@ const moreItems = [
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
-    { name: 'AI Assistant', icon: Sparkles, href: '/ai-assistant' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
 ];
 

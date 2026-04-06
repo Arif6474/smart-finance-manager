@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Sun, Moon, LogOut, User, Settings, ChevronDown } from 'lucide-react';
+import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -53,6 +53,14 @@ export default function Navbar() {
 
             {/* Right — Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
+                <Link
+                    href="/ai-assistant"
+                    className="p-2.5 hover:bg-primary/10 rounded-xl transition-all duration-300 border border-transparent hover:border-primary/20 text-primary group"
+                    title="AI Assistant"
+                >
+                    <Sparkles size={18} className="transition-transform group-hover:rotate-12 group-hover:scale-110" />
+                </Link>
+
                 <motion.button
                     whileTap={{ scale: 0.9, rotate: theme === 'dark' ? -30 : 30 }}
                     onClick={toggleTheme}
