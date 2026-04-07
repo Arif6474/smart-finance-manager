@@ -133,7 +133,7 @@ export default function AccountsPage() {
                     {accounts.length > 0 && (
                         <p className="text-muted-foreground text-sm font-medium">
                             Total Balance: <span className="font-bold text-foreground">
-                                {showBalance ? `৳${totalBalance.toLocaleString()}` : '৳ ••••••'}
+                                {showBalance ? `৳${totalBalance.toLocaleString()}` : '৳ ******'}
                             </span>
                         </p>
                     )}
@@ -191,7 +191,7 @@ export default function AccountsPage() {
                                 <div className="space-y-1">
                                     <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter">Current Balance</p>
                                     <span className="text-2xl font-black tracking-tighter">
-                                        {showBalance ? `৳${acc.balance.toLocaleString()}` : '৳ ••••••'}
+                                        {showBalance ? `৳${acc.balance.toLocaleString()}` : '৳ ******'}
                                     </span>
                                 </div>
                                 {/* <button

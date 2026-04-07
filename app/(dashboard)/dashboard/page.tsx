@@ -132,7 +132,7 @@ export default function DashboardPage() {
                             <div>
                                 <p className="text-muted-foreground text-sm font-medium">{card.title}</p>
                                 <h3 className="text-3xl font-bold mt-1 tracking-tight">
-                                    {showBalance ? `৳${(card.amount || 0).toLocaleString()}` : '৳ ••••••'}
+                                    {showBalance ? `৳${(card.amount || 0).toLocaleString()}` : '৳ ******'}
                                 </h3>
                             </div>
                             <div className={`${card.bg} ${card.color} p-4 rounded-xl`}>
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <p className={`font-bold text-sm ${t.type === 'Income' ? 'text-success' : 'text-destructive'}`}>
-                                        {t.type === 'Income' ? '+' : '-'} {showBalance ? `৳${(t.amount || 0).toLocaleString()}` : '৳ ••••••'}
+                                        {t.type === 'Income' ? '+' : '-'} {showBalance ? `৳${(t.amount || 0).toLocaleString()}` : '৳ ******'}
                                     </p>
                                 </div>
                             ))
