@@ -5,19 +5,29 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { UserPlus, Mail, Lock, User, Loader2 } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, Loader2, Phone, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function SignupPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
         setLoading(true);
         setError('');
 
@@ -25,7 +35,7 @@ export default function SignupPage() {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, email, password, confirmPassword, phone }),
             });
             const data = await res.json();
 
@@ -104,15 +114,52 @@ export default function SignupPage() {
                     </div>
 
                     <div className="relative">
+                        <Phone className="absolute left-4 top-3.5 text-muted-foreground/70" size={18} />
+                        <input
+                            type="tel"
+                            placeholder="Phone Number (Optional)"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className="input-field pl-12 focus-ring"
+                        />
+                    </div>
+
+                    <div className="relative">
                         <Lock className="absolute left-4 top-3.5 text-muted-foreground/70" size={18} />
                         <input
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             placeholder="Password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="input-field pl-12 focus-ring"
+                            className="input-field pl-12 pr-12 focus-ring"
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-3.5 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                    </div>
+
+                    <div className="relative">
+                        <Lock className="absolute left-4 top-3.5 text-muted-foreground/70" size={18} />
+                        <input
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            placeholder="Confirm Password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="input-field pl-12 pr-12 focus-ring"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-4 top-3.5 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
                     </div>
 
                     <motion.button

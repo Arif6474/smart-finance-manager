@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         image: { type: String, default: '' },
+        phone: { type: String, default: '' },
 
         // Gamification & Habit Building fields
         streakCount: { type: Number, default: 0 },

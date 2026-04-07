@@ -6,10 +6,14 @@ import { signToken } from '@/lib/jwt';
 export async function POST(req: Request) {
     try {
         await dbConnect();
-        const { name, email, password } = await req.json();
+        const { name, email, password, confirmPassword, phone } = await req.json();
 
-        if (!name || !email || !password) {
-            return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+        if (!name || !email || !password || !confirmPassword) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        if (password !== confirmPassword) {
+            return NextResponse.json({ error: 'Passwords do not match' }, { status: 400 });
         }
 
         const existingUser = await User.findOne({ email });
@@ -17,7 +21,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'User already exists' }, { status: 400 });
         }
 
-        const user = await User.create({ name, email, password });
+        const user = await User.create({ name, email, password, phone });
 
         const token = signToken({ userId: user._id, email: user.email });
 
