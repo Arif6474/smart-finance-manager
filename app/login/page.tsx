@@ -103,7 +103,7 @@ export default function LoginPage() {
                             className="input-field pl-12 focus-ring"
                         />
                         <div className="flex justify-end mt-1">
-                            <Link href="/forgot-password" size="sm" className="text-xs text-muted-foreground hover:text-primary transition-colors pr-2">
+                            <Link href="/forgot-password" className="text-xs text-muted-foreground hover:text-primary transition-colors pr-2">
                                 Forgot password?
                             </Link>
                         </div>
