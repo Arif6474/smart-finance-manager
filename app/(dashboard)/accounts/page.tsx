@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye } from 'lucide-react';
+import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye, ArrowRightLeft } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
@@ -12,12 +12,20 @@ import EmptyState from '@/components/EmptyState';
 export default function AccountsPage() {
     const [accounts, setAccounts] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
     // New account form state
     const [name, setName] = useState('');
     const [type, setType] = useState('Cash');
     const [balance, setBalance] = useState('');
+
+    // Transfer form state
+    const [fromAccount, setFromAccount] = useState('');
+    const [toAccount, setToAccount] = useState('');
+    const [transferAmount, setTransferAmount] = useState('');
+    const [transferDescription, setTransferDescription] = useState('');
+    const [transferLoading, setTransferLoading] = useState(false);
 
     useEffect(() => {
         fetchAccounts();
@@ -28,6 +36,12 @@ export default function AccountsPage() {
             const res = await fetch('/api/accounts');
             const data = await res.json();
             setAccounts(data);
+            if (data.length > 0) {
+                setFromAccount(data[0]._id);
+                if (data.length > 1) {
+                    setToAccount(data[1]._id);
+                }
+            }
         } catch (err) {
             console.error('Failed to fetch accounts', err);
         } finally {
@@ -58,6 +72,45 @@ export default function AccountsPage() {
         }
     };
 
+    const handleTransfer = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (fromAccount === toAccount) {
+            toast.error('Source and destination accounts must be different');
+            return;
+        }
+
+        try {
+            setTransferLoading(true);
+            const res = await fetch('/api/accounts/transfer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fromAccountId: fromAccount,
+                    toAccountId: toAccount,
+                    amount: parseFloat(transferAmount),
+                    description: transferDescription
+                }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setIsTransferModalOpen(false);
+                setTransferAmount('');
+                setTransferDescription('');
+                toast.success('Transfer successful');
+                fetchAccounts();
+            } else {
+                toast.error(data.error || 'Transfer failed');
+            }
+        } catch (err) {
+            console.error('Failed to perform transfer', err);
+            toast.error('An error occurred');
+        } finally {
+            setTransferLoading(false);
+        }
+    };
+
     const getIcon = (type: string) => {
         switch (type) {
             case 'Bank': return <Landmark size={24} />;
@@ -68,21 +121,30 @@ export default function AccountsPage() {
 
     return (
         <PageWrapper className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold">Accounts</h1>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="btn-primary px-5 py-2.5 flex items-center gap-2 text-sm"
-                >
-                    <Plus size={20} />
-                    <span>Add Account</span>
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setIsTransferModalOpen(true)}
+                        className="btn-secondary px-5 py-2.5 flex items-center gap-2 text-sm border border-border bg-card hover:bg-muted"
+                    >
+                        <ArrowRightLeft size={18} />
+                        <span>Transfer Fund</span>
+                    </button>
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="btn-primary px-5 py-2.5 flex items-center gap-2 text-sm"
+                    >
+                        <Plus size={20} />
+                        <span>Add Account</span>
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
                     [1, 2, 3].map((i) => (
-                        <Skeleton key={i} className="h-32" />
+                        <Skeleton key={i} className="h-44" />
                     ))
                 ) : accounts.length === 0 ? (
                     <div className="col-span-full">
@@ -93,28 +155,31 @@ export default function AccountsPage() {
                     </div>
                 ) : (
                     accounts.map((acc) => (
-                        <div key={acc._id} className="glass p-6 rounded-2xl group hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 border border-slate-200 dark:border-slate-800">
-
-                            <div className="mt-4 flex items-center justify-between ">
-                                <div className="flex  flex-col gap-1 ">
-                                    <div className=" w-12 h-12 flex items-center justify-center bg-primary/10 text-primary rounded-xl">
-                                        {getIcon(acc.type)}
-                                    </div>
-                                    <h3 className="text-lg font-bold truncate">{acc.name}</h3>
-                                    <p className="text-slate-500 text-sm">{acc.type}</p>
+                        <div key={acc._id} className="glass p-6 rounded-3xl group hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 border border-slate-200 dark:border-slate-800 flex flex-col justify-between h-44">
+                            <div className="flex items-start justify-between">
+                                <div className="p-3 bg-primary/10 text-primary rounded-2xl">
+                                    {getIcon(acc.type)}
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-3xl font-bold tracking-tight">৳{acc.balance.toLocaleString()}</span>
-                                    {/* <button className="p-2 bg-primary/10 text-primary rounded-xl">
-                                        <Eye size={20} />
-                                    </button> */}
+                                <div className="text-right">
+                                    <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">{acc.type}</p>
+                                    <h3 className="text-lg font-black truncate max-w-[150px]">{acc.name}</h3>
                                 </div>
+                            </div>
+                            <div className="flex items-end justify-between">
+                                <div className="space-y-1">
+                                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter">Current Balance</p>
+                                    <span className="text-2xl font-black tracking-tighter">৳{acc.balance.toLocaleString()}</span>
+                                </div>
+                                <button className="p-2 hover:bg-muted rounded-xl transition-colors text-muted-foreground hover:text-foreground">
+                                    <Eye size={18} />
+                                </button>
                             </div>
                         </div>
                     ))
                 )}
             </div>
 
+            {/* Add Account Modal */}
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
@@ -157,9 +222,68 @@ export default function AccountsPage() {
                     </div>
                     <button
                         type="submit"
-                        className="w-full btn-primary py-3 mt-4 text-sm"
+                        className="w-full btn-primary py-3.5 rounded-2xl mt-4 text-sm font-bold shadow-lg shadow-primary/20"
                     >
                         Create Account
+                    </button>
+                </form>
+            </Modal>
+
+            {/* Transfer Fund Modal */}
+            <Modal
+                isOpen={isTransferModalOpen}
+                onClose={() => setIsTransferModalOpen(false)}
+                title="Transfer Fund"
+            >
+                <form onSubmit={handleTransfer} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-sm font-medium block mb-2">From Account</label>
+                            <Select
+                                value={fromAccount}
+                                onChange={(val) => setFromAccount(val)}
+                                options={accounts.map(acc => ({ value: acc._id, label: `${acc.name} (৳${acc.balance.toLocaleString()})` }))}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-sm font-medium block mb-2">To Account</label>
+                            <Select
+                                value={toAccount}
+                                onChange={(val) => setToAccount(val)}
+                                options={accounts.map(acc => ({ value: acc._id, label: `${acc.name} (৳${acc.balance.toLocaleString()})` }))}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="text-sm font-medium block mb-2">Amount</label>
+                        <input
+                            type="number"
+                            required
+                            min="0.01"
+                            step="0.01"
+                            value={transferAmount}
+                            onChange={(e) => setTransferAmount(e.target.value)}
+                            placeholder="0.00"
+                            className="input-field"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-sm font-medium block mb-2">Description (Optional)</label>
+                        <input
+                            type="text"
+                            value={transferDescription}
+                            onChange={(e) => setTransferDescription(e.target.value)}
+                            placeholder="Reason for transfer"
+                            className="input-field"
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={transferLoading}
+                        className="w-full btn-primary py-3.5 rounded-2xl mt-4 text-sm font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                    >
+                        {transferLoading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                        {transferLoading ? 'Processing...' : 'Transfer Fund'}
                     </button>
                 </form>
             </Modal>
