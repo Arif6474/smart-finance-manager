@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { BalanceProvider } from "@/context/BalanceContext";
 
 import { Toaster } from 'react-hot-toast';
 
@@ -39,13 +40,15 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen antialiased`}>
         <ThemeProvider>
           <AuthProvider>
-            <Toaster
-              position="bottom-right"
-              toastOptions={{
-                style: { background: '#1e293b', color: '#fff', borderRadius: '12px' }
-              }}
-            />
-            {children}
+            <BalanceProvider>
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  style: { background: '#1e293b', color: '#fff', borderRadius: '12px' }
+                }}
+              />
+              {children}
+            </BalanceProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

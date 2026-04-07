@@ -11,8 +11,11 @@ import {
     DollarSign,
     ArrowUpRight,
     ArrowDownRight,
-    Clock
+    Clock,
+    Eye,
+    EyeOff
 } from 'lucide-react';
+import { useBalance } from '@/context/BalanceContext';
 
 import {
     AreaChart,
@@ -54,6 +57,7 @@ const itemVariants = {
 };
 
 export default function DashboardPage() {
+    const { showBalance, toggleBalance } = useBalance();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -99,6 +103,17 @@ export default function DashboardPage() {
 
     return (
         <PageWrapper>
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-3xl font-black tracking-tight">Dashboard</h1>
+                <button
+                    onClick={() => toggleBalance()}
+                    className="p-2.5 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                    title={showBalance ? "Hide Balances" : "Show Balances"}
+                >
+                    {showBalance ? <Eye size={18} /> : <EyeOff size={18} />}
+                </button>
+            </div>
+
             {/* Cards */}
             <motion.div
                 variants={containerVariants}
@@ -116,7 +131,9 @@ export default function DashboardPage() {
                         >
                             <div>
                                 <p className="text-muted-foreground text-sm font-medium">{card.title}</p>
-                                <h3 className="text-3xl font-bold mt-1 tracking-tight">৳{(card.amount || 0).toLocaleString()}</h3>
+                                <h3 className="text-3xl font-bold mt-1 tracking-tight">
+                                    {showBalance ? `৳${(card.amount || 0).toLocaleString()}` : '৳ ••••••'}
+                                </h3>
                             </div>
                             <div className={`${card.bg} ${card.color} p-4 rounded-xl`}>
                                 <Icon size={24} />
@@ -190,7 +207,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <p className={`font-bold text-sm ${t.type === 'Income' ? 'text-success' : 'text-destructive'}`}>
-                                        {t.type === 'Income' ? '+' : '-'}৳{(t.amount || 0).toLocaleString()}
+                                        {t.type === 'Income' ? '+' : '-'} {showBalance ? `৳${(t.amount || 0).toLocaleString()}` : '৳ ••••••'}
                                     </p>
                                 </div>
                             ))

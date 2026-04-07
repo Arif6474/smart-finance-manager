@@ -374,10 +374,10 @@ export default function TransactionsPage() {
                                 <span className="font-bold text-foreground">{filteredTransactions.length}</span>
                                 {' '}transactions
                             </p>
-                            
+
                             <div className="flex items-center gap-2">
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rows per page</span>
-                                <select 
+                                <select
                                     value={pageSize}
                                     onChange={(e) => handlePageSizeChange(e.target.value)}
                                     className="bg-slate-100 dark:bg-slate-800 border-0 rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/50 outline-none transition-all cursor-pointer"
@@ -422,7 +422,7 @@ export default function TransactionsPage() {
                                 >
                                     <ChevronLeft size={18} />
                                 </button>
-                                
+
                                 <div className="flex items-center gap-1">
                                     {getPageNumbers().map((page, idx) =>
                                         page === '...' ? (
@@ -431,11 +431,10 @@ export default function TransactionsPage() {
                                             <button
                                                 key={page}
                                                 onClick={() => handlePageChange(page as number)}
-                                                className={`min-w-[40px] h-[40px] rounded-xl text-sm font-bold transition-all ${
-                                                    safePage === page
+                                                className={`min-w-[40px] h-[40px] rounded-xl text-sm font-bold transition-all ${safePage === page
                                                         ? 'bg-primary text-white shadow-lg shadow-primary/30'
                                                         : 'text-slate-500 hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20'
-                                                }`}
+                                                    }`}
                                             >
                                                 {page}
                                             </button>

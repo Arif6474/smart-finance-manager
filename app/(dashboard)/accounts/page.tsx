@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye, ArrowRightLeft } from 'lucide-react';
+import { Plus, Wallet, CreditCard, Landmark, MoreVertical, Trash2, Eye, EyeOff, ArrowRightLeft } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { useBalance } from '@/context/BalanceContext';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 import PageWrapper from '@/components/PageWrapper';
@@ -10,6 +12,8 @@ import Skeleton from '@/components/Skeleton';
 import EmptyState from '@/components/EmptyState';
 
 export default function AccountsPage() {
+    const router = useRouter();
+    const { showBalance, toggleBalance } = useBalance();
     const [accounts, setAccounts] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
@@ -48,6 +52,8 @@ export default function AccountsPage() {
             setLoading(false);
         }
     };
+
+    const totalBalance = accounts.reduce((acc, curr) => acc + curr.balance, 0);
 
     const handleAddAccount = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -122,8 +128,24 @@ export default function AccountsPage() {
     return (
         <PageWrapper className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h1 className="text-3xl font-bold">Accounts</h1>
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">Accounts</h1>
+                    {accounts.length > 0 && (
+                        <p className="text-muted-foreground text-sm font-medium">
+                            Total Balance: <span className="font-bold text-foreground">
+                                {showBalance ? `৳${totalBalance.toLocaleString()}` : '৳ ••••••'}
+                            </span>
+                        </p>
+                    )}
+                </div>
                 <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => toggleBalance()}
+                        className="p-2.5 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                        title={showBalance ? "Hide Balances" : "Show Balances"}
+                    >
+                        {showBalance ? <Eye size={18} /> : <EyeOff size={18} />}
+                    </button>
                     <button
                         onClick={() => setIsTransferModalOpen(true)}
                         className="btn-secondary px-5 py-2.5 flex items-center gap-2 text-sm border border-border bg-card hover:bg-muted"
@@ -168,11 +190,16 @@ export default function AccountsPage() {
                             <div className="flex items-end justify-between">
                                 <div className="space-y-1">
                                     <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter">Current Balance</p>
-                                    <span className="text-2xl font-black tracking-tighter">৳{acc.balance.toLocaleString()}</span>
+                                    <span className="text-2xl font-black tracking-tighter">
+                                        {showBalance ? `৳${acc.balance.toLocaleString()}` : '৳ ••••••'}
+                                    </span>
                                 </div>
-                                <button className="p-2 hover:bg-muted rounded-xl transition-colors text-muted-foreground hover:text-foreground">
+                                {/* <button
+                                    onClick={() => router.push(`/transactions?accountId=${acc._id}`)}
+                                    className="p-2 hover:bg-muted rounded-xl transition-colors text-muted-foreground hover:text-foreground"
+                                >
                                     <Eye size={18} />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     ))
