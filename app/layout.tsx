@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { BalanceProvider } from "@/context/BalanceContext";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -38,19 +39,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen antialiased`}>
-        <ThemeProvider>
-          <AuthProvider>
-            <BalanceProvider>
-              <Toaster
-                position="bottom-right"
-                toastOptions={{
-                  style: { background: '#1e293b', color: '#fff', borderRadius: '12px' }
-                }}
-              />
-              {children}
-            </BalanceProvider>
-          </AuthProvider>
-        </ThemeProvider>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
+          <ThemeProvider>
+            <AuthProvider>
+              <BalanceProvider>
+                <Toaster
+                  position="bottom-right"
+                  toastOptions={{
+                    style: { background: '#1e293b', color: '#fff', borderRadius: '12px' }
+                  }}
+                />
+                {children}
+              </BalanceProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

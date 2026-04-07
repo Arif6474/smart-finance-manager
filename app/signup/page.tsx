@@ -5,8 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 import { UserPlus, Mail, Lock, User, Loader2, Phone, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 export default function SignupPage() {
     const [name, setName] = useState('');
@@ -47,6 +49,35 @@ export default function SignupPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        setLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: credentialResponse.credential }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || 'Google signup failed');
+
+            login(data.user);
+            toast.success('Account created with Google!');
+        } catch (err: any) {
+            setError(err.message);
+            toast.error(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleError = () => {
+        setError('Google signup failed. Please try again.');
+        toast.error('Google signup failed');
     };
 
     return (
@@ -172,6 +203,23 @@ export default function SignupPage() {
                         <span>{loading ? 'Creating Account...' : 'Get Started'}</span>
                     </motion.button>
                 </form>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3">
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-xs text-muted-foreground">OR</span>
+                    <div className="flex-1 h-px bg-border" />
+                </div>
+
+                {/* Google Sign Up */}
+                <div className="flex justify-center">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleError}
+                        theme="dark"
+                        locale="en"
+                    />
+                </div>
 
                 <div className="text-center text-sm text-muted-foreground">
                     Already have an account?{' '}

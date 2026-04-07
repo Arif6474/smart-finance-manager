@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema(
     {
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
-        password: { type: String, required: true },
+        password: { type: String },
+        authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
         image: { type: String, default: '' },
         phone: { type: String, default: '' },
         resetPasswordToken: { type: String },
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving
 userSchema.pre('save', async function () {
-    if (!this.isModified('password')) return;
+    if (!this.isModified('password') || !this.password) return;
     this.password = await bcrypt.hash(this.password, 12);
 });
 
