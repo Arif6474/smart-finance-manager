@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema(
         password: { type: String, required: true },
         image: { type: String, default: '' },
         phone: { type: String, default: '' },
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: { type: Date },
 
         // Gamification & Habit Building fields
         streakCount: { type: Number, default: 0 },
