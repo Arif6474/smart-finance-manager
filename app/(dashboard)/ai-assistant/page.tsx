@@ -185,7 +185,7 @@ export default function AiAssistantPage() {
                         <button
                             onClick={handleGenerate}
                             disabled={generating}
-                            className="bg-primary text-white py-3 px-12 rounded-3xl flex items-center gap-4 text-xl font-black shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1.5 transition-all active:scale-95 disabled:opacity-50"
+                            className="bg-primary text-white py-3 px-12 rounded-3xl flex items-center gap-4 text-base md:text-xl font-black shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1.5 transition-all active:scale-95 disabled:opacity-50"
                         >
                             {generating ? <Loader2 size={26} className="animate-spin" /> : <Sparkles size={26} />}
                             {generating ? 'Gathering context...' : 'Generate Daily Report'}
