@@ -216,8 +216,7 @@ export default function SignupPage() {
                     <GoogleLogin
                         onSuccess={handleGoogleSuccess}
                         onError={handleGoogleError}
-                        theme="dark"
-                        locale="en"
+                        theme="filled_blue"
                     />
                 </div>
 

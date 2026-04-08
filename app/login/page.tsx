@@ -163,8 +163,7 @@ export default function LoginPage() {
                     <GoogleLogin
                         onSuccess={handleGoogleSuccess}
                         onError={handleGoogleError}
-                        theme="dark"
-                        locale="en"
+                        theme="filled_blue"
                     />
                 </div>
 
