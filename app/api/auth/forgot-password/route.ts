@@ -62,7 +62,7 @@ export async function POST(req: Request) {
                         If you didn't make this request, you can safely ignore this email.
                     </p>
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${resetUrl}" style="background-color: #0ea5e9; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">
+                        <a href="${resetUrl}" style="background-color: #34D39D; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">
                             Reset My Password
                         </a>
                     </div>
