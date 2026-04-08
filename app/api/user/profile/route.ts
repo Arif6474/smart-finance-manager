@@ -12,7 +12,7 @@ export async function PATCH(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const { name } = await req.json();
+        const { name, phone } = await req.json();
 
         if (!name || name.trim() === '') {
             return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -20,7 +20,7 @@ export async function PATCH(req: Request) {
 
         const updatedUser = await User.findByIdAndUpdate(
             decoded.userId,
-            { name: name.trim() },
+            { name: name.trim(), phone: phone?.trim() },
             { new: true }
         );
 
@@ -32,7 +32,8 @@ export async function PATCH(req: Request) {
             user: {
                 id: updatedUser._id,
                 name: updatedUser.name,
-                email: updatedUser.email
+                email: updatedUser.email,
+                phone: updatedUser.phone
             }
         });
     } catch (error: any) {

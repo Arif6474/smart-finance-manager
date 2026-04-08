@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import { useAuth } from '@/context/AuthContext';
-import { User as UserIcon, Save, Mail, AlertCircle, Loader2 } from 'lucide-react';
+import { User as UserIcon, Save, Mail, Phone, AlertCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ProfilePage() {
     const { user, updateUser } = useAuth();
 
     const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -17,6 +18,7 @@ export default function ProfilePage() {
     useEffect(() => {
         if (user) {
             setName(user.name);
+            setPhone(user.phone || '');
         }
     }, [user]);
 
@@ -30,7 +32,7 @@ export default function ProfilePage() {
             const res = await fetch('/api/user/profile', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name })
+                body: JSON.stringify({ name, phone })
             });
 
             const data = await res.json();
@@ -131,10 +133,27 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
+                    {/* Phone - Editable */}
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Phone Number</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground">
+                                <Phone size={18} />
+                            </div>
+                            <input
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                                placeholder="Enter your phone number"
+                            />
+                        </div>
+                    </div>
+
                     <div className="pt-4 border-t border-border">
                         <button
                             type="submit"
-                            disabled={loading || name === user.name || !name.trim()}
+                            disabled={loading || (name === user.name && phone === (user.phone || '')) || !name.trim()}
                             className="btn-primary flex items-center gap-2 justify-center w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
                         >
                             {loading ? (
