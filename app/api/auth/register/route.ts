@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         const token = signToken({ userId: user._id, email: user.email });
 
         const response = NextResponse.json(
-            { message: 'User created successfully', user: { id: user._id, name: user.name, email: user.email } },
+            { message: 'User created successfully', user: { id: user._id, name: user.name, email: user.email, phone: user.phone } },    
             { status: 201 }
         );
 
