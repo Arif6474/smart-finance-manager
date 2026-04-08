@@ -55,9 +55,6 @@ export default function Navbar() {
             {/* Right — Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
 
-
-                <NotificationBell />
-
                 <motion.button
                     whileTap={{ scale: 0.9, rotate: theme === 'dark' ? -30 : 30 }}
                     onClick={toggleTheme}
@@ -75,6 +72,9 @@ export default function Navbar() {
                         AI Assistant
                     </span>
                 </Link>
+
+                <NotificationBell />
+
                 <div className="h-6 w-px bg-border mx-1"></div>
 
                 {/* Profile Dropdown */}
