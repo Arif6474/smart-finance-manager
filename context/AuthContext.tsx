@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         setUser(null);
         localStorage.removeItem('user');
-        window.location.href = '/';
+        window.location.href = '/login';
     };
 
     return (
