@@ -96,7 +96,7 @@ export default function NotificationBell() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-80 sm:w-96 bg-card border border-border shadow-2xl rounded-2xl overflow-hidden z-50 origin-top-right px-1 py-1"
+                        className="absolute -right-20 mt-2 w-80 sm:w-96 bg-card border border-border shadow-2xl rounded-2xl overflow-hidden z-50 origin-top-right px-1 py-1"
                     >
                         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                             <h3 className="text-sm font-bold">Upcoming Reminders</h3>
