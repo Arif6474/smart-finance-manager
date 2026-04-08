@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import PageWrapper from '@/components/PageWrapper';
 import AiInsightsWidget from '@/components/dashboard/AiInsightsWidget';
 import GamificationWidget from '@/components/dashboard/GamificationWidget';
+import RemindersWidget from '@/components/dashboard/RemindersWidget';
 import { motion } from 'framer-motion';
 import {
     TrendingUp,
@@ -220,6 +221,9 @@ export default function DashboardPage() {
                     </div>
                 </motion.div>
             </motion.div>
+
+            {/* Reminders Widget */}
+            <RemindersWidget />
 
             {/* AI Insights Widget */}
             <AiInsightsWidget />

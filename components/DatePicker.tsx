@@ -15,16 +15,17 @@ import {
     isToday,
     addDays
 } from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, X, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DatePickerProps {
-    value: string; // yyyy-MM-dd
+    value: string; // yyyy-MM-dd or ISO
     onChange: (date: string) => void;
     placeholder?: string;
+    showTime?: boolean;
 }
 
-export default function DatePicker({ value, onChange, placeholder = 'Select date' }: DatePickerProps) {
+export default function DatePicker({ value, onChange, placeholder = 'Select date', showTime = false }: DatePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [currentMonth, setCurrentMonth] = useState(value ? new Date(value) : new Date());
     const containerRef = useRef<HTMLDivElement>(null);
@@ -50,8 +51,24 @@ export default function DatePicker({ value, onChange, placeholder = 'Select date
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
 
     const handleDateClick = (date: Date) => {
-        onChange(format(date, 'yyyy-MM-dd'));
-        setIsOpen(false);
+        if (showTime) {
+            // If showTime is true, we preserve the current time from the 'value' or default to now
+            const base = value ? new Date(value) : new Date();
+            date.setHours(base.getHours());
+            date.setMinutes(base.getMinutes());
+            onChange(date.toISOString());
+        } else {
+            onChange(format(date, 'yyyy-MM-dd'));
+            setIsOpen(false);
+        }
+    };
+
+    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const [hours, minutes] = e.target.value.split(':').map(Number);
+        const base = selectedDate || new Date();
+        base.setHours(hours);
+        base.setMinutes(minutes);
+        onChange(base.toISOString());
     };
 
     return (
@@ -145,22 +162,37 @@ export default function DatePicker({ value, onChange, placeholder = 'Select date
                             })}
                         </div>
 
-                        {/* Quick Presets Footer */}
-                        <div className="mt-6 pt-6 border-t border-border grid grid-cols-2 gap-2">
-                            <button
-                                type="button"
-                                onClick={() => handleDateClick(new Date())}
-                                className="text-xs font-bold py-2.5 px-3 rounded-xl bg-muted hover:bg-primary/10 hover:text-primary transition-all"
-                            >
-                                Today
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleDateClick(addDays(new Date(), 1))}
-                                className="text-xs font-bold py-2.5 px-3 rounded-xl bg-muted hover:bg-primary/10 hover:text-primary transition-all"
-                            >
-                                Tomorrow
-                            </button>
+                        {/* Quick Presets & Time Footer */}
+                        <div className="mt-6 pt-6 border-t border-border space-y-4">
+                            {showTime && (
+                                <div className="flex items-center justify-between gap-4 px-1">
+                                    <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-2">
+                                        <Clock size={14} /> Time
+                                    </span>
+                                    <input
+                                        type="time"
+                                        value={selectedDate ? format(selectedDate, 'HH:mm') : '12:00'}
+                                        onChange={handleTimeChange}
+                                        className="bg-muted border border-border px-3 py-1.5 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    />
+                                </div>
+                            )}
+                            <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => handleDateClick(new Date())}
+                                    className="text-xs font-bold py-2.5 px-3 rounded-xl bg-muted hover:bg-primary/10 hover:text-primary transition-all"
+                                >
+                                    Today
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDateClick(addDays(new Date(), 1))}
+                                    className="text-xs font-bold py-2.5 px-3 rounded-xl bg-muted hover:bg-primary/10 hover:text-primary transition-all"
+                                >
+                                    Tomorrow
+                                </button>
+                            </div>
                         </div>
                     </motion.div>
                 )}

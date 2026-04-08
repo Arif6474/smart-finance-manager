@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import NotificationBell from './NotificationBell';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -60,6 +61,8 @@ export default function Navbar() {
                 >
                     <Sparkles size={18} className="transition-transform group-hover:rotate-12 group-hover:scale-110" />
                 </Link>
+
+                <NotificationBell />
 
                 <motion.button
                     whileTap={{ scale: 0.9, rotate: theme === 'dark' ? -30 : 30 }}

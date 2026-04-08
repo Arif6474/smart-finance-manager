@@ -13,7 +13,8 @@ import {
     LogOut,
     Sparkles,
     Goal,
-    RotateCw
+    RotateCw,
+    Bell
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -28,6 +29,7 @@ const menuItems = [
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
+    { name: 'Reminders', icon: Bell, href: '/reminders' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
 ];
 
