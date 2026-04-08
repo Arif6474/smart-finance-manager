@@ -54,24 +54,27 @@ export default function Navbar() {
 
             {/* Right — Actions */}
             <div className="flex items-center gap-2 sm:gap-4">
-                <Link
-                    href="/ai-assistant"
-                    className="p-2.5 hover:bg-primary/10 rounded-xl transition-all duration-300 border border-transparent hover:border-primary/20 text-primary group"
-                    title="AI Assistant"
-                >
-                    <Sparkles size={18} className="transition-transform group-hover:rotate-12 group-hover:scale-110" />
-                </Link>
+
 
                 <NotificationBell />
 
                 <motion.button
                     whileTap={{ scale: 0.9, rotate: theme === 'dark' ? -30 : 30 }}
                     onClick={toggleTheme}
-                    className="p-2.5 hover:bg-muted rounded-xl transition-colors duration-300 border border-transparent hover:border-border/50"
+                    className="p-1.5 md:p-2.5 hover:bg-muted rounded-xl transition-colors duration-300 border border-transparent hover:border-border/50"
                 >
                     {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-500" />}
                 </motion.button>
-
+                <Link
+                    href="/ai-assistant"
+                    className="flex gap-2 items-center  p-1.5 md:p-2.5 hover:bg-primary/10 rounded-xl transition-all duration-300 border border-transparent hover:border-primary/20 text-primary group"
+                    title="AI Assistant"
+                >
+                    <Sparkles size={18} className="transition-transform group-hover:rotate-12 group-hover:scale-110" />
+                    <span className="hidden md:block text-sm font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                        AI Assistant
+                    </span>
+                </Link>
                 <div className="h-6 w-px bg-border mx-1"></div>
 
                 {/* Profile Dropdown */}

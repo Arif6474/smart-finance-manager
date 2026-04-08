@@ -79,7 +79,7 @@ export default function NotificationBell() {
             <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2.5 hover:bg-muted rounded-xl transition-all duration-300 border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground relative group"
+                className="p-1.5 md:p-2.5 hover:bg-muted rounded-xl transition-all duration-300 border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground relative group"
             >
                 <Bell size={20} className={pendingCount > 0 ? 'animate-wiggle' : ''} />
                 {pendingCount > 0 && (
