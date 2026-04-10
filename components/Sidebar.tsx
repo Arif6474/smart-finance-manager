@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import {
     LayoutDashboard,
     Wallet,
@@ -15,9 +16,14 @@ import {
     Goal,
     RotateCw,
     Bell,
-    Zap
+    Zap,
+    ChevronDown,
+    Shield,
+    CreditCard,
+    Users
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { isAdmin } from '@/lib/adminUtils';
 import { motion } from 'framer-motion';
 import { HeartPulse } from 'lucide-react';
 
@@ -34,9 +40,17 @@ const menuItems = [
     { name: 'Health', icon: HeartPulse, href: '/health' },
 ];
 
+const adminMenuItems = [
+    { name: 'Payments', icon: CreditCard, href: '/admin-payments' },
+    { name: 'Users', icon: Users, href: '/admin-users' },
+];
+
 export default function Sidebar() {
     const pathname = usePathname();
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
+    const [adminOpen, setAdminOpen] = useState(false);
+    const userIsAdmin = isAdmin(user?.level);
+
 
     return (
         <aside className="fixed left-0 top-0 h-screen w-64 bg-card/90 dark:bg-card/80 backdrop-blur-2xl border-r border-border z-50 hidden md:flex flex-col transition-colors duration-500">
@@ -86,6 +100,58 @@ export default function Sidebar() {
                         </Link>
                     );
                 })}
+
+                {/* Admin Menu */}
+                {userIsAdmin && (
+                    <div className="mt-4 pt-4 border-t border-border">
+                        <button
+                            onClick={() => setAdminOpen(!adminOpen)}
+                            className={`relative flex items-center justify-between w-full px-4 py-2.5 rounded-xl transition-all duration-300 group ${
+                                adminOpen ? 'bg-shield/10 text-shield' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                            }`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Shield size={19} />
+                                <span className="text-sm font-semibold">Admin</span>
+                            </div>
+                            <motion.div
+                                animate={{ rotate: adminOpen ? 180 : 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <ChevronDown size={16} />
+                            </motion.div>
+                        </button>
+
+                        {/* Admin Submenu */}
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: adminOpen ? 1 : 0, height: adminOpen ? 'auto' : 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="mt-1 ml-4 pl-3 border-l border-border/50 space-y-1">
+                                {adminMenuItems.map((item) => {
+                                    const Icon = item.icon;
+                                    const isActive = pathname === item.href || pathname?.startsWith(item.href);
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
+                                            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 text-sm ${
+                                                isActive
+                                                    ? 'bg-primary/10 text-primary font-semibold'
+                                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                            }`}
+                                        >
+                                            <Icon size={16} />
+                                            <span>{item.name}</span>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
             </nav>
 
             {/* Upgrade to Pro */}

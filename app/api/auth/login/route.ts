@@ -32,6 +32,7 @@ export async function POST(req: Request) {
         }
 
         const token = signToken({ userId: user._id, email: user.email });
+console.log(user, 'user');
 
         const response = NextResponse.json({
             message: 'Logged in successfully',
@@ -40,11 +41,13 @@ export async function POST(req: Request) {
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
-                plan: user.plan || 'free',
+                level: user.level,
                 trialStartDate: user.trialStartDate,
                 subscriptionExpiryDate: user.subscriptionExpiryDate,
+                plan: user.plan || 'free',
             },
         });
+
 
         response.cookies.set('token', token, {
             httpOnly: true,

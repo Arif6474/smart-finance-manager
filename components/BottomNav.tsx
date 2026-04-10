@@ -14,8 +14,16 @@ import {
     MoreHorizontal,
     RotateCw,
     HeartPulse,
-    Sparkles
+    Sparkles,
+    Bell,
+    Shield,
+    CreditCard,
+    Users,
+    Zap,
+    LogOut
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { isAdmin } from '@/lib/adminUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const mainItems = [
@@ -30,13 +38,22 @@ const moreItems = [
     { name: 'Goals', icon: Goal, href: '/goals' },
     { name: 'Subscriptions', icon: RotateCw, href: '/subscriptions' },
     { name: 'Reports', icon: BarChart3, href: '/reports' },
+    { name: 'Reminders', icon: Bell, href: '/reminders' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
+];
+
+const adminItems = [
+    { name: 'Payments', icon: CreditCard, href: '/admin-payments' },
+    { name: 'Users', icon: Users, href: '/admin-users' },
 ];
 
 export default function BottomNav() {
     const pathname = usePathname();
+    const { user, logout } = useAuth();
+    
     const [showMore, setShowMore] = useState(false);
     const moreMenuRef = useRef<HTMLDivElement>(null);
+    const userIsAdmin = isAdmin(user?.level);
 
     // Close on route change
     useEffect(() => {
@@ -58,7 +75,8 @@ export default function BottomNav() {
         };
     }, [showMore]);
 
-    const isMoreActive = moreItems.some(item => item.href === pathname);
+    const isMoreActive = moreItems.some(item => item.href === pathname) || 
+                        (userIsAdmin && adminItems.some(item => item.href === pathname));
 
     return (
         <>
@@ -102,6 +120,68 @@ export default function BottomNav() {
                                         </Link>
                                     );
                                 })}
+
+                                {/* Admin Section */}
+                                {userIsAdmin && (
+                                    <>
+                                        <div className="h-px bg-border my-1" />
+                                        <div className="px-4 py-2">
+                                            <p className="text-xs font-semibold text-muted-foreground uppercase">Admin</p>
+                                        </div>
+                                        {adminItems.map((item) => {
+                                            const Icon = item.icon;
+                                            const isActive = pathname === item.href;
+                                            return (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-muted font-medium text-muted-foreground'
+                                                        }`}
+                                                >
+                                                    <Icon size={18} className={isActive ? 'stroke-[2.5]' : 'stroke-[2]'} />
+                                                    <span className="text-sm">{item.name}</span>
+                                                </Link>
+                                            );
+                                        })}
+
+                                        {/* More Actions */}
+                                        <div className="h-px bg-border my-1" />
+                                        <Link
+                                            href="/upgrade"
+                                            className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-primary/10 font-medium text-primary"
+                                        >
+                                            <Zap size={18} />
+                                            <span className="text-sm">Upgrade</span>
+                                        </Link>
+                                    </>
+                                )}
+
+                                {/* Non-admin Upgrade Option */}
+                                {!userIsAdmin && (
+                                    <>
+                                        <div className="h-px bg-border my-1" />
+                                        <Link
+                                            href="/upgrade"
+                                            className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-primary/10 font-medium text-primary"
+                                        >
+                                            <Zap size={18} />
+                                            <span className="text-sm">Upgrade to Pro</span>
+                                        </Link>
+                                    </>
+                                )}
+
+                                {/* Logout Option */}
+                                <div className="h-px bg-border my-1" />
+                                <button
+                                    onClick={() => {
+                                        logout();
+                                        setShowMore(false);
+                                    }}
+                                    className="flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all hover:bg-destructive/10 font-medium text-destructive"
+                                >
+                                    <LogOut size={18} />
+                                    <span className="text-sm">Logout</span>
+                                </button>
                             </div>
                         </motion.div>
                     )}

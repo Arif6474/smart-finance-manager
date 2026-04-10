@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import PaymentRequest from '@/models/PaymentRequest';
+import User from '@/models/User';
 import { verify } from 'jsonwebtoken';
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
@@ -8,17 +9,33 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         await dbConnect();
 
         // Get user from token
-        const token = req.headers.get('authorization')?.split(' ')[1];
+        let token = req.headers.get('authorization')?.split(' ')[1];
+        
+        // Handle cases where frontend sends "null" or "undefined" as a string
+        if (token === 'null' || token === 'undefined') {
+            token = undefined;
+        }
+
+        if (!token) {
+            const cookies = req.headers.get('cookie');
+            if (cookies) {
+                const tokenMatch = cookies.match(/token=([^;]+)/);
+                if (tokenMatch) {
+                    token = tokenMatch[1];
+                }
+            }
+        }
+
         if (!token) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const decoded: any = verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        const decoded: any = verify(token, process.env.JWT_SECRET || 'fallback_secret');
         const adminId = decoded.userId;
 
-        // Check if admin
-        const isAdmin = process.env.ADMIN_IDS?.includes(adminId);
-        if (!isAdmin) {
+        // Check if user is admin or superAdmin from DB
+        const currentUser = await User.findById(adminId);
+        if (!currentUser || (currentUser.level !== 'admin' && currentUser.level !== 'superAdmin')) {
             return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
         }
 

@@ -8,25 +8,54 @@ export async function GET(req: Request) {
     try {
         await dbConnect();
 
-        // Get user from token
-        const token = req.headers.get('authorization')?.split(' ')[1];
+        // Get user from token (check header first, then cookies)
+        let token = req.headers.get('authorization')?.split(' ')[1];
+        
+        // Handle cases where frontend sends "null" or "undefined" as a string
+        if (token === 'null' || token === 'undefined') {
+            token = undefined;
+        }
+        
+        if (!token) {
+            const cookies = req.headers.get('cookie');
+            if (cookies) {
+                const tokenMatch = cookies.match(/token=([^;]+)/);
+                if (tokenMatch) {
+                    token = tokenMatch[1];
+                }
+            }
+        }
+
         if (!token) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const decoded: any = verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        let decoded: any;
+        try {
+            decoded = verify(token, process.env.JWT_SECRET || 'fallback_secret');
+        } catch (err) {
+            return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+        }
+
         const userId = decoded.userId;
 
-        // Check if user is admin (you can add an isAdmin field to User model)
-        // For now, we'll assume users can only see their own payment requests
-        const isAdmin = process.env.ADMIN_IDS?.includes(userId) || false;
+        // Fetch user from database to check level
+        const currentUser = await User.findById(userId);
+        if (!currentUser) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        // Check if user is admin or superAdmin
+        const adminStatus = currentUser.level === 'admin' || currentUser.level === 'superAdmin';
 
         let paymentRequests;
-        if (isAdmin) {
+        if (adminStatus) {
+            // Admins can see all payment requests
             paymentRequests = await PaymentRequest.find()
                 .sort({ createdAt: -1 })
                 .populate('userId', 'name email phone');
         } else {
+            // Regular users only see their own requests
             paymentRequests = await PaymentRequest.find({ userId }).sort({ createdAt: -1 });
         }
 
