@@ -5,6 +5,7 @@ import Transaction from '@/models/Transaction';
 import Account from '@/models/Account';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
+import { checkSubscription } from '@/lib/subscriptionUtils';
 import console from 'console';
 
 export async function GET() {
@@ -29,6 +30,14 @@ export async function POST(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
+        const userId = decoded.userId;
+
+        // Check subscription status
+        const subStatus = await checkSubscription(userId);
+        if (!subStatus.isAllowed) {
+            return NextResponse.json({ error: subStatus.reason }, { status: 403 });
+        }
+
         const body = await req.json();
         const {
             type, person, amount, category, description, dueDate,

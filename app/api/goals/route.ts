@@ -4,6 +4,7 @@ import dbConnect from '@/lib/db';
 import Goal from '@/models/Goal';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
+import { checkSubscription } from '@/lib/subscriptionUtils';
 
 export async function GET(req: Request) {
     try {
@@ -29,6 +30,14 @@ export async function POST(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
+        const userId = decoded.userId;
+
+        // Check subscription status
+        const subStatus = await checkSubscription(userId);
+        if (!subStatus.isAllowed) {
+            return NextResponse.json({ error: subStatus.reason }, { status: 403 });
+        }
+
         const { name, targetAmount, currentAmount, deadline, color, icon } = await req.json();
 
         if (!name || !targetAmount) {

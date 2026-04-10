@@ -21,7 +21,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'User already exists' }, { status: 400 });
         }
 
-        const user = await User.create({ name, email, password, phone });
+        const user = await User.create({ 
+            name, 
+            email, 
+            password, 
+            phone,
+            trialStartDate: new Date()
+        });
 
         const token = signToken({ userId: user._id, email: user.email });
 
