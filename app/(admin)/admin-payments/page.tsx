@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { CheckCircle2, XCircle, Clock, AlertCircle, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import PageWrapper from '@/components/PageWrapper';
+import { isAdmin } from '@/lib/adminUtils';
 import { PAYMENT_CONFIG } from '@/lib/paymentConfig';
 
 interface PaymentRequest {
@@ -24,16 +26,31 @@ interface PaymentRequest {
 }
 
 export default function AdminPaymentsPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
     const [payments, setPayments] = useState<PaymentRequest[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
     const [rejectionReason, setRejectionReason] = useState('');
     const [rejectingId, setRejectingId] = useState<string | null>(null);
 
+    // Check if user is admin/superAdmin
     useEffect(() => {
-        fetchPayments();
-    }, []);
+        if (!authLoading && user && !isAdmin(user.level)) {
+            // User is not admin, redirect to dashboard
+            toast.error('Access Denied: Admin only');
+            router.push('/dashboard');
+        }
+    }, [user, authLoading, router]);
+
+    // Fetch payments only if user is admin
+    useEffect(() => {
+        if (user && isAdmin(user.level)) {
+            fetchPayments();
+        } else if (user && !authLoading) {
+            setLoading(false);
+        }
+    }, [user?.id, authLoading]);
 
     const fetchPayments = async () => {
         try {
@@ -125,6 +142,25 @@ export default function AdminPaymentsPage() {
                 <div className="flex items-center justify-center min-h-[500px]">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
                 </div>
+            </PageWrapper>
+        );
+    }
+
+    // Access denied for non-admin users
+    if (!user || !isAdmin(user.level)) {
+        return (
+            <PageWrapper className="flex items-center justify-center min-h-[500px]">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center space-y-4"
+                >
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-destructive/10 rounded-full">
+                        <Lock size={32} className="text-destructive" />
+                    </div>
+                    <h2 className="text-2xl font-bold">Access Denied</h2>
+                    <p className="text-muted-foreground">Only admins and super admins can access this page.</p>
+                </motion.div>
             </PageWrapper>
         );
     }

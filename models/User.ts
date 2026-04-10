@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
 
         // Subscription fields
         plan: { type: String, enum: ['free', 'pro'], default: 'free' },
+        level: { type: String, enum: ['superAdmin', 'admin', 'user'], default: 'user' },
         trialStartDate: { type: Date },
         subscriptionExpiryDate: { type: Date },
 

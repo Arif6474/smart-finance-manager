@@ -9,6 +9,7 @@ interface User {
     email: string;
     phone?: string;
     plan?: 'free' | 'pro';
+    level?: 'user' | 'admin' | 'superAdmin';
     trialStartDate?: string;
     subscriptionExpiryDate?: string;
 }
