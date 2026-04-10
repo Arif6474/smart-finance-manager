@@ -12,19 +12,24 @@ const stats = [
 
 const benefits = [
     {
-        title: "See where every taka goes",
-        desc: "Most people have no idea where their money disappears each month. Our auto-categorization and charts make it crystal clear — instantly.",
+        title: "Improve Spending Habits",
+        desc: "Get real-time feedback on where your money leaks. Our auto-categorization helps you identify and cut unnecessary expenses instantly.",
         color: "from-teal-500 to-emerald-500",
     },
     {
-        title: "Never miss a payment again",
-        desc: "Outstanding loans, due bills, supplier payments — we track everything so nothing falls through the cracks. Your reputation stays intact.",
+        title: "Never Miss a Bill",
+        desc: "Automated reminders for payables, loans, and subscriptions. Keep your reputation intact and avoid late fees every single month.",
         color: "from-amber-500 to-orange-500",
     },
     {
-        title: "Build wealth, not just track it",
-        desc: "Month-over-month net worth tracking shows your progress. Seeing the number go up every month is addicting in the best way possible.",
+        title: "Grow Your Savings Faster",
+        desc: "Set visual goals and watch your progress update as you save. Seeing your savings grow is the best motivation to keep going.",
         color: "from-purple-500 to-pink-500",
+    },
+    {
+        title: "Total Financial Visibility",
+        desc: "One unified dashboard for your entire financial life. From Net Worth graphs to daily cash flows, see it all in one place.",
+        color: "from-blue-500 to-cyan-500",
     },
 ];
 
@@ -93,7 +98,7 @@ export default function BenefitsSection() {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {benefits.map((b, i) => (
                         <motion.div
                             key={i}

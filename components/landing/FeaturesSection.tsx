@@ -1,50 +1,89 @@
 'use client';
 
-import { BarChart2, Wallet, HandCoins, PieChart, Smartphone, BellRing } from 'lucide-react';
+import { 
+    BarChart2, 
+    Wallet, 
+    HandCoins, 
+    PieChart, 
+    Smartphone, 
+    BellRing, 
+    Sparkles, 
+    Target, 
+    CalendarClock, 
+    Trophy 
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
     {
-        icon: BarChart2,
-        title: 'Real-Time Cash Flow',
-        desc: 'Watch your money move in real time. Beautiful charts that update the moment you log a transaction.',
+        icon: Target,
+        title: 'Smart Budgeting',
+        desc: 'Set category limits and get AI-powered alerts before you overspend. Stay on track effortlessly.',
         gradient: 'from-teal-500 to-emerald-500',
-        badge: 'Most Popular',
+        badge: 'Popular',
     },
     {
-        icon: Wallet,
-        title: 'All Accounts, One View',
-        desc: 'Cash, bank, bKash, Nagad — every account in one unified dashboard. No more jumping between apps.',
+        icon: Sparkles,
+        title: 'AI Financial Assistant',
+        desc: 'Ask questions and get intelligent suggestions on saving money and improving your financial habits.',
+        gradient: 'from-purple-500 to-pink-500',
+        badge: 'AI Powered',
+    },
+    {
+        icon: BarChart2,
+        title: 'Net Worth Tracking',
+        desc: 'Visualize your wealth growth with real-time graphs. See the big picture of your financial journey.',
         gradient: 'from-blue-500 to-cyan-500',
         badge: null,
     },
     {
-        icon: HandCoins,
-        title: 'Debt & Lending Tracker',
-        desc: "Who owes you. Who you owe. Track borrowings, due dates, and repayments with zero confusion.",
-        gradient: 'from-amber-500 to-orange-500',
-        badge: 'Unique',
-    },
-    {
-        icon: PieChart,
-        title: 'Smart Spending Insights',
-        desc: 'Monthly breakdowns by category show exactly where your money leaks — so you can stop it.',
-        gradient: 'from-purple-500 to-pink-500',
+        icon: Wallet,
+        title: 'Multi-Account Sync',
+        desc: 'Unified view for Bank, bKash, Nagad, and Cash. No more switching between multiple apps.',
+        gradient: 'from-emerald-500 to-teal-600',
         badge: null,
     },
     {
-        icon: BellRing,
-        title: 'Smart Alerts',
-        desc: 'Get notified when you overspend a category, a debt is due, or your balance drops dangerously low.',
+        icon: HandCoins,
+        title: 'Payable & Receivable',
+        desc: 'Never forget who you owe or who owes you. Track debts and collections with automated reminders.',
+        gradient: 'from-amber-500 to-orange-500',
+        badge: null,
+    },
+    {
+        icon: CalendarClock,
+        title: 'Loan & EMI Manager',
+        desc: 'Track installments, interest, and upcoming payment dates. Never miss a loan repayment again.',
         gradient: 'from-red-500 to-rose-500',
-        badge: 'Coming Soon',
+        badge: 'New',
+    },
+    {
+        icon: BellRing,
+        title: 'Subscription Tracker',
+        desc: 'Manage monthly bills and recurring payments. Get notified before your subscriptions renew.',
+        gradient: 'from-indigo-500 to-blue-600',
+        badge: null,
+    },
+    {
+        icon: Trophy,
+        title: 'Gamified Finance',
+        desc: 'Earn streaks and badges for healthy financial habits. Watch your Health Score improve daily.',
+        gradient: 'from-yellow-500 to-amber-600',
+        badge: 'Fun',
     },
     {
         icon: Smartphone,
-        title: 'Works Like a Native App',
-        desc: 'Install it on your phone homescreen. Works offline. Feels native. No App Store required.',
+        title: 'PWA / Offline Access',
+        desc: 'Works like a native app on your phone. Access and log transactions even without internet.',
         gradient: 'from-teal-500 to-blue-500',
         badge: 'PWA',
+    },
+    {
+        icon: PieChart,
+        title: 'Advanced Analytics',
+        desc: 'Deep dive into your spending patterns with interactive reports. Export your data to CSV or PDF.',
+        gradient: 'from-cyan-500 to-blue-500',
+        badge: null,
     },
 ];
 

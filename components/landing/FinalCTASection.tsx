@@ -28,13 +28,12 @@ export default function FinalCTASection() {
                 </div>
 
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                    Your financial future <br className="hidden sm:block" />
-                    starts{' '}
-                    <span className="text-amber-300">right now.</span>
+                    Start Your Free <br className="hidden sm:block" />
+                    Trial <span className="text-amber-300">Today.</span>
                 </h2>
 
                 <p className="text-xl text-white/80 mb-12 max-w-xl mx-auto leading-relaxed">
-                    Stop waiting. Stop guessing. Take 30 seconds to sign up and see your complete financial picture for the first time.
+                    Stop waiting. Stop guessing. Take 30 seconds to sign up and experience full financial clarity for the next 14 days — for free.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -52,21 +51,21 @@ export default function FinalCTASection() {
                                 href="/signup"
                                 className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-amber-50 font-extrabold px-10 py-5 rounded-2xl text-lg shadow-2xl hover:shadow-white/25 hover:scale-105 transition-all duration-300"
                             >
-                                Start for Free
+                                Start 14-Day Free Trial
                                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                             <Link
                                 href="/login"
                                 className="w-full sm:w-auto inline-flex items-center justify-center text-white/80 hover:text-white font-semibold px-8 py-5 rounded-2xl border border-white/20 hover:bg-white/10 transition-all duration-300 text-lg"
                             >
-                                Already have an account?
+                                Sign In
                             </Link>
                         </>
                     )}
                 </div>
 
                 <p className="mt-8 text-white/50 text-sm">
-                    Free forever plan available · No credit card required · Cancel anytime
+                    No credit card required · 14 days full access · Cancel anytime
                 </p>
             </motion.div>
         </section>

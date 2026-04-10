@@ -7,6 +7,7 @@ import DashboardPreviewSection from '@/components/landing/DashboardPreviewSectio
 import BenefitsSection from '@/components/landing/BenefitsSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
+import FAQSection from '@/components/landing/FAQSection';
 import FinalCTASection from '@/components/landing/FinalCTASection';
 import Footer from '@/components/landing/Footer';
 import Link from 'next/link';
@@ -44,6 +45,7 @@ export default function Home() {
             <a href="#features" className="hover:text-foreground transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
             <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
+            <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
           </nav>
 
           {/* Auth buttons */}
@@ -90,6 +92,9 @@ export default function Home() {
         <TestimonialsSection />
         <div id="pricing" className="scroll-mt-20 px-6 sm:px-0">
           <PricingSection />
+        </div>
+        <div id="faq" className="scroll-mt-20 px-6 sm:px-0">
+          <FAQSection />
         </div>
         <FinalCTASection />
       </main>

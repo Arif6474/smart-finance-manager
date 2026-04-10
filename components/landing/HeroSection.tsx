@@ -45,10 +45,9 @@ export default function HeroSection() {
                     transition={{ duration: 0.6, delay: 0.1 }}
                     className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-6"
                 >
-                    Stop Guessing.{' '}
-                    <br className="hidden sm:block" />
+                    Take Control of Your Money <br className="hidden sm:block" />
                     <span className="bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 bg-clip-text text-transparent">
-                        Start Knowing.
+                        & Grow Smarter.
                     </span>
                 </motion.h1>
 
@@ -60,7 +59,7 @@ export default function HeroSection() {
                     className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
                 >
                     SmartFinance gives you a crystal-clear picture of your money in seconds.
-                    Track every taka, crush your debt, and build wealth — all in one beautiful app.
+                    Advanced budgeting, AI insights, and total financial control — all in one beautiful app.
                 </motion.p>
 
                 {/* ── CTAs ── */}
@@ -84,14 +83,14 @@ export default function HeroSection() {
                                 href="/signup"
                                 className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 btn-primary px-8 py-4 text-base font-bold rounded-2xl"
                             >
-                                Start Free
+                                Start Free 14-Day Trial
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                             <Link
-                                href="/login"
+                                href="#how-it-works"
                                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card border border-border hover:bg-muted text-foreground font-semibold px-8 py-4 rounded-2xl transition-all duration-300 text-base"
                             >
-                                Sign In
+                                See How It Works
                             </Link>
                         </>
                     )}
@@ -135,10 +134,10 @@ export default function HeroSection() {
                         animate="animate"
                         className="hidden sm:block absolute -left-16 top-8 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-52"
                     >
-                        <p className="text-xs text-muted-foreground mb-1">Net Worth</p>
-                        <p className="text-2xl font-black text-foreground">৳1.25L</p>
+                        <p className="text-xs text-muted-foreground mb-1">Financial Health</p>
+                        <p className="text-2xl font-black text-foreground">84/100</p>
                         <p className="text-xs text-success font-semibold mt-1 flex items-center gap-1">
-                            <TrendingUp size={11} /> +18.4% this month
+                            <Zap size={11} className="fill-current" /> Excellent Progress
                         </p>
                     </motion.div>
 
@@ -147,12 +146,12 @@ export default function HeroSection() {
                         animate="animate"
                         className="hidden sm:block absolute -right-16 top-16 z-20 bg-card border border-border rounded-2xl p-4 shadow-lift text-left w-52"
                     >
-                        <p className="text-xs text-muted-foreground mb-1">Monthly Savings</p>
-                        <p className="text-2xl font-black text-primary">৳32,400</p>
+                        <p className="text-xs text-muted-foreground mb-1">Net Worth</p>
+                        <p className="text-2xl font-black text-primary">৳1,25,400</p>
                         <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
                             <div className="h-full w-3/4 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full" />
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">74% of goal</p>
+                        <p className="text-xs text-muted-foreground mt-1">+12% from last month</p>
                     </motion.div>
 
 

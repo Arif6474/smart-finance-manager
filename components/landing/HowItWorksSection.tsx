@@ -7,22 +7,22 @@ const steps = [
     {
         num: '01',
         icon: UserPlus,
-        title: 'Create your account',
-        desc: 'Sign up in 30 seconds. No credit card, no setup headache. Just your name and email.',
+        title: 'Connect & Log',
+        desc: 'Add your accounts and transactions in seconds. Whether it’s Cash, bKash, or Bank — setup is a breeze.',
         color: 'from-teal-500 to-emerald-500',
     },
     {
         num: '02',
         icon: LayoutDashboard,
-        title: 'Log your money',
-        desc: 'Add your accounts, income, and expenses. It takes 2 minutes to set up and looks stunning.',
+        title: 'Monitor & Manage',
+        desc: 'Keep track of every taka with automated categorization. Stay on top of your payables and budgets.',
         color: 'from-blue-500 to-cyan-500',
     },
     {
         num: '03',
         icon: TrendingUp,
-        title: 'Watch your wealth grow',
-        desc: 'Get powerful insights and charts. Cut bad habits. Save more. Build real financial freedom.',
+        title: 'Optimize & Grow',
+        desc: 'Use AI insights and health scores to improve habits. Watch your net worth grow with smart decisions.',
         color: 'from-purple-500 to-pink-500',
     },
 ];
