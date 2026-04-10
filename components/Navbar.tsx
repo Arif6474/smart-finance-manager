@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles } from 'lucide-react';
+import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles, Zap } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import NotificationBell from './NotificationBell';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -114,6 +114,14 @@ export default function Navbar() {
                                     >
                                         <User size={16} />
                                         Profile Settings
+                                    </Link>
+                                    <Link
+                                        href="/upgrade"
+                                        onClick={() => setIsProfileOpen(false)}
+                                        className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl hover:bg-primary/10 text-primary hover:text-primary transition-colors"
+                                    >
+                                        <Zap size={16} />
+                                        Upgrade to Pro
                                     </Link>
                                 </div>
                                 <div className="p-2 border-t border-border">

@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema(
         resetPasswordToken: { type: String },
         resetPasswordExpires: { type: Date },
 
+        // Subscription fields
+        plan: { type: String, enum: ['free', 'pro'], default: 'free' },
+        trialStartDate: { type: Date },
+        subscriptionExpiryDate: { type: Date },
+
         // Gamification & Habit Building fields
         streakCount: { type: Number, default: 0 },
         lastActiveDate: { type: Date },

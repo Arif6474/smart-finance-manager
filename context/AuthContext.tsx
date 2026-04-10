@@ -8,6 +8,9 @@ interface User {
     name: string;
     email: string;
     phone?: string;
+    plan?: 'free' | 'pro';
+    trialStartDate?: string;
+    subscriptionExpiryDate?: string;
 }
 
 interface AuthContextType {
