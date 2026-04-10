@@ -379,13 +379,10 @@ export default function UpgradePage() {
                             q: 'How long does it take to activate?',
                             a: 'Payments are verified within 1-2 hours. Pro access will be activated immediately after verification.',
                         },
-                        {
-                            q: 'Can I get a refund?',
-                            a: 'Yes, full refund within 7 days if not satisfied. Contact support@smartfinance.bd',
-                        },
+                       
                         {
                             q: 'What is included in Pro?',
-                            a: 'All features are included: unlimited accounts, analytics, budgets, AI insights, and more.',
+                            a: 'All features are included: analytics, budgets, AI insights, mobile app access, and more.',
                         },
                         {
                             q: 'Do I need to wait for trial to end?',

@@ -14,7 +14,8 @@ import {
     Sparkles,
     Goal,
     RotateCw,
-    Bell
+    Bell,
+    Zap
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
@@ -87,12 +88,19 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            {/* Logout */}
+            {/* Upgrade to Pro */}
             <div className="px-3 pb-4">
                 <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-3" />
+                <Link
+                    href="/upgrade"
+                    className="flex items-center gap-3 w-full px-4 py-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 text-sm font-semibold"
+                >
+                    <Zap size={19} />
+                    <span>Upgrade to Pro</span>
+                </Link>
                 <button
                     onClick={logout}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-300 text-sm"
+                    className="flex items-center gap-3 w-full px-4 py-2.5 mt-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-300 text-sm"
                 >
                     <LogOut size={19} />
                     <span>Logout</span>

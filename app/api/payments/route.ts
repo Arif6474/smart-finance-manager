@@ -99,6 +99,15 @@ export async function POST(req: Request) {
             );
         }
 
+        // Fetch user details
+        const user = await User.findById(userId);
+        if (!user) {
+            return NextResponse.json(
+                { error: 'User not found' },
+                { status: 404 }
+            );
+        }
+
         // Handle screenshot upload (if provided)
         let screenshotUrl = null;
         if (screenshotFile) {
@@ -110,10 +119,12 @@ export async function POST(req: Request) {
         // Create payment request
         const paymentRequest = await PaymentRequest.create({
             userId,
-            method,
+            userEmail: user.email,
+            userName: user.name,
+            paymentMethod: method,
             transactionId,
-            senderNumber: senderNumber || null,
-            screenshotUrl,
+            senderNumber: senderNumber || '',
+            screenshotUrl: screenshotUrl || '',
             status: 'pending',
         });
 

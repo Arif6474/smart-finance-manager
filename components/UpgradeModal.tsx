@@ -7,7 +7,6 @@ import toast from 'react-hot-toast';
 import { PAYMENT_CONFIG } from '@/lib/paymentConfig';
 import PaymentForm from './PaymentForm';
 
-
 interface UpgradeModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -134,17 +133,17 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                     <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 space-y-4">
                                         <h3 className="font-semibold text-lg">Payment Instructions</h3>
 
-                                        {selectedPaymentMethod.id === 'bank' ? (
+                                        {selectedPaymentMethod?.id === 'bank' ? (
                                             <div className="space-y-4">
                                                 <div>
                                                     <p className="text-sm text-muted-foreground mb-2">Account Name</p>
                                                     <div className="bg-card border border-border rounded-lg p-3 flex items-center justify-between">
                                                         <code className="font-mono text-sm font-semibold">
-                                                            {selectedPaymentMethod.accountName}
+                                                            {(selectedPaymentMethod as typeof PAYMENT_CONFIG.methods.bank).accountName}
                                                         </code>
                                                         <button
                                                             onClick={() =>
-                                                                handleCopy(selectedPaymentMethod.accountName)
+                                                                handleCopy((selectedPaymentMethod as typeof PAYMENT_CONFIG.methods.bank).accountName)
                                                             }
                                                             className="p-2 hover:bg-primary/10 rounded transition-colors"
                                                         >
@@ -161,11 +160,11 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                                     <p className="text-sm text-muted-foreground mb-2">Account Number</p>
                                                     <div className="bg-card border border-border rounded-lg p-3 flex items-center justify-between">
                                                         <code className="font-mono text-sm font-semibold">
-                                                            {selectedPaymentMethod.accountNumber}
+                                                            {(selectedPaymentMethod as typeof PAYMENT_CONFIG.methods.bank).accountNumber}
                                                         </code>
                                                         <button
                                                             onClick={() =>
-                                                                handleCopy(selectedPaymentMethod.accountNumber)
+                                                                handleCopy((selectedPaymentMethod as typeof PAYMENT_CONFIG.methods.bank).accountNumber)
                                                             }
                                                             className="p-2 hover:bg-primary/10 rounded transition-colors"
                                                         >
@@ -181,7 +180,7 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                                 <div>
                                                     <p className="text-sm text-muted-foreground mb-2">Branch</p>
                                                     <div className="bg-card border border-border rounded-lg p-3">
-                                                        <p className="font-semibold">{selectedPaymentMethod.branchName}</p>
+                                                        <p className="font-semibold">{(selectedPaymentMethod as typeof PAYMENT_CONFIG.methods.bank).branchName}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -190,10 +189,14 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                                 <p className="text-sm text-muted-foreground mb-2">Send Money To</p>
                                                 <div className="bg-card border border-border rounded-lg p-4 flex items-center justify-between">
                                                     <code className="font-mono text-lg font-bold">
-                                                        {selectedPaymentMethod.number}
+                                                        {selectedPaymentMethod && 'number' in selectedPaymentMethod ? selectedPaymentMethod.number : 'N/A'}
                                                     </code>
                                                     <button
-                                                        onClick={() => handleCopy(selectedPaymentMethod.number)}
+                                                        onClick={() => {
+                                                            if (selectedPaymentMethod && 'number' in selectedPaymentMethod) {
+                                                                handleCopy(selectedPaymentMethod.number);
+                                                            }
+                                                        }}
                                                         className="p-2 hover:bg-primary/10 rounded transition-colors"
                                                     >
                                                         {copied ? (
