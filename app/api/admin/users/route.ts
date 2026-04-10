@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
         const { isAdmin, error } = await checkAdminAccess(req);
         
         if (!isAdmin) {
-            return error;
+            return error || NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
         await dbConnect();
