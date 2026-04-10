@@ -20,7 +20,8 @@ import {
     ChevronDown,
     Shield,
     CreditCard,
-    Users
+    Users,
+    Calendar
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { isAdmin } from '@/lib/adminUtils';
@@ -155,16 +156,66 @@ export default function Sidebar() {
                 )}
             </nav>
 
-            {/* Upgrade to Pro */}
+            {/* Subscription Status */}
             <div className="px-3 pb-4">
-                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-3" />
-                <Link
-                    href="/upgrade"
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 text-sm font-semibold"
-                >
-                    <Zap size={19} />
-                    <span>Upgrade to Pro</span>
-                </Link>
+                <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mb-4" />
+                
+                {user?.subscription && (
+                    <div className="px-4 mb-4">
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Current Plan</span>
+                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
+                                    user.subscription.currentPlan === 'pro' ? 'bg-success/10 text-success' :
+                                    user.subscription.currentPlan === 'free-trial' ? 'bg-warning/10 text-warning' :
+                                    user.subscription.currentPlan === 'admin' ? 'bg-shield/10 text-shield' :
+                                    'bg-destructive/10 text-destructive'
+                                }`}>
+                                    {user.subscription.currentPlan.replace('-', ' ')}
+                                </span>
+                            </div>
+                            
+                            <h4 className="font-bold text-sm mb-1">
+                                {user.subscription.currentPlan === 'admin' ? 'System Administrator' :
+                                 user.subscription.currentPlan === 'pro' ? 'Pro Membership' :
+                                 user.subscription.currentPlan === 'free-trial' ? 'Free Trial' :
+                                 'Free Account'}
+                            </h4>
+                            
+                            {user.subscription.daysRemaining > 0 && user.subscription.currentPlan !== 'admin' && (
+                                <div className="mt-2 flex items-center gap-2">
+                                    <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                                        <motion.div 
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${Math.min(100, (user.subscription.daysRemaining / (user.subscription.currentPlan === 'pro' ? 30 : 14)) * 100)}%` }}
+                                            className={`h-full ${user.subscription.daysRemaining < 3 ? 'bg-destructive' : 'bg-primary'}`}
+                                        />
+                                    </div>
+                                    <span className="text-[10px] font-bold whitespace-nowrap">
+                                        {user.subscription.daysRemaining} days left
+                                    </span>
+                                </div>
+                            )}
+
+                            {user.subscription.expiryDate && (
+                                <p className="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
+                                    <Calendar size={10} />
+                                    Expires: {new Date(user.subscription.expiryDate).toLocaleDateString()}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {user?.subscription?.currentPlan !== 'pro' && user?.subscription?.currentPlan !== 'admin' && (
+                    <Link
+                        href="/upgrade"
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 text-sm font-semibold group"
+                    >
+                        <Zap size={19} className="group-hover:animate-pulse" />
+                        <span>Upgrade to Pro</span>
+                    </Link>
+                )}
                 <button
                     onClick={logout}
                     className="flex items-center gap-3 w-full px-4 py-2.5 mt-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-300 text-sm"

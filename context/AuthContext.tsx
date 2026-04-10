@@ -12,6 +12,13 @@ interface User {
     level?: 'user' | 'admin' | 'superAdmin';
     trialStartDate?: string;
     subscriptionExpiryDate?: string;
+    subscription?: {
+        currentPlan: string;
+        daysRemaining: number;
+        expiryDate: string | null;
+        isProActive: boolean;
+        isTrialExpired: boolean;
+    }
 }
 
 interface AuthContextType {
@@ -20,6 +27,7 @@ interface AuthContextType {
     login: (userData: User) => void;
     logout: () => void;
     updateUser: (userData: User) => void;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,7 +44,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(JSON.parse(savedUser));
         }
         setLoading(false);
+        refreshUser();
     }, []);
+
+    const refreshUser = async () => {
+        try {
+            const res = await fetch('/api/user/profile');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.user) {
+                    updateUser(data.user);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to refresh user data', error);
+        }
+    };
 
     const login = (userData: User) => {
         setUser(userData);
@@ -61,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, updateUser }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, updateUser, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );
