@@ -40,7 +40,7 @@ const moreItems = [
     { name: 'Reports', icon: BarChart3, href: '/reports' },
     { name: 'Reminders', icon: Bell, href: '/reminders' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
-    { name: 'Payments', icon: CreditCard, href: '/payments' },
+    // { name: 'Payments', icon: CreditCard, href: '/payments' },
 ];
 
 const adminItems = [
