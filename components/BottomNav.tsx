@@ -20,7 +20,8 @@ import {
     CreditCard,
     Users,
     Zap,
-    LogOut
+    LogOut,
+    Calendar
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { isAdmin } from '@/lib/adminUtils';
@@ -103,9 +104,46 @@ export default function BottomNav() {
                             initial={{ opacity: 0, y: 20, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                            className="absolute bottom-[88px] right-2 bg-card border border-border shadow-2xl rounded-2xl p-2 w-48 z-50"
+                            className="absolute bottom-[88px] right-2 bg-card border border-border shadow-2xl rounded-2xl p-2 w-56 z-50 overflow-hidden"
                         >
                             <div className="flex flex-col gap-1">
+                                {user?.subscription && (
+                                    <div className="px-1 mb-2">
+                                        <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20">
+                                            <div className="flex items-center justify-between mb-1">
+                                                <span className="text-[9px] font-black uppercase tracking-wider text-muted-foreground">Plan</span>
+                                                <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${
+                                                    user.subscription.currentPlan === 'pro' ? 'bg-success/10 text-success' :
+                                                    user.subscription.currentPlan === 'free-trial' ? 'bg-warning/10 text-warning' :
+                                                    user.subscription.currentPlan === 'admin' ? 'bg-shield/10 text-shield' :
+                                                    'bg-destructive/10 text-destructive'
+                                                }`}>
+                                                    {user.subscription.currentPlan.replace('-', ' ')}
+                                                </span>
+                                            </div>
+                                            <h4 className="font-bold text-xs truncate">
+                                                {user.subscription.currentPlan === 'admin' ? 'Administrator' :
+                                                 user.subscription.currentPlan === 'pro' ? 'Pro Member' :
+                                                 user.subscription.currentPlan === 'free-trial' ? 'Free Trial' :
+                                                 'Free Account'}
+                                            </h4>
+                                            {user.subscription.daysRemaining > 0 && user.subscription.currentPlan !== 'admin' && (
+                                                <div className="mt-2 flex items-center gap-2">
+                                                    <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+                                                        <motion.div 
+                                                            initial={{ width: 0 }}
+                                                            animate={{ width: `${Math.min(100, (user.subscription.daysRemaining / (user.subscription.currentPlan === 'pro' ? 30 : 14)) * 100)}%` }}
+                                                            className={`h-full ${user.subscription.daysRemaining < 3 ? 'bg-destructive' : 'bg-primary'}`}
+                                                        />
+                                                    </div>
+                                                    <span className="text-[9px] font-bold">
+                                                        {user.subscription.daysRemaining}d
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
                                 {moreItems.map((item) => {
                                     const Icon = item.icon;
                                     const isActive = pathname === item.href;
