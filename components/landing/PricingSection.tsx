@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Check, Zap, PackageCheck } from 'lucide-react';
+import { Check, Zap, PackageCheck, Star, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const plans = [
@@ -9,43 +9,79 @@ const plans = [
         name: 'Free Trial',
         price: '৳0',
         period: '14 days',
-        desc: 'Experience the full power of SmartFinance with absolutely zero risk.',
+        desc: 'Try everything free. No risk, no commitment.',
         icon: PackageCheck,
         gradient: 'from-slate-500 to-slate-600',
+        badge: 'Start Here',
         features: [
-            '14 days full access',
-            'All premium features included',
+            'Full access to all features',
+            'Unlimited transactions',
+            'Budget, goals & EMI tracking',
+            'AI insights (limited)',
             'No credit card required',
-            'Unlimited accounts & tx',
-            'AI financial insights',
-            'PWA mobile app',
         ],
         cta: 'Start Free Trial',
         ctaHref: '/signup',
         highlighted: false,
     },
     {
-        name: 'Pro',
+        name: 'Pro Monthly',
         price: '৳100',
-        period: 'per month',
-        desc: 'For those serious about growing their wealth and mastering their money.',
+        period: 'month',
+        desc: 'Simple monthly plan for consistent financial growth.',
         icon: Zap,
-        gradient: 'from-teal-500 to-emerald-500',
+        gradient: 'from-blue-500 to-indigo-500',
+        badge: 'Most Flexible',
         features: [
-            'Unlimited accounts & transactions',
-            'Advanced reports & analytics',
-            'AI financial assistant',
-            'Savings goals & Net worth',
-            'Loan & EMI tracking',
-            'Export data (CSV/PDF)',
-            'Priority updates & support',
+            'All premium features unlocked',
+            'Advanced analytics & reports',
+            'Savings goals & EMI management',
+            'Smart budgeting & alerts',
+            'Priority support',
         ],
         cta: 'Upgrade to Pro',
         ctaHref: '/signup',
+        highlighted: false,
+    },
+    {
+        name: 'Pro 6 Months',
+        price: '৳550',
+        period: '6 months',
+        desc: 'Best for focused users. Save more as you grow.',
+        icon: Star,
+        gradient: 'from-teal-500 to-emerald-500',
+        badge: '🔥 Most Popular',
+        features: [
+            'Everything in Monthly',
+            'AI financial insights (full)',
+            'Net worth tracking & reports',
+            'Subscription & bill reminders',
+            'Better savings vs monthly',
+        ],
+        cta: 'Get 6 Months Plan',
+        ctaHref: '/signup',
         highlighted: true,
     },
+    {
+        name: 'Pro Yearly',
+        price: '৳1000',
+        period: 'year',
+        desc: 'Maximum value for long-term financial control.',
+        icon: ShieldCheck,
+        gradient: 'from-violet-500 to-purple-500',
+        badge: '💎 Best Value',
+        features: [
+            'Everything in 6 Months',
+            'Save ৳200 yearly',
+            'Early access to new features',
+            'VIP priority support',
+            'Long-term savings optimization',
+        ],
+        cta: 'Upgrade Yearly',
+        ctaHref: '/signup',
+        highlighted: false,
+    },
 ];
-
 export default function PricingSection() {
     return (
         <section className="py-28 bg-card border-t border-border relative overflow-hidden">
@@ -84,7 +120,7 @@ export default function PricingSection() {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
                     {plans.map((plan, i) => {
                         const Icon = plan.icon;
                         return (

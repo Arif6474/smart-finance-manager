@@ -97,10 +97,12 @@ export async function POST(req: Request) {
         const method = formData.get('method') as string;
         const transactionId = formData.get('transactionId') as string;
         const senderNumber = formData.get('senderNumber') as string;
+        const planId = formData.get('planId') as string;
+        const amount = Number(formData.get('amount'));
         const screenshotFile = formData.get('screenshot') as File | null;
 
         // Validate inputs
-        if (!method || !transactionId) {
+        if (!method || !transactionId || !planId || !amount) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
@@ -155,6 +157,8 @@ export async function POST(req: Request) {
             senderNumber: senderNumber || '',
             screenshotUrl: screenshotUrl || '',
             status: 'pending',
+            planId,
+            amount,
         });
 
         return NextResponse.json(

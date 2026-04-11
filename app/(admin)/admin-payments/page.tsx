@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import PageWrapper from '@/components/PageWrapper';
 import { isAdmin } from '@/lib/adminUtils';
-import { PAYMENT_CONFIG } from '@/lib/paymentConfig';
+import { PAYMENT_CONFIG, PLANS } from '@/lib/paymentConfig';
 
 interface PaymentRequest {
     _id: string;
@@ -18,6 +18,7 @@ interface PaymentRequest {
     paymentMethod: string;
     transactionId: string;
     senderNumber: string;
+    planId: string;
     status: 'pending' | 'approved' | 'rejected';
     amount: number;
     createdAt: string;
@@ -223,14 +224,17 @@ export default function AdminPaymentsPage() {
                             </div>
 
                             {/* Details */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-muted/50 rounded-xl p-4">
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-muted/50 rounded-xl p-4">
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Plan Details</p>
+                                    <p className="font-semibold text-sm">
+                                        {Object.values(PLANS).find(p => p.id === payment.planId)?.name || 'Pro Monthly'}
+                                        <span className="text-muted-foreground ml-1">({PAYMENT_CONFIG.pricing.currency}{payment.amount})</span>
+                                    </p>
+                                </div>
                                 <div>
                                     <p className="text-xs text-muted-foreground">Payment Method</p>
                                     <p className="font-semibold text-sm">{getPaymentMethodName(payment.paymentMethod)}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground">Amount</p>
-                                    <p className="font-semibold text-sm">{PAYMENT_CONFIG.pricing.currency}{payment.amount}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-muted-foreground">Transaction ID</p>

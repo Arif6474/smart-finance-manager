@@ -13,7 +13,8 @@ const paymentRequestSchema = new mongoose.Schema(
         approvedAt: { type: Date },
         approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         rejectionReason: { type: String, default: '' },
-        amount: { type: Number, default: 100 }, // ৳100
+        planId: { type: String, required: true },
+        amount: { type: Number, required: true },
     },
     { timestamps: true }
 );

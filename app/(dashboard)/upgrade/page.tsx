@@ -6,9 +6,11 @@ import { useAuth } from '@/context/AuthContext';
 import { Copy, Check, Send, Building2, Smartphone, Loader2, Upload, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { PLANS } from '@/lib/paymentConfig';
 
 export default function UpgradePage() {
     const { user } = useAuth();
+    const [selectedPlanId, setSelectedPlanId] = useState<string>(PLANS.MONTHLY.id);
     const [selectedMethod, setSelectedMethod] = useState<'bkash' | 'nagad' | 'bank' | null>(null);
     const [copied, setCopied] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -20,19 +22,21 @@ export default function UpgradePage() {
     const [senderNumber, setSenderNumber] = useState('');
     const [screenshot, setScreenshot] = useState<File | null>(null);
 
+    const currentPlan = Object.values(PLANS).find(p => p.id === selectedPlanId) || PLANS.MONTHLY;
+
     const payments = {
         bkash: {
             icon: Smartphone,
             title: 'bKash',
             number: '01820082894',
-            instruction: 'Send ৳100 using "Send Money"',
+            instruction: `Send ৳${currentPlan.price} using "Send Money"`,
             color: 'from-pink-600 to-pink-700',
         },
         nagad: {
             icon: Smartphone,
             title: 'Nagad',
             number: '01820082894',
-            instruction: 'Send ৳100',
+            instruction: `Send ৳${currentPlan.price}`,
             color: 'from-orange-600 to-orange-700',
         },
         bank: {
@@ -43,7 +47,7 @@ export default function UpgradePage() {
                 accountNumber: '1062488210001',
                 branch: 'Gulshan',
             },
-            instruction: 'Transfer ৳100 and note the transaction ID',
+            instruction: `Transfer ৳${currentPlan.price} and note the transaction ID`,
             color: 'from-blue-600 to-blue-700',
         },
     };
@@ -71,6 +75,8 @@ export default function UpgradePage() {
             formData.append('method', selectedMethod);
             formData.append('transactionId', transactionId);
             formData.append('senderNumber', senderNumber);
+            formData.append('planId', selectedPlanId);
+            formData.append('amount', currentPlan.price.toString());
             if (screenshot) {
                 formData.append('screenshot', screenshot);
             }
@@ -112,55 +118,38 @@ export default function UpgradePage() {
                 <p className="text-muted-foreground mt-2">Unlock advanced features and unlimited access</p>
             </div>
 
-            {/* Pricing Card */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-3xl p-8"
-            >
-                <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h2 className="text-2xl font-bold mb-2">Pro Plan</h2>
-                        <p className="text-muted-foreground mb-6">Get full access to all features</p>
-                        <div className="flex items-end gap-2 mb-6">
-                            <span className="text-5xl font-bold">৳100</span>
-                            <span className="text-muted-foreground mb-1">/month</span>
-                        </div>
-                        <ul className="space-y-3">
-                            {[
-                                'Unlimited accounts',
-                                'Advanced analytics',
-                                'Budget management',
-                                'AI insights',
-                                'Mobile app access',
-                                'Priority support',
-                            ].map((feature) => (
-                                <li key={feature} className="flex items-center gap-2 text-sm">
-                                    <div className="w-2 h-2 rounded-full bg-primary" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="flex items-center justify-center">
-                        <div className="text-center">
-                            <div className="inline-block bg-success/10 text-success px-4 py-2 rounded-full text-sm font-medium mb-4">
-                                Include Free 14-day Trial
+            {/* Plan Selector */}
+            <div>
+                <h2 className="text-2xl font-bold mb-4">Select a Plan</h2>
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                    {Object.values(PLANS).map((plan) => (
+                        <motion.button
+                            key={plan.id}
+                            onClick={() => setSelectedPlanId(plan.id)}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`p-6 rounded-3xl border-2 transition-all flex flex-col items-start text-left relative overflow-hidden ${
+                                selectedPlanId === plan.id
+                                    ? 'border-primary bg-primary/10 shadow-lg'
+                                    : 'border-border bg-card hover:border-primary/50'
+                            }`}
+                        >
+                            {selectedPlanId === plan.id && (
+                                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase">
+                                    Selected
+                                </div>
+                            )}
+                            <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                            <div className="flex items-end gap-1 mb-2">
+                                <span className="text-3xl font-bold">৳{plan.price}</span>
                             </div>
-                            <p className="text-muted-foreground mb-6">
-                                Start your journey with Smart Finance Manager today
-                            </p>
                             <p className="text-sm text-muted-foreground">
-                                📱 Works on all devices
-                                <br />
-                                🔒 100% Secure
-                                <br />
-                                🚀 Instant activation
+                                {plan.duration} days access
                             </p>
-                        </div>
-                    </div>
+                        </motion.button>
+                    ))}
                 </div>
-            </motion.div>
+            </div>
 
             {/* Success Message */}
             <AnimatePresence>
@@ -291,7 +280,7 @@ export default function UpgradePage() {
                         <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl text-sm text-blue-700 dark:text-blue-400 flex items-start gap-3">
                             <AlertCircle size={18} className="flex-shrink-0 mt-0.5" />
                             <p>
-                                Send exactly <strong>৳100</strong> to complete your upgrade. Keep the transaction ID for verification.
+                                Send exactly <strong>৳{currentPlan.price}</strong> to complete your upgrade. Keep the transaction ID for verification.
                             </p>
                         </div>
 

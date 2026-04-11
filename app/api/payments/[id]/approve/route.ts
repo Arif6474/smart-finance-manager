@@ -3,6 +3,7 @@ import dbConnect from '@/lib/db';
 import User from '@/models/User';
 import PaymentRequest from '@/models/PaymentRequest';
 import { verify } from 'jsonwebtoken';
+import { PLANS } from '@/lib/paymentConfig';
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
     try {
@@ -44,13 +45,26 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
             return NextResponse.json({ error: 'Payment request not found' }, { status: 404 });
         }
 
-        // Approve payment
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 30); // 30 days
+        const user = await User.findById(paymentRequest.userId);
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        // Determine plan duration
+        const plan = Object.values(PLANS).find(p => p.id === paymentRequest.planId) || PLANS.MONTHLY;
+        const extensionDays = plan.duration;
+
+        // Calculate new expiry date
+        // If current subscription is still active, add to it. Otherwise, start from now.
+        const currentExpiry = user.subscriptionExpiryDate ? new Date(user.subscriptionExpiryDate) : new Date();
+        const baseDate = currentExpiry > new Date() ? currentExpiry : new Date();
+        
+        const newExpiryDate = new Date(baseDate);
+        newExpiryDate.setDate(newExpiryDate.getDate() + extensionDays);
 
         await User.findByIdAndUpdate(paymentRequest.userId, {
             plan: 'pro',
-            subscriptionExpiryDate: expiryDate,
+            subscriptionExpiryDate: newExpiryDate,
         });
 
         paymentRequest.status = 'approved';

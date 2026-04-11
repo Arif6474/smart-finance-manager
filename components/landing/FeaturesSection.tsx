@@ -73,8 +73,8 @@ const features = [
     },
     {
         icon: Smartphone,
-        title: 'PWA / Offline Access',
-        desc: 'Works like a native app on your phone. Access and log transactions even without internet.',
+        title: 'PWA Access',
+        desc: 'Works like a native app on your phone.',
         gradient: 'from-teal-500 to-blue-500',
         badge: 'PWA',
     },
