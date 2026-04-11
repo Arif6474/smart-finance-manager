@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { X, Copy, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { PAYMENT_CONFIG } from '@/lib/paymentConfig';
+import { PAYMENT_CONFIG, PLANS } from '@/lib/paymentConfig';
 import PaymentForm from './PaymentForm';
 
 interface UpgradeModalProps {
@@ -84,7 +84,7 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                     <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-start gap-3 mb-6">
                                         <AlertCircle size={20} className="text-primary shrink-0 mt-0.5" />
                                         <div className="text-sm">
-                                            <p className="font-semibold">Pro Plan: {PAYMENT_CONFIG.pricing.currency}100/month</p>
+                                            <p className="font-semibold">Pro Plan: {PAYMENT_CONFIG.pricing.currency}{PLANS.MONTHLY.price}/month</p>
                                             <p className="text-muted-foreground">After your 14-day free trial</p>
                                         </div>
                                     </div>
@@ -212,7 +212,7 @@ export default function UpgradeModal({ isOpen, onClose, onSuccess }: UpgradeModa
                                         <div className="bg-warning/10 border border-warning/20 rounded-lg p-4">
                                             <p className="text-sm">
                                                 <strong>Amount to send:</strong> {PAYMENT_CONFIG.pricing.currency}
-                                                {PAYMENT_CONFIG.pricing.proMonthly}
+                                                {PLANS.MONTHLY.price}
                                             </p>
                                             <p className="text-sm text-muted-foreground mt-2">
                                                 {selectedPaymentMethod.instruction}
