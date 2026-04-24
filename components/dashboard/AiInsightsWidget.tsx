@@ -113,7 +113,7 @@ export default function AiInsightsWidget() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <Link
                         href="/ai-assistant"
                         className="text-xs font-black uppercase tracking-widest text-primary/60 hover:text-primary transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-primary/5"
@@ -125,7 +125,7 @@ export default function AiInsightsWidget() {
                         <button
                             onClick={handleGenerate}
                             disabled={generating}
-                            className="bg-primary text-white py-2.5 px-6 rounded-2xl flex items-center gap-2 text-sm font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
+                            className="bg-primary text-white py-2.5 px-4 sm:px-6 rounded-2xl flex items-center gap-2 text-xs sm:text-sm font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
                         >
                             {generating ? (
                                 <>

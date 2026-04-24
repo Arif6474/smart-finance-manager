@@ -151,11 +151,11 @@ export default function AccountsPage() {
                         className="btn-secondary px-5 py-2.5 flex items-center gap-2 text-sm border border-border bg-card hover:bg-muted"
                     >
                         <ArrowRightLeft size={18} />
-                        <span>Transfer Fund</span>
+                        <span>Transfer</span>
                     </button>
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="btn-primary px-5 py-2.5 flex items-center gap-2 text-sm"
+                        className="btn-primary px-5 py-2.5 flex items-center gap-2 text-xs"
                     >
                         <Plus size={20} />
                         <span>Add Account</span>
