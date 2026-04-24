@@ -11,12 +11,17 @@ import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { generateFinancialInsights, FinancialDataSummary } from '@/lib/ai';
 
-const getTodayRange = () => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return { today, tomorrow };
+const getWeeklyRange = () => {
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to Monday
+    const monday = new Date(now.setDate(diff));
+    monday.setHours(0, 0, 0, 0);
+    
+    const nextMonday = new Date(monday);
+    nextMonday.setDate(nextMonday.getDate() + 7);
+    
+    return { start: monday, end: nextMonday };
 };
 
 export async function GET(req: Request) {
@@ -26,12 +31,12 @@ export async function GET(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const { today, tomorrow } = getTodayRange();
+        const { start, end } = getWeeklyRange();
 
-        // Check if an insight already exists for today
+        // Check for the latest insight within the current week
         const existingInsight = await AiInsight.findOne({
             userId: decoded.userId,
-            createdAt: { $gte: today, $lt: tomorrow }
+            createdAt: { $gte: start, $lt: end }
         }).sort({ createdAt: -1 });
 
         return NextResponse.json({ insight: existingInsight || null });
@@ -48,17 +53,17 @@ export async function POST(req: Request) {
         if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const decoded: any = verifyToken(token);
-        const { today, tomorrow } = getTodayRange();
+        const { start, end } = getWeeklyRange();
 
-        // 1. Check if already generated today
+        // 1. Check if already generated this week
         const existingInsight = await AiInsight.findOne({
             userId: decoded.userId,
-            createdAt: { $gte: today, $lt: tomorrow }
+            createdAt: { $gte: start, $lt: end }
         });
 
         if (existingInsight) {
             return NextResponse.json({ 
-                error: 'Daily limit reached. You can only generate one report per day.',
+                error: 'Weekly limit reached. You can only generate one report per week.',
                 insight: existingInsight 
             }, { status: 429 });
         }

@@ -27,10 +27,10 @@ export default function AiAssistantPage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchTodayInsight();
+        fetchWeeklyInsight();
     }, []);
 
-    const fetchTodayInsight = async () => {
+    const fetchWeeklyInsight = async () => {
         try {
             setLoading(true);
             const res = await fetch('/api/insights');
@@ -132,7 +132,7 @@ export default function AiAssistantPage() {
                             ) : (
                                 <>
                                     <Zap size={20} className="fill-white" />
-                                    Generate Today's Report
+                                    Generate Weekly Report
                                 </>
                             )}
                         </button>
@@ -158,7 +158,7 @@ export default function AiAssistantPage() {
                             <p className="text-muted-foreground max-w-md mx-auto font-medium">{error}</p>
                         </div>
                         <button 
-                            onClick={fetchTodayInsight}
+                            onClick={fetchWeeklyInsight}
                             className="bg-background border border-border py-2 px-6 rounded-xl font-black text-sm hover:bg-muted transition-colors"
                         >
                             Try again
@@ -177,10 +177,10 @@ export default function AiAssistantPage() {
                                 <Zap size={20} className="text-white fill-white" />
                             </div>
                         </motion.div>
-                        <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tighter">Ready for your daily audit?</h2>
+                        <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tighter">Ready for your weekly audit?</h2>
                         <p className="text-muted-foreground max-w-lg mb-12 text-lg font-medium leading-relaxed opacity-80">
                             Let our AI analyze your spending patterns, identify leaks, and celebrate your savings milestones. 
-                            Your first report of the day is just one click away.
+                            Your first report of the week is just one click away.
                         </p>
                         <button
                             onClick={handleGenerate}
@@ -188,7 +188,7 @@ export default function AiAssistantPage() {
                             className="bg-primary text-white py-3 px-12 rounded-3xl flex items-center gap-4 text-base md:text-xl font-black shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1.5 transition-all active:scale-95 disabled:opacity-50"
                         >
                             {generating ? <Loader2 size={26} className="animate-spin" /> : <Sparkles size={26} />}
-                            {generating ? 'Gathering context...' : 'Generate Daily Report'}
+                            {generating ? 'Gathering context...' : 'Generate Weekly Report'}
                         </button>
                     </div>
                 ) : (

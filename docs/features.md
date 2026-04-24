@@ -35,7 +35,7 @@ Save for what matters.
 
 ## 6. AI Financial Assistant
 Get personalized advice powered by AI.
-- **Daily Insights**: The AI analyzes your transactions, budgets, and debts to provide tailored tips.
+- **Weekly Insights**: The AI analyzes your transactions, budgets, and debts to provide tailored tips.
 - **Success & Warnings**: Receive "success" badges for good habits and "warning" alerts for potential issues.
 - **Financial Summary**: A human-readable summary of your current financial health.
 

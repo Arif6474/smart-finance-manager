@@ -149,7 +149,7 @@ const sections = [
                         <div className="p-2 h-fit bg-emerald-500/10 text-emerald-500 rounded-lg"><ShieldCheck size={20} /></div>
                         <div>
                             <h5 className="font-bold text-sm">Proactive Monitoring</h5>
-                            <p className="text-xs text-muted-foreground mt-1">The AI monitors your spending habits daily to identify areas for improvement.</p>
+                            <p className="text-xs text-muted-foreground mt-1">The AI monitors your spending habits weekly to identify areas for improvement.</p>
                         </div>
                     </div>
                     <div className="flex gap-4 p-4 bg-card border border-border rounded-xl">

@@ -47,7 +47,7 @@ export default function HeroSection() {
                 >
                     Take Control of Your Money <br className="hidden sm:block" />
                     <span className="bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 bg-clip-text text-transparent">
-                        & Grow Smarter.
+                        Grow Smarter.
                     </span>
                 </motion.h1>
 
@@ -97,7 +97,7 @@ export default function HeroSection() {
                 </motion.div>
 
                 {/* ── Social Proof ── */}
-                <motion.div
+                {/* <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.45 }}
@@ -119,7 +119,7 @@ export default function HeroSection() {
                         <TrendingUp size={16} className="text-primary" />
                         <span>৳500Cr+ tracked monthly</span>
                     </div>
-                </motion.div>
+                </motion.div> */}
 
                 {/* ── Floating Dashboard Preview ── */}
                 <motion.div
