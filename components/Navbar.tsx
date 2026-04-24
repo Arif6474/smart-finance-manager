@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@/context/ThemeContext';
-import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles, Zap, CreditCard } from 'lucide-react';
+import { Sun, Moon, LogOut, User, Settings, ChevronDown, Sparkles, Zap, CreditCard, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import NotificationBell from './NotificationBell';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -72,6 +72,8 @@ export default function Navbar() {
                         AI Assistant
                     </span>
                 </Link>
+
+              
 
                 <NotificationBell />
 

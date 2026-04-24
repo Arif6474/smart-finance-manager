@@ -21,7 +21,7 @@ import {
     Users,
     Zap,
     LogOut,
-    Calendar
+    HelpCircle
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { isAdmin } from '@/lib/adminUtils';
@@ -41,7 +41,6 @@ const moreItems = [
     { name: 'Reports', icon: BarChart3, href: '/reports' },
     { name: 'Reminders', icon: Bell, href: '/reminders' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
-    // { name: 'Payments', icon: CreditCard, href: '/payments' },
 ];
 
 const adminItems = [

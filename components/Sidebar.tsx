@@ -20,13 +20,14 @@ import {
     ChevronDown,
     Shield,
     CreditCard,
-    Users,
-    Calendar
+    HelpCircle,
+    HeartPulse,
+    Calendar,
+    Users
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { isAdmin } from '@/lib/adminUtils';
 import { motion } from 'framer-motion';
-import { HeartPulse } from 'lucide-react';
 
 const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
@@ -39,7 +40,6 @@ const menuItems = [
     { name: 'Reports', icon: BarChart3, href: '/reports' },
     { name: 'Reminders', icon: Bell, href: '/reminders' },
     { name: 'Health', icon: HeartPulse, href: '/health' },
-    // { name: 'Payments', icon: CreditCard, href: '/payments' },
 ];
 
 const adminMenuItems = [

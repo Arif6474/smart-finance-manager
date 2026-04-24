@@ -12,7 +12,7 @@ import FinalCTASection from '@/components/landing/FinalCTASection';
 import Footer from '@/components/landing/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles, LayoutDashboard } from 'lucide-react';
+import { Sparkles, LayoutDashboard, HelpCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
@@ -46,6 +46,16 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
             <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+            <Link
+              href="/docs"
+              className="flex gap-2 items-center p-1.5 md:p-2.5 hover:bg-muted rounded-xl transition-all duration-300 border border-transparent hover:border-border/50 text-muted-foreground hover:text-foreground group"
+              title="Help & Documentation"
+            >
+              <HelpCircle size={18} className="transition-transform group-hover:scale-110" />
+              <span className="hidden md:block text-sm font-bold">
+                Help & Docs
+              </span>
+            </Link>
           </nav>
 
           {/* Auth buttons */}
