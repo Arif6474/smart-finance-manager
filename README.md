@@ -1,6 +1,6 @@
-# Smart Finance Manager
+# TakaHisab
 
-Smart Finance Manager is a comprehensive personal finance tracking and management application. It helps users achieve financial clarity through smart tracking, automated budgeting, and AI-driven insights.
+TakaHisab is a comprehensive personal finance tracking and management application. It helps users achieve financial clarity through smart tracking, automated budgeting, and AI-driven insights.
 
 ## 🚀 Key Features
 

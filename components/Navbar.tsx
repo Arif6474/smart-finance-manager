@@ -40,14 +40,14 @@ export default function Navbar() {
                 </h2>
                 <Link href="/dashboard" className="flex items-center gap-2 group md:hidden">
                     <Image
-                        src="/icons/icon-192x192.png"
-                        alt="SmartFinance Logo"
+                        src="/logo.png"
+                        alt="TakaHisab Logo"
                         width={28}
                         height={28}
                         className="w-7 h-7 rounded-lg object-contain shadow-sm shadow-primary/20"
                     />
                     <span className="text-sm font-bold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                        SmartFinance
+                        TakaHisab
                     </span>
                 </Link>
             </div>

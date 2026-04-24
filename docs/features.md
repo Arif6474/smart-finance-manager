@@ -1,6 +1,6 @@
-# Smart Finance Manager - Feature Directory
+# TakaHisab - Feature Directory
 
-This document provides a detailed overview of the features available in the Smart Finance Manager application.
+This document provides a detailed overview of the features available in the TakaHisab application.
 
 ## 1. Dashboard
 The Dashboard is your financial control center. It provides a real-time summary of your financial status:

@@ -11,7 +11,7 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Smart Finance Manager",
+  title: "TakaHisab - Smart Finance Manager",
   description: "Advanced full-stack financial management PWA",
   manifest: "/manifest.json",
   icons: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Finance Manager",
+    title: "TakaHisab",
   },
 };
 

@@ -96,14 +96,14 @@ export default function SignupPage() {
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2 mb-2 group">
                         <Image
-                            src="/icons/icon-192x192.png"
-                            alt="SmartFinance Logo"
+                            src="/logo.png"
+                            alt="TakaHisab Logo"
                             width={48}
                             height={48}
                             className="w-12 h-12 rounded-2xl object-contain shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow"
                         />
                         <span className="text-2xl font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                            SmartFinance
+                            TakaHisab
                         </span>
                     </Link>
                     <p className="text-muted-foreground text-sm mt-1">Start managing your wealth smarter</p>

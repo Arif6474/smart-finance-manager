@@ -58,7 +58,7 @@ export default function HeroSection() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
                 >
-                    SmartFinance gives you a crystal-clear picture of your money in seconds.
+                    TakaHisab gives you a crystal-clear picture of your money in seconds.
                     Advanced budgeting, AI insights, and total financial control — all in one beautiful app.
                 </motion.p>
 
@@ -166,7 +166,7 @@ export default function HeroSection() {
                             </div>
                             <div className="flex-1 flex justify-center">
                                 <div className="bg-background rounded-lg px-16 py-1.5 text-muted-foreground text-xs border border-border">
-                                    smartfinance.app
+                                    takahishab.com
                                 </div>
                             </div>
                         </div>

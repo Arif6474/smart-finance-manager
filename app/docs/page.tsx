@@ -31,7 +31,7 @@ const sections = [
         content: (
             <div className="space-y-6">
                 <p className="text-lg text-muted-foreground">
-                    Welcome to Smart Finance Manager. Achieve financial clarity through smart tracking, automated budgeting, and AI-driven insights.
+                    Welcome to TakaHisab. Achieve financial clarity through smart tracking, automated budgeting, and AI-driven insights.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 transition-colors">
@@ -291,7 +291,7 @@ const sections = [
         icon: ArrowRightLeft,
         content: (
             <div className="space-y-6">
-                <p>The power of Smart Finance Manager lies in the deep integration between its features.</p>
+                <p>The power of TakaHisab lies in the deep integration between its features.</p>
                 <div className="space-y-4">
                     <div className="p-4 bg-card border border-border rounded-xl">
                         <h5 className="font-bold text-primary mb-2">The Transaction Engine</h5>

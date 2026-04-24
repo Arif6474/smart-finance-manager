@@ -156,7 +156,7 @@ export default function RemindersPage() {
                             resetForm();
                             setIsModalOpen(true);
                         }}
-                        className="btn-primary px-6"
+                        className="btn-primary px-6 py-2.5"
                     >
                         Set Your First Reminder
                     </button>

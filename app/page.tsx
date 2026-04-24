@@ -29,14 +29,14 @@ export default function Home() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2 group">
             <Image
-              src="/icons/icon-192x192.png"
-              alt="SmartFinance Logo"
+              src="/logo.png"
+              alt="TakaHisab Logo"
               width={32}
               height={32}
               className="w-8 h-8 rounded-xl object-contain shadow-md shadow-primary/20 group-hover:shadow-primary/40 transition-shadow flex-shrink-0"
             />
             <span className="text-sm sm:text-base font-extrabold bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent truncate max-w-[100px] sm:max-w-none">
-              SmartFinance
+              TakaHisab
             </span>
           </Link>
 

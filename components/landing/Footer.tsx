@@ -7,7 +7,7 @@ export default function Footer() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 mb-16">
                     <div className="col-span-2 md:col-span-1">
                         <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent inline-block">
-                            SmartFinance
+                            TakaHisab
                         </h2>
                         <p className="text-muted-foreground text-sm mb-6 max-w-xs">
                             The smartest way to track your income, expenses, and overall financial health all in one place.
@@ -52,7 +52,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                    <p>© {new Date().getFullYear()} Smart Finance Manager. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} TakaHisab. All rights reserved.</p>
                     <div className="flex gap-6">
                         <Link href="/privacy" className="hover:text-primary transition-colors duration-300">Privacy</Link>
                         <Link href="/terms" className="hover:text-primary transition-colors duration-300">Terms</Link>

@@ -1,6 +1,6 @@
-# Smart Finance Manager - System Architecture & Connectivity
+# TakaHisab - System Architecture & Connectivity
 
-This document explains the technical implementation of the Smart Finance Manager and how its various features are interconnected.
+This document explains the technical implementation of TakaHisab and how its various features are interconnected.
 
 ## 1. Technology Stack
 The application is built using a modern full-stack architecture:

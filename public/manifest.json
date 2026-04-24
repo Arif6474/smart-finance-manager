@@ -1,6 +1,6 @@
 {
-  "name": "Smart Finance Manager",
-  "short_name": "Finance",
+  "name": "TakaHisab",
+  "short_name": "TakaHisab",
   "description": "Manage your finances, accounts, and transactions with ease.",
   "start_url": "/",
   "display": "standalone",
