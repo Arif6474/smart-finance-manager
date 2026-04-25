@@ -45,6 +45,8 @@ const menuItems = [
 const adminMenuItems = [
     { name: 'Payments', icon: CreditCard, href: '/admin-payments' },
     { name: 'Users', icon: Users, href: '/admin-users' },
+    // contact messages
+    { name: 'Contact Requests', icon: Users, href: '/admin-contact-requests' },
 ];
 
 export default function Sidebar() {
