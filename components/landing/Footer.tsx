@@ -13,31 +13,24 @@ export default function Footer() {
                         <p className="text-muted-foreground text-sm mb-6 max-w-xs">
                             The smartest way to track your income, expenses, and overall financial health all in one place.
                         </p>
-                        <div className="flex gap-4 text-muted-foreground text-sm font-medium flex-wrap">
-                            <a href="#" className="hover:text-primary transition-colors duration-300">Twitter</a>
-                            <a href="#" className="hover:text-primary transition-colors duration-300">Facebook</a>
-                            <a href="#" className="hover:text-primary transition-colors duration-300">Instagram</a>
-                            <a href="#" className="hover:text-primary transition-colors duration-300">GitHub</a>
-                        </div>
+
                     </div>
 
                     <div>
                         <h4 className="font-semibold mb-4 text-foreground">Product</h4>
                         <ul className="space-y-3 text-sm text-muted-foreground">
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Features</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Pricing</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Download App</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Changelog</a></li>
+                            <li><a href="#features" className="hover:text-primary transition-colors duration-300">Features</a></li>
+                            <li><a href="#pricing" className="hover:text-primary transition-colors duration-300">Pricing</a></li>
+                            <li><a href="#how-it-works" className="hover:text-primary transition-colors duration-300">How it works</a></li>
+                            <li><a href="#faq" className="hover:text-primary transition-colors duration-300">FAQ</a></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="font-semibold mb-4 text-foreground">Resources</h4>
                         <ul className="space-y-3 text-sm text-muted-foreground">
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Help Center</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Blog</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Financial Guides</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors duration-300">Community</a></li>
+                            <li><Link href="/contact" className="hover:text-primary transition-colors duration-300">Contact Us</Link></li>
+                            <li><Link href="/docs" className="hover:text-primary transition-colors duration-300">Documentation</Link></li>
                         </ul>
                     </div>
 
@@ -46,8 +39,8 @@ export default function Footer() {
                         <ul className="space-y-3 text-sm text-muted-foreground">
                             <li><a href="#" className="hover:text-primary transition-colors duration-300">About Us</a></li>
                             <li><a href="#" className="hover:text-primary transition-colors duration-300">Careers</a></li>
-                            <li><Link href="/privacy" className="hover:text-primary transition-colors duration-300">Privacy Policy</Link></li>
-                            <li><Link href="/terms" className="hover:text-primary transition-colors duration-300">Terms of Service</Link></li>
+                            <li><Link href="/#" className="hover:text-primary transition-colors duration-300">Privacy Policy</Link></li>
+                            <li><Link href="/#" className="hover:text-primary transition-colors duration-300">Terms of Service</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -55,8 +48,8 @@ export default function Footer() {
                 <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
                     <p>© {new Date().getFullYear()} TakaHisab. All rights reserved.</p>
                     <div className="flex gap-6 items-center">
-                        <Link href="/privacy" className="hover:text-primary transition-colors duration-300">Privacy</Link>
-                        <Link href="/terms" className="hover:text-primary transition-colors duration-300">Terms</Link>
+                        <Link href="/#" className="hover:text-primary transition-colors duration-300">Privacy</Link>
+                        <Link href="/#" className="hover:text-primary transition-colors duration-300">Terms</Link>
                         <PWAInstallButton />
                     </div>
                 </div>
